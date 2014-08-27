@@ -6,8 +6,6 @@ point::point()
 {
     mClick = true;
     mPaintFlag = false;
-    setFlags(ItemIsSelectable);
-    setAcceptHoverEvents(true);
 }
 
 QRectF point::boundingRect() const
@@ -32,12 +30,12 @@ void point:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 }
 
-void point::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void point::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(e->button()==Qt::LeftButton) {
+    if(event->button()==Qt::LeftButton) {
         if(mClick){
-            x1 = e->pos().x();
-            y1 = e->pos().y();
+            x1 = event->pos().x();
+            y1 = event->pos().y();
             coordinateX = QString::number(x1, 'g', 5);
             coordinateY = QString::number(y1, 'g', 5);
             qDebug() << coordinateX << "," <<coordinateY;
@@ -46,18 +44,18 @@ void point::mousePressEvent(QGraphicsSceneMouseEvent *e)
             update();
         }
     }
-    QGraphicsItem::mousePressEvent(e);
+    QGraphicsItem::mousePressEvent(event);
     update();
 }
 
-void point::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
+void point::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseMoveEvent(e);
+    QGraphicsItem::mouseMoveEvent(event);
     update();
 }
 
-void point::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void point::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseReleaseEvent(e);
+    QGraphicsItem::mouseReleaseEvent(event);
     update();
 }

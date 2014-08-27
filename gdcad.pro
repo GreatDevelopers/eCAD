@@ -9,7 +9,7 @@ QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = gdcad
+TARGET = eCAD
 TEMPLATE = app
 
 
@@ -18,15 +18,13 @@ SOURCES += main.cpp\
     circle.cpp \
     ellipse.cpp \
     point.cpp \
-    line.cpp \
-    storage.cpp
+    line.cpp
 
 HEADERS  += mainwindow.h \
     circle.h \
     ellipse.h \
     point.h \
-    line.h \
-    storage.h
+    line.h
 
 FORMS    += mainwindow.ui
 

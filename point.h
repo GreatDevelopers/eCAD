@@ -18,13 +18,13 @@ public:
     QString coordinateX, coordinateY;
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     QPointF p1;
-    double x1, y1;
+    int x1, y1;
     bool mClick;
     bool mPaintFlag;
 };

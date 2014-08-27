@@ -13,23 +13,22 @@ class circle: public QObject, public QGraphicsItem
 public:
     circle();
     QRectF boundingRect() const;
-    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    virtual void paint(QPainter * painter,
+                       const QStyleOptionGraphicsItem * option,
+                       QWidget * widget);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    int x1, y1, x2, y2, radius;
+    int center_x, center_y, x1, y1, radius;
     bool mFirstClick;
     bool mSecondClick;
     bool mPaintFlag;
     QVector<QPointF> stuff;
-    QPointF move_p;
-
-signals:
-    void DrawFinished();
+    QPointF center, p1, move_p;
 };
 
 #endif // CIRCLE_H

@@ -6,8 +6,6 @@ ellipse::ellipse()
     mSecondClick = false;
     mThirdClick = false;
     mPaintFlag = false;
-    setFlags(ItemIsSelectable);
-    setAcceptHoverEvents(true);
 }
 
 QRectF ellipse::boundingRect() const
@@ -16,19 +14,19 @@ QRectF ellipse::boundingRect() const
     return QRectF(0,0,1450,1400);
 }
 
-void ellipse::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void ellipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(e->button()==Qt::LeftButton) {
+    if(event->button()==Qt::LeftButton) {
         if(mFirstClick){
-            x1 = e->pos().x();
-            y1 = e->pos().y();
+            center_x = event->pos().x();
+            center_y= event->pos().y();
             mFirstClick = false;
             mSecondClick = true;
         }
 
         else if(!mFirstClick && mSecondClick){
-            x2 = e->pos().x();
-            y2 = e->pos().y();
+            x1 = event->pos().x();
+            y1 = event->pos().y();
             mFirstClick = false;
             mSecondClick = false;
             mThirdClick = true;
@@ -36,31 +34,30 @@ void ellipse::mousePressEvent(QGraphicsSceneMouseEvent *e)
         }
 
         else if(!mSecondClick && mThirdClick){
-            x3 = e->pos().x();
-            y3 = e->pos().y();
+            x2 = event->pos().x();
+            y2 = event->pos().y();
             mThirdClick = false;
             mPaintFlag = true;
             update();
-            emit DrawFinished();
         }
     }
-    QGraphicsItem::mousePressEvent(e);
+    QGraphicsItem::mousePressEvent(event);
     update();
 }
 
-void ellipse::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
+void ellipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (e->modifiers() & Qt::ShiftModifier) {
-        stuff << e->pos();
+    if (event->modifiers() & Qt::ShiftModifier) {
+        stuff << event->pos();
         update();
         return;
     }
-    QGraphicsItem::mouseMoveEvent(e);
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
-void ellipse::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void ellipse::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseReleaseEvent(e);
+    QGraphicsItem::mouseReleaseEvent(event);
     update();
 }
 
@@ -72,31 +69,28 @@ void ellipse:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         QPen linepen(Qt::black);
         linepen.setWidth(1);
 
-        QPoint p1;
+        center.setX(center_x);
+        center.setY(center_y);
+
+        painter->setPen(paintpen);
+        painter->drawPoint(center);
+
         p1.setX(x1);
         p1.setY(y1);
 
         painter->setPen(paintpen);
         painter->drawPoint(p1);
 
-        QPoint p2;
         p2.setX(x2);
         p2.setY(y2);
 
         painter->setPen(paintpen);
         painter->drawPoint(p2);
 
-        QPoint p3;
-        p3.setX(x3);
-        p3.setY(y3);
-
-        painter->setPen(paintpen);
-        painter->drawPoint(p3);
-
-        majRadius = qSqrt(qPow((p2.x()-x1), 2) + qPow((p2.y()-y1), 2));
-        minRadius = qSqrt(qPow((p3.x()-x1), 2) + qPow((p3.y()-y1), 2));
+        majRadius = qSqrt(qPow((p1.x()-center_x), 2) + qPow((p2.y()-center_y), 2));
+        minRadius = qSqrt(qPow((p2.x()-center_x), 2) + qPow((p2.y()-center_y), 2));
 
         painter->setPen(linepen);
-        painter->drawEllipse(p1, majRadius, minRadius);
+        painter->drawEllipse(center, majRadius, minRadius);
     }
 }

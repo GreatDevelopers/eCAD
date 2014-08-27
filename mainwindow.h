@@ -25,24 +25,23 @@ public:
 
 protected:
     void wheelEvent(QWheelEvent* event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-//    void drawBackground(QPainter *painter, const QRectF &rect);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     Ui::MainWindow *ui;
     bool mFirstClick;
     bool mPaintFlag;
-    int mStartX;
-    int mStartY;
-    int mEndX;
-    int mEndY;
+    double mStartX;
+    double mStartY;
+    double mEndX;
+    double mEndY;
 
     QGraphicsScene *scene;
     QPainter *painter;
-    point *item;
-    line *item1;
-    circle *item2;
-    ellipse *item3;
+    point *point_entity;
+    line *line_entity;
+    circle *circle_entity;
+    ellipse *ellipse_entity;
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
