@@ -5,7 +5,6 @@
 #include <QGraphicsItem>
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
-
 #include "qmath.h"
 
 class ellipse: public QObject, public QGraphicsItem
@@ -14,24 +13,24 @@ class ellipse: public QObject, public QGraphicsItem
 public:
     ellipse();
     QRectF boundingRect() const;
-    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    virtual void paint(QPainter * painter,
+                       const QStyleOptionGraphicsItem * option,
+                       QWidget * widget);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    int x1, y1, x2, y2, x3, y3;
+    int center_x, center_y, x1, y1, x2, y2;
     int majRadius, minRadius;
     bool mFirstClick;
     bool mSecondClick;
     bool mThirdClick;
     bool mPaintFlag;
+    QPointF center, p1, p2;
     QVector<QPointF> stuff;
-
-signals:
-    void DrawFinished();
 };
 
 #endif // ELLIPSE_H

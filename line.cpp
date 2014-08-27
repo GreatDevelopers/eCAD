@@ -18,30 +18,29 @@ QRectF line::boundingRect() const
     return QRectF(0,0,1450,1400);
 }
 
-void line::mousePressEvent(QGraphicsSceneMouseEvent* e){
+void line::mousePressEvent(QGraphicsSceneMouseEvent* event){
 
-    if(e->button()==Qt::LeftButton) {
+    if(event->button()==Qt::LeftButton) {
         if(mFirstClick){
 
-            x1 = e->pos().x();
-            y1 = e->pos().y();
+            start_x = event->pos().x();
+            start_y = event->pos().y();
 
             mFirstClick = false;
             mSecondClick = true;
         }
 
         else if(!mFirstClick && mSecondClick){
-            x2 = e->pos().x();
-            y2 = e->pos().y();
+            end_x = event->pos().x();
+            end_y = event->pos().y();
             mPaintFlag = true;
             mSecondClick = false;
             update();
-            emit DrawFinished();
         }
-        check_p = e->pos();
+        check_p = event->pos();
     }
 
-    QGraphicsItem::mousePressEvent(e);
+    QGraphicsItem::mousePressEvent(event);
     update();
 }
 
@@ -57,43 +56,43 @@ void line:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
         painter->setRenderHint(QPainter::Antialiasing, true);
 
-        p1.setX(x1);
-        p1.setY(y1);
+        start_p.setX(start_x);
+        start_p.setY(start_y);
 
         painter->setPen(paintpen);
-        painter->drawPoint(p1);
+        painter->drawPoint(start_p);
 
-        p2.setX(move_p.x());
-        p2.setY(move_p.y());
+        end_p.setX(move_p.x());
+        end_p.setY(move_p.y());
 
         painter->setPen(paintpen);
-        painter->drawPoint(p2);
+        painter->drawPoint(end_p);
 
         painter->setPen(linePen);
-        painter->drawLine(p1, p2);
+        painter->drawLine(start_p, end_p);
     }
 }
 
-void line::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
+void line::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    move_p = e->pos();
+    move_p = event->pos();
     update();
 
-    if(check_p == e->pos())
+    if(check_p == event->pos())
     {
         qDebug()  << "Item exists";
     }
 
-    if (e->modifiers() & Qt::ShiftModifier) {
-        stuff << e->pos();
+    if (event->modifiers() & Qt::ShiftModifier) {
+        stuff << event->pos();
         update();
         return;
     }
-    QGraphicsItem::mouseMoveEvent(e);
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
-void line::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void line::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseReleaseEvent(e);
+    QGraphicsItem::mouseReleaseEvent(event);
     update();
 }

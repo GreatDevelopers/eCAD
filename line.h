@@ -3,10 +3,8 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
-#include <QGraphicsPolygonItem>
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneHoverEvent>
 #include "ui_mainwindow.h"
 
 class line: public QObject, public QGraphicsItem{
@@ -14,25 +12,23 @@ class line: public QObject, public QGraphicsItem{
 public:
     line();
     QRectF boundingRect() const;
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
-    //void keyPressEvent(QKeyEvent *e);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    int x1, y1, x2, y2, w, h;
+    int start_x, start_y, end_x, end_y;
     bool mFirstClick;
     bool mSecondClick;
     bool mPaintFlag;
     QVector<QPointF> stuff;
-    QPointF p1, p2, move_p, check_p;
+    QPointF start_p, end_p, move_p, check_p;
     QPen paintpen, linePen;
-
-signals:
-    void DrawFinished();
 };
 
 #endif // LINE_H

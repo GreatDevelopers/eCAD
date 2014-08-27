@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     setupUi(this);
-    setWindowTitle(tr("GD CAD"));
+    setWindowTitle(tr("eCAD"));
     newFile();
 
     qApp->installEventFilter(this);
@@ -95,30 +95,27 @@ void  MainWindow::print( QPrinter* printer )
 }
 
 void MainWindow::drawPoint(){
-    item = new point;
-    scene->addItem(item);
+    point_entity = new point;
+    scene->addItem(point_entity);
     qDebug() << "Point Created";
 }
 
 void MainWindow::drawLine(){
-    item1 = new line;
-    scene->addItem(item1);
+    line_entity = new line;
+    scene->addItem(line_entity);
     qDebug() << "Line Created";
-    connect(item1, SIGNAL(DrawFinished()), this, SLOT(drawLine()));
 }
 
 void MainWindow::drawCircle(){
-    item2 = new circle;
-    scene->addItem(item2);
+    circle_entity = new circle;
+    scene->addItem(circle_entity);
     qDebug() << "Circle Created";
-    connect(item2, SIGNAL(DrawFinished()), this, SLOT(drawCircle()));
 }
 
 void MainWindow::drawEllipse(){
-    item3 = new ellipse;
-    scene->addItem(item3);
+    ellipse_entity = new ellipse;
+    scene->addItem(ellipse_entity);
     qDebug() << "Ellipse Created";
-    connect(item3, SIGNAL(DrawFinished()), this, SLOT(drawEllipse()));
 }
 
 void MainWindow::wheelEvent(QWheelEvent* event) {
@@ -165,12 +162,10 @@ void MainWindow::on_actionSave_triggered()
             QTextStream stream(&file);
             QList<QGraphicsItem*> allItems = scene->items();
             foreach (QGraphicsItem *i, allItems) {
-                if(i->type() == item->type()){
-
                     stream << "Point " << allItems.indexOf(i,0)<< "\n";
-                    stream << "x,y:"<<item->coordinateX <<","<<item->coordinateY <<"\n";
+                    stream << "x,y:"<<point_entity->coordinateX <<","<<point_entity->coordinateY <<"\n";
                 }
-            }
+
             stream.flush();
             file.close();
         }

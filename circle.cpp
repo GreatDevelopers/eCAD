@@ -5,8 +5,6 @@ circle::circle()
     mFirstClick = true;
     mSecondClick = false;
     mPaintFlag = false;
-    setFlags(ItemIsSelectable);
-    setAcceptHoverEvents(true);
 }
 
 QRectF circle::boundingRect() const
@@ -15,26 +13,25 @@ QRectF circle::boundingRect() const
     return QRectF(0,0,1450,1400);
 }
 
-void circle::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void circle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(e->button()==Qt::LeftButton) {
+    if(event->button()==Qt::LeftButton) {
         if(mFirstClick){
-            x1 = e->pos().x();
-            y1 = e->pos().y();
+            center_x = event->pos().x();
+            center_y = event->pos().y();
             mFirstClick = false;
             mSecondClick = true;
         }
 
         else if(!mFirstClick && mSecondClick){
-            x2 = e->pos().x();
-            y2 = e->pos().y();
+            x1 = event->pos().x();
+            y1 = event->pos().y();
             mPaintFlag = true;
             mSecondClick = false;
             update();
-            emit DrawFinished();
         }
     }
-    QGraphicsItem::mousePressEvent(e);
+    QGraphicsItem::mousePressEvent(event);
     update();
 }
 
@@ -46,41 +43,39 @@ void circle:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
         QPen linepen(Qt::black);
         linepen.setWidth(1);
 
-        QPoint p1;
-        p1.setX(x1);
-        p1.setY(y1);
+        center.setX(center_x);
+        center.setY(center_y);
+
+        painter->setPen(paintpen);
+        painter->drawPoint(center);
+
+        p1.setX(move_p.x());
+        p1.setY(move_p.y());
+
+        radius = qSqrt(qPow((p1.x()-center_x), 2) + qPow((p1.y()-center_y), 2));
 
         painter->setPen(paintpen);
         painter->drawPoint(p1);
 
-        QPoint p2;
-        p2.setX(move_p.x());
-        p2.setY(move_p.y());
-
-        radius = qSqrt(qPow((p2.x()-x1), 2) + qPow((p2.y()-y1), 2));
-
-        painter->setPen(paintpen);
-        painter->drawPoint(p2);
-
         painter->setPen(linepen);
-        painter->drawEllipse(p1,radius,radius);
+        painter->drawEllipse(center,radius,radius);
     }
 }
 
-void circle::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
+void circle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    move_p = e->pos();
+    move_p = event->pos();
     update();
-    if (e->modifiers() & Qt::ShiftModifier) {
-        stuff << e->pos();
+    if (event->modifiers() & Qt::ShiftModifier) {
+        stuff << event->pos();
         update();
         return;
     }
-    QGraphicsItem::mouseMoveEvent(e);
+    QGraphicsItem::mouseMoveEvent(event);
 }
 
-void circle::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void circle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem::mouseReleaseEvent(e);
+    QGraphicsItem::mouseReleaseEvent(event);
     update();
 }
