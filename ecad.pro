@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     circle.cpp \
     ellipse.cpp \
     point.cpp \
-    line.cpp
+    line.cpp \
+    cadgraphicsscene.cpp
 
 HEADERS  += mainwindow.h \
     circle.h \
     ellipse.h \
     point.h \
-    line.h
+    line.h \
+    cadgraphicsscene.h
 
 FORMS    += mainwindow.ui
 
