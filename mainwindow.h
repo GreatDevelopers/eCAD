@@ -3,17 +3,17 @@
 
 #include <QMainWindow>
 #include <QPaintEvent>
-#include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPainter>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 
+#include "cadgraphicsscene.h"
 #include "line.h"
-#include "circle.h"
-#include "ellipse.h"
-#include "point.h"
+//#include "circle.h"
+//#include "ellipse.h"
+//#include "point.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -36,12 +36,12 @@ private:
     double mEndX;
     double mEndY;
 
-    QGraphicsScene *scene;
+    cadgraphicsscene *scene;
     QPainter *painter;
-    point *point_entity;
+//    point *point_entity;
     line *line_entity;
-    circle *circle_entity;
-    ellipse *ellipse_entity;
+//    circle *circle_entity;
+//    ellipse *ellipse_entity;
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
@@ -49,10 +49,10 @@ private:
     bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
-    void drawPoint();
-    void drawLine();
-    void drawCircle();
-    void drawEllipse();
+//    void drawPoint();
+//    void drawLine();
+//    void drawCircle();
+//    void drawEllipse();
     void newFile();
 
     void on_actionSave_triggered();

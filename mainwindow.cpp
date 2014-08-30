@@ -18,15 +18,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qApp->installEventFilter(this);
 
-    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
-    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
-    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
-    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
+//    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
+//    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
+//    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
+//    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
 
-    connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
-    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
-    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
-    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
+//    connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
+//    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
+//    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
+//    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
 
     connect(actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -54,7 +54,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::newFile()
 {
-    scene =  new QGraphicsScene;
+    scene =  new cadgraphicsscene;
     graphicsView->setScene(scene);
     graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
 }
@@ -94,29 +94,29 @@ void  MainWindow::print( QPrinter* printer )
     scene->render( &painter, page );
 }
 
-void MainWindow::drawPoint(){
-    point_entity = new point;
-    scene->addItem(point_entity);
-    qDebug() << "Point Created";
-}
+//void MainWindow::drawPoint(){
+//    point_entity = new point;
+//    scene->addItem(point_entity);
+//    qDebug() << "Point Created";
+//}
 
-void MainWindow::drawLine(){
-    line_entity = new line;
-    scene->addItem(line_entity);
-    qDebug() << "Line Created";
-}
+//void MainWindow::drawLine(){
+//    line_entity = new line;
+//    scene->addItem(line_entity);
+//    qDebug() << "Line Created";
+//}
 
-void MainWindow::drawCircle(){
-    circle_entity = new circle;
-    scene->addItem(circle_entity);
-    qDebug() << "Circle Created";
-}
+//void MainWindow::drawCircle(){
+//    circle_entity = new circle;
+//    scene->addItem(circle_entity);
+//    qDebug() << "Circle Created";
+//}
 
-void MainWindow::drawEllipse(){
-    ellipse_entity = new ellipse;
-    scene->addItem(ellipse_entity);
-    qDebug() << "Ellipse Created";
-}
+//void MainWindow::drawEllipse(){
+//    ellipse_entity = new ellipse;
+//    scene->addItem(ellipse_entity);
+//    qDebug() << "Ellipse Created";
+//}
 
 void MainWindow::wheelEvent(QWheelEvent* event) {
     graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
@@ -163,7 +163,7 @@ void MainWindow::on_actionSave_triggered()
             QList<QGraphicsItem*> allItems = scene->items();
             foreach (QGraphicsItem *i, allItems) {
                     stream << "Point " << allItems.indexOf(i,0)<< "\n";
-                    stream << "x,y:"<<point_entity->coordinateX <<","<<point_entity->coordinateY <<"\n";
+                    //stream << "x,y:"<<point_entity->coordinateX <<","<<point_entity->coordinateY <<"\n";
                 }
 
             stream.flush();
@@ -195,7 +195,7 @@ void MainWindow::on_actionInsert_Image_triggered(){
     imageObject =new QImage();
     imageObject->load(imagePath);
     image = QPixmap::fromImage(*imageObject);
-    scene =new QGraphicsScene(this);
+    scene =new cadgraphicsscene(this);
     scene->addPixmap(image);
     scene->setSceneRect(image.rect());
     graphicsView->setScene(scene);
