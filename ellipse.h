@@ -7,11 +7,11 @@
 #include <QGraphicsSceneMouseEvent>
 #include "qmath.h"
 
-class ellipse: public QObject, public QGraphicsItem
+class Ellipse: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    ellipse();
+    Ellipse();
     QRectF boundingRect() const;
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,

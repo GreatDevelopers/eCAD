@@ -2,11 +2,11 @@
 
 #include <QGraphicsSceneMouseEvent>
 
-cadgraphicsscene::cadgraphicsscene(QObject *parent) :
+CadGraphicsScene::CadGraphicsScene(QObject *parent) :
     QGraphicsScene(parent)
 {
 }
 
-void cadgraphicsscene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
 }

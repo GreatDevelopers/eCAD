@@ -8,11 +8,11 @@
 
 using namespace std;
 
-class point: public QObject,public QGraphicsItem
+class Point: public QObject,public QGraphicsItem
 {
     Q_OBJECT
 public:
-    point();
+    Point();
     QRectF boundingRect() const;
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     QString coordinateX, coordinateY;

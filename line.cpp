@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 
-line::line()
+Line::Line()
 {
     mFirstClick = true;
     mSecondClick = false;
@@ -12,13 +12,13 @@ line::line()
     setAcceptHoverEvents(true);
 }
 
-QRectF line::boundingRect() const
+QRectF Line::boundingRect() const
 {
     // outer most edges
     return QRectF(0,0,1450,1400);
 }
 
-void line::mousePressEvent(QGraphicsSceneMouseEvent* event){
+void Line::mousePressEvent(QGraphicsSceneMouseEvent* event){
 
     if(event->button()==Qt::LeftButton) {
         if(mFirstClick){
@@ -44,8 +44,8 @@ void line::mousePressEvent(QGraphicsSceneMouseEvent* event){
     update();
 }
 
-void line:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    setCursor(Qt::CrossCursor);
+void Line:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+    //setCursor(Qt::CrossCursor);
     if(mPaintFlag){
 
         paintpen.setColor(Qt::red);
@@ -73,7 +73,7 @@ void line:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     }
 }
 
-void line::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Line::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     move_p = event->pos();
     update();
@@ -91,7 +91,7 @@ void line::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-void line::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Line::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     update();

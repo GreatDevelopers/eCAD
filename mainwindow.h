@@ -9,8 +9,9 @@
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 
+#include "ui_mainwindow.h"
 #include "cadgraphicsscene.h"
-#include "line.h"
+//#include "line.h"
 //#include "circle.h"
 //#include "ellipse.h"
 //#include "point.h"
@@ -36,10 +37,10 @@ private:
     double mEndX;
     double mEndY;
 
-    cadgraphicsscene *scene;
+    CadGraphicsScene *scene;
     QPainter *painter;
 //    point *point_entity;
-    line *line_entity;
+//    line *line_entity;
 //    circle *circle_entity;
 //    ellipse *ellipse_entity;
     QPrinter *printer;

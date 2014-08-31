@@ -3,11 +3,11 @@
 
 #include <QGraphicsScene>
 
-class cadgraphicsscene : public QGraphicsScene
+class CadGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit cadgraphicsscene(QObject *parent = 0);
+    explicit CadGraphicsScene(QObject *parent = 0);
 
 signals:
 
