@@ -7,11 +7,11 @@
 #include <QDebug>
 #include "qmath.h"
 
-class circle: public QObject, public QGraphicsItem
+class Circle: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    circle();
+    Circle();
     QRectF boundingRect() const;
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,

@@ -1,6 +1,6 @@
 #include "ellipse.h"
 
-ellipse::ellipse()
+Ellipse::Ellipse()
 {
     mFirstClick = true;
     mSecondClick = false;
@@ -8,13 +8,13 @@ ellipse::ellipse()
     mPaintFlag = false;
 }
 
-QRectF ellipse::boundingRect() const
+QRectF Ellipse::boundingRect() const
 {
     // outer most edges
     return QRectF(0,0,1450,1400);
 }
 
-void ellipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Ellipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button()==Qt::LeftButton) {
         if(mFirstClick){
@@ -45,7 +45,7 @@ void ellipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
-void ellipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Ellipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->modifiers() & Qt::ShiftModifier) {
         stuff << event->pos();
@@ -55,13 +55,13 @@ void ellipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-void ellipse::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Ellipse::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     update();
 }
 
-void ellipse:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+void Ellipse:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
     if(mPaintFlag){
         QPen paintpen(Qt::red);
         paintpen.setWidth(4);

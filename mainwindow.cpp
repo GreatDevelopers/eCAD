@@ -1,6 +1,6 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
+#include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QDebug>
 #include <QHBoxLayout>
@@ -54,7 +54,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::newFile()
 {
-    scene =  new cadgraphicsscene;
+    scene =  new CadGraphicsScene;
     graphicsView->setScene(scene);
     graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
 }
@@ -195,7 +195,7 @@ void MainWindow::on_actionInsert_Image_triggered(){
     imageObject =new QImage();
     imageObject->load(imagePath);
     image = QPixmap::fromImage(*imageObject);
-    scene =new cadgraphicsscene(this);
+    scene =new CadGraphicsScene(this);
     scene->addPixmap(image);
     scene->setSceneRect(image.rect());
     graphicsView->setScene(scene);

@@ -5,12 +5,11 @@
 #include <QGraphicsItem>
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
-#include "ui_mainwindow.h"
 
-class line: public QObject, public QGraphicsItem{
+class Line: public QObject, public QGraphicsItem{
     Q_OBJECT
 public:
-    line();
+    Line();
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,

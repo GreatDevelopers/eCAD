@@ -1,19 +1,19 @@
 #include "circle.h"
 
-circle::circle()
+Circle::Circle()
 {
     mFirstClick = true;
     mSecondClick = false;
     mPaintFlag = false;
 }
 
-QRectF circle::boundingRect() const
+QRectF Circle::boundingRect() const
 {
     // outer most edges
     return QRectF(0,0,1450,1400);
 }
 
-void circle::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Circle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button()==Qt::LeftButton) {
         if(mFirstClick){
@@ -35,7 +35,7 @@ void circle::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
-void circle:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+void Circle:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
     if(mPaintFlag){
         QPen paintpen(Qt::red);
         paintpen.setWidth(4);
@@ -62,7 +62,7 @@ void circle:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     }
 }
 
-void circle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Circle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     move_p = event->pos();
     update();
@@ -74,7 +74,7 @@ void circle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-void circle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Circle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     update();

@@ -2,19 +2,19 @@
 #include <QDebug>
 #include "mainwindow.h"
 
-point::point()
+Point::Point()
 {
     mClick = true;
     mPaintFlag = false;
 }
 
-QRectF point::boundingRect() const
+QRectF Point::boundingRect() const
 {
     // outer most edges
     return QRectF(0,0,1450,1400);
 }
 
-void point:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+void Point:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
     if(mPaintFlag){
         {
             QPen paintpen(Qt::red);
@@ -30,7 +30,7 @@ void point:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 }
 
-void point::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Point::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button()==Qt::LeftButton) {
         if(mClick){
@@ -48,13 +48,13 @@ void point::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
-void point::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void Point::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseMoveEvent(event);
     update();
 }
 
-void point::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void Point::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     update();
