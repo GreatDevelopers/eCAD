@@ -14,7 +14,7 @@
 //#include "line.h"
 //#include "circle.h"
 //#include "ellipse.h"
-//#include "point.h"
+#include "point.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -39,10 +39,6 @@ private:
 
     CadGraphicsScene *scene;
     QPainter *painter;
-//    point *point_entity;
-//    line *line_entity;
-//    circle *circle_entity;
-//    ellipse *ellipse_entity;
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
@@ -50,7 +46,7 @@ private:
     bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
-//    void drawPoint();
+    void drawPoint();
 //    void drawLine();
 //    void drawCircle();
 //    void drawEllipse();
