@@ -17,9 +17,10 @@ QRectF Point::boundingRect() const
 
 void Point:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
 
-    QPen paintpen(Qt::red);
+    QPen paintpen(Qt::black);
     paintpen.setWidth(2);
-    paintpen.setBrush(Qt::SolidPattern);
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setBrush(Qt::SolidPattern);
     painter->setPen(paintpen);
     painter->drawEllipse(boundingRect());
 }
