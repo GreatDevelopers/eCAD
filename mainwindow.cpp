@@ -144,9 +144,37 @@ void MainWindow::on_actionOpen_triggered()
             return;
         }
         else{
-            QTextStream in(&file);
-            QString line = in.readAll();
-            QMainWindow::statusBar()->showMessage(line);
+            QXmlStreamReader  stream( &file );
+              CadGraphicsScene* newScene = new CadGraphicsScene();
+              while ( !stream.atEnd() )
+              {
+                stream.readNext();
+                if ( stream.isStartElement() )
+                {
+                  if ( stream.name() == "SceneData" )
+                    newScene->readStream( &stream );
+                  else
+                    stream.raiseError( QString("Unrecognised element '%1'").arg(stream.name().toString()) );
+                }
+              }
+
+              // check if error occured
+              if ( stream.hasError() )
+              {
+                file.close();
+                QMessageBox::warning(this,"Error", QString("Failed to load '%1' (%2)").arg(filename).arg(stream.errorString()));
+                delete newScene;
+                return;
+              }
+
+              // close file, display new scene, delete old scene, and display useful message
+              file.close();
+
+              graphicsView->setScene( newScene );
+              delete scene;
+              scene = newScene;
+              QMessageBox::warning(this,"Done", QString("Loaded '%1'").arg(filename));
+              return;
         }
     }
 }
@@ -165,22 +193,14 @@ void MainWindow::on_actionSave_triggered()
                 xmlWriter.writeStartDocument();
                 xmlWriter.writeStartElement("SceneData");
                 xmlWriter.writeAttribute("version", "v1.0");
-                xmlWriter.writeStartElement("GraphicsItemList");
-                foreach( QGraphicsItem* item, scene->items())
-                {
-//                    if( item->type() == Point::Type )
-//                    {
-                        Point* myItem = (Point*)item;
-                        xmlWriter.writeStartElement("Point");
-                        xmlWriter.writeAttribute("xCoord", QString::number(myItem->x()));
-                        xmlWriter.writeAttribute("yCoord", QString::number(myItem->y()));
-                        xmlWriter.writeEndElement();  //end of MyGraphicsItem
-//                    }
-                }
-                xmlWriter.writeEndElement();   //end of GraphicsItemList
+                xmlWriter.writeStartElement("Entities");
+
+                scene->writeStream(&xmlWriter);
+
+                xmlWriter.writeEndElement();   //end of Entities
                 xmlWriter.writeEndElement();   //end of SceneData
-                QMessageBox::warning(this,"Success","Saved Scene Data to XML File");
-                close();
+                QMessageBox::warning(this,"Saved", QString("Saved Scene Data to '%1'").arg(filename));
+                file.close();
         }
     }
 }
@@ -212,14 +232,4 @@ void MainWindow::on_actionInsert_Image_triggered(){
     scene->addPixmap(image);
     scene->setSceneRect(image.rect());
     graphicsView->setScene(scene);
-}
-
-void MainWindow::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
-{
-    if (e->type() == QEvent::GraphicsSceneMouseMove)
-    {
-        QGraphicsSceneMouseEvent *mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(e);
-        qDebug() << "mouse";
-        QMainWindow::statusBar()->showMessage(QString("Mouse move (%1,%2)").arg(mouseEvent->pos().x()).arg(mouseEvent->pos().y()));
-    }
 }
