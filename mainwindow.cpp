@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextEdit>
+#include <QXmlStreamWriter>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -18,12 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qApp->installEventFilter(this);
 
-//    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
+    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
 //    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
 //    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
 //    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
 
-//    connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
+    connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
 //    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
 //    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
 //    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
@@ -55,6 +56,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::newFile()
 {
     scene =  new CadGraphicsScene;
+    scene->setSceneRect(0,0,2000,2000);
     graphicsView->setScene(scene);
     graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
 }
@@ -94,11 +96,10 @@ void  MainWindow::print( QPrinter* printer )
     scene->render( &painter, page );
 }
 
-//void MainWindow::drawPoint(){
-//    point_entity = new point;
-//    scene->addItem(point_entity);
-//    qDebug() << "Point Created";
-//}
+void MainWindow::drawPoint(){
+    scene->setMode(CadGraphicsScene::PointMode);
+    qDebug() << "Point Created";
+}
 
 //void MainWindow::drawLine(){
 //    line_entity = new line;
@@ -134,7 +135,7 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString filename=QFileDialog::getOpenFileName(this, tr("Open File"), QString(), tr("file Name(*.dxf)"));
+    QString filename=QFileDialog::getOpenFileName(this, tr("Open File"), QString(), tr("file Name(*.xml)"));
     QMainWindow::statusBar()->showMessage("File opened successfully");
     if (!filename.isEmpty()) {
         QFile file(filename);
@@ -152,22 +153,34 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString filename=QFileDialog::getSaveFileName(this, tr("Save File"), QString(), tr("file Name(*.dxf)"));
+    QString filename=QFileDialog::getSaveFileName(this, tr("Save File"), QString(), tr("file Name(*.xml)"));
     if(!filename.isEmpty()) {
         QFile file(filename);
         if (!file.open(QIODevice::WriteOnly)) {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
         } else {
-            QTextStream stream(&file);
-            QList<QGraphicsItem*> allItems = scene->items();
-            foreach (QGraphicsItem *i, allItems) {
-                    stream << "Point " << allItems.indexOf(i,0)<< "\n";
-                    //stream << "x,y:"<<point_entity->coordinateX <<","<<point_entity->coordinateY <<"\n";
+            QXmlStreamWriter xmlWriter(&file);
+                xmlWriter.setAutoFormatting(true);
+                xmlWriter.writeStartDocument();
+                xmlWriter.writeStartElement("SceneData");
+                xmlWriter.writeAttribute("version", "v1.0");
+                xmlWriter.writeStartElement("GraphicsItemList");
+                foreach( QGraphicsItem* item, scene->items())
+                {
+//                    if( item->type() == Point::Type )
+//                    {
+                        Point* myItem = (Point*)item;
+                        xmlWriter.writeStartElement("Point");
+                        xmlWriter.writeAttribute("xCoord", QString::number(myItem->x()));
+                        xmlWriter.writeAttribute("yCoord", QString::number(myItem->y()));
+                        xmlWriter.writeEndElement();  //end of MyGraphicsItem
+//                    }
                 }
-
-            stream.flush();
-            file.close();
+                xmlWriter.writeEndElement();   //end of GraphicsItemList
+                xmlWriter.writeEndElement();   //end of SceneData
+                QMessageBox::warning(this,"Success","Saved Scene Data to XML File");
+                close();
         }
     }
 }
