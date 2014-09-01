@@ -36,6 +36,7 @@ private:
     double mStartY;
     double mEndX;
     double mEndY;
+    double scaleFactor;
 
     CadGraphicsScene *scene;
     QPainter *painter;

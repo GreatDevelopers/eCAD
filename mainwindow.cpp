@@ -17,17 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle(tr("eCAD"));
     newFile();
 
+    scaleFactor = 1.15;
+
     qApp->installEventFilter(this);
 
     connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
-//    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
-//    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
-//    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
+    //    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
+    //    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
+    //    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
 
     connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
-//    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
-//    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
-//    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
+    //    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
+    //    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
+    //    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
 
     connect(actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -59,6 +61,7 @@ void MainWindow::newFile()
     scene->setSceneRect(0,0,2000,2000);
     graphicsView->setScene(scene);
     graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    graphicsView->resize(100,100);
 }
 
 void  MainWindow::filePrintPreview()
@@ -123,7 +126,6 @@ void MainWindow::wheelEvent(QWheelEvent* event) {
     graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
     // Scale the view / do the zoom
-    double scaleFactor = 1.15;
     if(event->delta() > 0) {
         // Zoom in
         graphicsView->scale(scaleFactor, scaleFactor);
@@ -145,36 +147,36 @@ void MainWindow::on_actionOpen_triggered()
         }
         else{
             QXmlStreamReader  stream( &file );
-              CadGraphicsScene* newScene = new CadGraphicsScene();
-              while ( !stream.atEnd() )
-              {
+            CadGraphicsScene* newScene = new CadGraphicsScene();
+            while ( !stream.atEnd() )
+            {
                 stream.readNext();
                 if ( stream.isStartElement() )
                 {
-                  if ( stream.name() == "SceneData" )
-                    newScene->readStream( &stream );
-                  else
-                    stream.raiseError( QString("Unrecognised element '%1'").arg(stream.name().toString()) );
+                    if ( stream.name() == "SceneData" )
+                        newScene->readStream( &stream );
+                    else
+                        stream.raiseError( QString("Unrecognised element '%1'").arg(stream.name().toString()) );
                 }
-              }
+            }
 
-              // check if error occured
-              if ( stream.hasError() )
-              {
+            // check if error occured
+            if ( stream.hasError() )
+            {
                 file.close();
                 QMessageBox::warning(this,"Error", QString("Failed to load '%1' (%2)").arg(filename).arg(stream.errorString()));
                 delete newScene;
                 return;
-              }
+            }
 
-              // close file, display new scene, delete old scene, and display useful message
-              file.close();
+            // close file, display new scene, delete old scene, and display useful message
+            file.close();
 
-              graphicsView->setScene( newScene );
-              delete scene;
-              scene = newScene;
-              QMessageBox::warning(this,"Done", QString("Loaded '%1'").arg(filename));
-              return;
+            graphicsView->setScene( newScene );
+            delete scene;
+            scene = newScene;
+            QMessageBox::warning(this,"Done", QString("Loaded '%1'").arg(filename));
+            return;
         }
     }
 }
@@ -189,38 +191,32 @@ void MainWindow::on_actionSave_triggered()
             return;
         } else {
             QXmlStreamWriter xmlWriter(&file);
-                xmlWriter.setAutoFormatting(true);
-                xmlWriter.writeStartDocument();
-                xmlWriter.writeStartElement("SceneData");
-                xmlWriter.writeAttribute("version", "v1.0");
-                xmlWriter.writeStartElement("Entities");
+            xmlWriter.setAutoFormatting(true);
+            xmlWriter.writeStartDocument();
+            xmlWriter.writeStartElement("SceneData");
+            xmlWriter.writeAttribute("version", "v1.0");
+            xmlWriter.writeStartElement("Entities");
 
-                scene->writeStream(&xmlWriter);
+            scene->writeStream(&xmlWriter);
 
-                xmlWriter.writeEndElement();   //end of Entities
-                xmlWriter.writeEndElement();   //end of SceneData
-                QMessageBox::warning(this,"Saved", QString("Saved Scene Data to '%1'").arg(filename));
-                file.close();
+            xmlWriter.writeEndElement();   //end of Entities
+            xmlWriter.writeEndElement();   //end of SceneData
+            QMessageBox::warning(this,"Saved", QString("Saved Scene Data to '%1'").arg(filename));
+            file.close();
         }
     }
 }
 
-void MainWindow::on_actionZoom_In_triggered(){
-    QWheelEvent *event;
-    double scaleFactor = 1.15;
-    if(event->delta() > 0) {
-        // Zoom in
-        graphicsView->scale(scaleFactor, scaleFactor);
-    }
+void MainWindow::on_actionZoom_In_triggered()
+{
+    // Zoom in
+    graphicsView->scale(scaleFactor, scaleFactor);
 }
 
-void MainWindow::on_actionZoom_Out_triggered(){
-    QWheelEvent *event;
-    double scaleFactor = 1.15;
-    if(event->delta() > 0) {
-        // Zoom out
-        graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
-    }
+void MainWindow::on_actionZoom_Out_triggered()
+{
+    // Zoom out
+    graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
 void MainWindow::on_actionInsert_Image_triggered(){
