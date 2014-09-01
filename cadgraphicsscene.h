@@ -2,6 +2,7 @@
 #define CADGRAPHICSSCENE_H
 
 #include <QGraphicsScene>
+#include <QXmlStreamWriter>
 
 #include "point.h"
 
@@ -12,6 +13,9 @@ public:
     explicit CadGraphicsScene(QObject *parent = 0);
     enum Mode { PointMode };
 
+    void writeStream(QXmlStreamWriter *stream);
+    void readStream(QXmlStreamReader *stream);
+
 signals:
     void createdPoint(Point *pointItem);
 
@@ -20,6 +24,7 @@ public slots:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+
 
 private:
     Mode entityMode;
