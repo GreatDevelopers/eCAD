@@ -32,8 +32,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="images.qrc">
-          <normaloff>:/res/points.png</normaloff>:/res/points.png</iconset>
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -61,8 +61,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="images.qrc">
-          <normaloff>:/res/line.png</normaloff>:/res/line.png</iconset>
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -84,8 +84,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="images.qrc">
-          <normaloff>:/res/circles.png</normaloff>:/res/circles.png</iconset>
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -107,8 +107,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="images.qrc">
-          <normaloff>:/res/ellipse.png</normaloff>:/res/ellipse.png</iconset>
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -144,7 +144,7 @@
      <x>0</x>
      <y>0</y>
      <width>725</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -906,7 +906,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="images.qrc"/>
+  <include location="../images.qrc"/>
  </resources>
  <connections/>
 </ui>
