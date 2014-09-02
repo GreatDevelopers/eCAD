@@ -5,30 +5,36 @@
 #-------------------------------------------------
 QMAKE_CXXFLAGS_WARN_OFF -= -Wunused-parameter
 
-QT       += core gui printsupport
+QT += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = eCAD
 TEMPLATE = app
 
+INCLUDEPATH += \
+    $$PWD/gui \
+    $$PWD/gui/entities
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    circle.cpp \
-    ellipse.cpp \
-    point.cpp \
-    line.cpp \
-    cadgraphicsscene.cpp
+SOURCES += \
+    main.cpp\
+    gui/mainwindow.cpp \
+    gui/cadgraphicsscene.cpp \
+    gui/entities/circle.cpp \
+    gui/entities/ellipse.cpp \
+    gui/entities/point.cpp \
+    gui/entities/line.cpp
 
-HEADERS  += mainwindow.h \
-    circle.h \
-    ellipse.h \
-    point.h \
-    line.h \
-    cadgraphicsscene.h
+HEADERS += \
+    gui/mainwindow.h \
+    gui/cadgraphicsscene.h\
+    gui/entities/circle.h \
+    gui/entities/ellipse.h \
+    gui/entities/point.h \
+    gui/entities/line.h
 
-FORMS    += mainwindow.ui
+FORMS += \
+    resources/ui/mainwindow.ui
 
 RESOURCES += \
-    images.qrc
+    resources/images.qrc
