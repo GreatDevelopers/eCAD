@@ -15,18 +15,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setupUi(this);
     setWindowTitle(tr("eCAD"));
-    newFile();
-
-    scaleFactor = 1.15;
+    mdiArea->setViewMode(QMdiArea::TabbedView);
+    setCentralWidget(mdiArea);
 
     qApp->installEventFilter(this);
 
-    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
-    //    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
-    //    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
-    //    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
-
-    connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
+    connect(actionPoints, SIGNAL(triggered()), activeMdiChild(), SLOT(drawPoint()));
     //    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
     //    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
     //    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
@@ -39,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(actionZoom_Out, SIGNAL(triggered()), this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),this,SLOT(on_actionInsert_Image_triggered()));
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -57,11 +50,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::newFile()
 {
-    scene =  new CadGraphicsScene;
-    scene->setSceneRect(0,0,2000,2000);
-    graphicsView->setScene(scene);
-    graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
-    graphicsView->resize(100,100);
+    MdiChild *child = createMdiChild();
+    child->newFile();
+    child->show();
 }
 
 void  MainWindow::filePrintPreview()
@@ -96,12 +87,15 @@ void  MainWindow::print( QPrinter* printer )
                       QDateTime::currentDateTime().toString( Qt::DefaultLocaleShortDate ) );
 
     page.adjust( w/20, h/20, -w/20, -h/20 );
-    scene->render( &painter, page );
+    //scene->render( &painter, page );
 }
 
 void MainWindow::drawPoint(){
-    scene->setMode(CadGraphicsScene::PointMode);
-    qDebug() << "Point Created";
+    if (activeMdiChild())
+    {
+        activeMdiChild()->drawPoint();
+        QMainWindow::statusBar()->showMessage(tr("Point drawn"), 2000);
+    }
 }
 
 //void MainWindow::drawLine(){
@@ -122,17 +116,18 @@ void MainWindow::drawPoint(){
 //    qDebug() << "Ellipse Created";
 //}
 
-void MainWindow::wheelEvent(QWheelEvent* event) {
-    graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+MdiChild *MainWindow::createMdiChild()
+{
+    MdiChild *child = new MdiChild;
+    mdiArea->addSubWindow(child);
+    return child;
+}
 
-    // Scale the view / do the zoom
-    if(event->delta() > 0) {
-        // Zoom in
-        graphicsView->scale(scaleFactor, scaleFactor);
-    } else {
-        // Zooming out
-        graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
-    }
+CadGraphicsView *MainWindow::activeMdiChild()
+{
+    if (QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow())
+        return qobject_cast<CadGraphicsView *>(activeSubWindow->widget());
+    //return 0;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -172,9 +167,9 @@ void MainWindow::on_actionOpen_triggered()
             // close file, display new scene, delete old scene, and display useful message
             file.close();
 
-            graphicsView->setScene( newScene );
-            delete scene;
-            scene = newScene;
+            //graphicsView->setScene( newScene );
+            //delete scene;
+            //scene = newScene;
             QMessageBox::warning(this,"Done", QString("Loaded '%1'").arg(filename));
             return;
         }
@@ -197,7 +192,7 @@ void MainWindow::on_actionSave_triggered()
             xmlWriter.writeAttribute("version", "v1.0");
             xmlWriter.writeStartElement("Entities");
 
-            scene->writeStream(&xmlWriter);
+            //scene->writeStream(&xmlWriter);
 
             xmlWriter.writeEndElement();   //end of Entities
             xmlWriter.writeEndElement();   //end of SceneData
@@ -210,13 +205,13 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_actionZoom_In_triggered()
 {
     // Zoom in
-    graphicsView->scale(scaleFactor, scaleFactor);
+    //graphicsView->scale(scaleFactor, scaleFactor);
 }
 
 void MainWindow::on_actionZoom_Out_triggered()
 {
     // Zoom out
-    graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+    //graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
 void MainWindow::on_actionInsert_Image_triggered(){
@@ -224,8 +219,8 @@ void MainWindow::on_actionInsert_Image_triggered(){
     imageObject =new QImage();
     imageObject->load(imagePath);
     image = QPixmap::fromImage(*imageObject);
-    scene =new CadGraphicsScene(this);
-    scene->addPixmap(image);
-    scene->setSceneRect(image.rect());
-    graphicsView->setScene(scene);
+    //scene =new CadGraphicsScene(this);
+    //scene->addPixmap(image);
+    //scene->setSceneRect(image.rect());
+    //graphicsView->setScene(scene);
 }
