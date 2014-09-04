@@ -34,14 +34,14 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
     foreach(QGraphicsItem* item, items())
     {
-//        if(item->type() == Point::Type )
-//        {
-            Point* myItem = dynamic_cast<Point*>(item);
-            stream->writeStartElement("Point");
-            stream->writeAttribute("xCoord", QString::number(myItem->x()));
-            stream->writeAttribute("yCoord", QString::number(myItem->y()));
-            stream->writeEndElement();  //end of Point Item
-//        }
+        //        if(item->type() == Point::Type )
+        //        {
+        Point* myItem = dynamic_cast<Point*>(item);
+        stream->writeStartElement("Point");
+        stream->writeAttribute("xCoord", QString::number(myItem->x()));
+        stream->writeAttribute("yCoord", QString::number(myItem->y()));
+        stream->writeEndElement();  //end of Point Item
+        //        }
     }
 }
 
