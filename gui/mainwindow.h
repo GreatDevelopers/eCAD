@@ -11,8 +11,6 @@
 
 #include "ui_mainwindow.h"
 #include "cadgraphicsscene.h"
-#include "cadgraphicsview.h"
-#include "mdichild.h"
 //#include "line.h"
 //#include "circle.h"
 //#include "ellipse.h"
@@ -26,9 +24,22 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void wheelEvent(QWheelEvent* event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
 private:
-    CadGraphicsView *activeMdiChild();
-    MdiChild *getMdiChild();
+    Ui::MainWindow *ui;
+    bool mFirstClick;
+    bool mPaintFlag;
+    double mStartX;
+    double mStartY;
+    double mEndX;
+    double mEndY;
+    double scaleFactor;
+
+    CadGraphicsScene *scene;
+    QPainter *painter;
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
@@ -41,7 +52,6 @@ private slots:
 //    void drawCircle();
 //    void drawEllipse();
     void newFile();
-    MdiChild *createMdiChild();
 
     void on_actionSave_triggered();
     void on_actionOpen_triggered();

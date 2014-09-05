@@ -25,6 +25,7 @@ public slots:
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
+
 private:
     Mode entityMode;
 };
