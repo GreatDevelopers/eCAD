@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>800</height>
+    <width>725</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -17,39 +17,134 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QMdiArea" name="mdiArea">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>10</y>
-      <width>910</width>
-      <height>512</height>
-     </rect>
-    </property>
-    <property name="activationOrder">
-     <enum>QMdiArea::CreationOrder</enum>
-    </property>
-    <property name="viewMode">
-     <enum>QMdiArea::SubWindowView</enum>
-    </property>
-    <property name="documentMode">
-     <bool>true</bool>
-    </property>
-    <property name="tabsClosable">
-     <bool>true</bool>
-    </property>
-    <property name="tabsMovable">
-     <bool>false</bool>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QToolButton" name="pointButton">
+        <property name="toolTip">
+         <string>Point</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>200000</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="lineButton">
+        <property name="toolTip">
+         <string>Line</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>200000</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="circleButton">
+        <property name="toolTip">
+         <string>Circle</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>200000</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="ellipseButton">
+        <property name="toolTip">
+         <string>Ellipse</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>200000</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGraphicsView" name="graphicsView"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
-     <height>19</height>
+     <width>725</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -192,19 +287,12 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionPoints"/>
-   <addaction name="actionLine"/>
-   <addaction name="actionCircle"/>
-   <addaction name="actionEllipse"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -483,10 +571,6 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
-   </property>
    <property name="text">
     <string>Points</string>
    </property>
@@ -494,10 +578,6 @@
   <action name="actionLine">
    <property name="enabled">
     <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
    </property>
    <property name="text">
     <string>Line</string>
@@ -515,10 +595,6 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
-   </property>
    <property name="text">
     <string>Circle</string>
    </property>
@@ -526,10 +602,6 @@
   <action name="actionEllipse">
    <property name="enabled">
     <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
    </property>
    <property name="text">
     <string>Ellipse</string>

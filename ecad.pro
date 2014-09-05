@@ -19,9 +19,7 @@ INCLUDEPATH += \
 SOURCES += \
     main.cpp\
     gui/mainwindow.cpp \
-    gui/mdichild.cpp \
     gui/cadgraphicsscene.cpp \
-    gui/cadgraphicsview.cpp \
     gui/entities/circle.cpp \
     gui/entities/ellipse.cpp \
     gui/entities/point.cpp \
@@ -29,9 +27,7 @@ SOURCES += \
 
 HEADERS += \
     gui/mainwindow.h \
-    gui/mdichild.h \
-    gui/cadgraphicsscene.h \
-    gui/cadgraphicsview.h \
+    gui/cadgraphicsscene.h\
     gui/entities/circle.h \
     gui/entities/ellipse.h \
     gui/entities/point.h \
