@@ -16,9 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
     setupUi(this);
     setWindowTitle(tr("eCAD"));
 
+    setCentralWidget(mdiArea);
+
     qApp->installEventFilter(this);
 
-    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
+    //    connect(pointButton, SIGNAL(clicked()), this, SLOT(drawPoint()));
     //    connect(lineButton, SIGNAL(clicked()), this, SLOT(drawLine()));
     //    connect(circleButton, SIGNAL(clicked()), this, SLOT(drawCircle()));
     //    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
