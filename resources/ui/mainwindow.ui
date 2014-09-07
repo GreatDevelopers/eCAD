@@ -17,126 +17,143 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QToolButton" name="pointButton">
-        <property name="toolTip">
-         <string>Point</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>200000</number>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-        <property name="autoRepeat">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="lineButton">
-        <property name="toolTip">
-         <string>Line</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>200000</number>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="circleButton">
-        <property name="toolTip">
-         <string>Circle</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>200000</number>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="ellipseButton">
-        <property name="toolTip">
-         <string>Ellipse</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>200000</number>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="1">
-     <widget class="QGraphicsView" name="graphicsView"/>
-    </item>
-   </layout>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>11</y>
+      <width>958</width>
+      <height>514</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QToolButton" name="pointButton">
+         <property name="toolTip">
+          <string>Point</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>200000</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../images.qrc">
+           <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="autoRepeat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="lineButton">
+         <property name="toolTip">
+          <string>Line</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>200000</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../images.qrc">
+           <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="circleButton">
+         <property name="toolTip">
+          <string>Circle</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>200000</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../images.qrc">
+           <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="ellipseButton">
+         <property name="toolTip">
+          <string>Ellipse</string>
+         </property>
+         <property name="toolTipDuration">
+          <number>200000</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../images.qrc">
+           <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QMdiArea" name="mdiArea">
+       <property name="viewMode">
+        <enum>QMdiArea::TabbedView</enum>
+       </property>
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -144,7 +161,7 @@
      <x>0</x>
      <y>0</y>
      <width>725</width>
-     <height>25</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
