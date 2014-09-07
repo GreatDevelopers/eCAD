@@ -5,16 +5,16 @@
 #include <QPaintEvent>
 #include <QGraphicsView>
 #include <QPainter>
+#include <QMdiArea>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 
 #include "ui_mainwindow.h"
-#include "cadgraphicsscene.h"
+#include "cadgraphicsview.h"
 //#include "line.h"
 //#include "circle.h"
 //#include "ellipse.h"
-#include "point.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -25,11 +25,9 @@ public:
     ~MainWindow();
 
 protected:
-    void wheelEvent(QWheelEvent* event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    Ui::MainWindow *ui;
     bool mFirstClick;
     bool mPaintFlag;
     double mStartX;
@@ -38,7 +36,6 @@ private:
     double mEndY;
     double scaleFactor;
 
-    CadGraphicsScene *scene;
     QPainter *painter;
     QPrinter *printer;
     QPixmap image;
@@ -63,6 +60,7 @@ private slots:
     void filePrint();
     void print(QPrinter *);
 
+    CadGraphicsView *createMdiView();
 };
 
 #endif // MAINWINDOW_H

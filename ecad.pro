@@ -23,7 +23,8 @@ SOURCES += \
     gui/entities/circle.cpp \
     gui/entities/ellipse.cpp \
     gui/entities/point.cpp \
-    gui/entities/line.cpp
+    gui/entities/line.cpp \
+    gui/cadgraphicsview.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -31,7 +32,8 @@ HEADERS += \
     gui/entities/circle.h \
     gui/entities/ellipse.h \
     gui/entities/point.h \
-    gui/entities/line.h
+    gui/entities/line.h \
+    gui/cadgraphicsview.h
 
 FORMS += \
     resources/ui/mainwindow.ui
