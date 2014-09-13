@@ -56,8 +56,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::newFile()
 {
-    CadGraphicsView *view = createMdiView();
-    view->newFile();
+//    CadGraphicsView *view = createMdiView();
+//    view->newFile();
+//    view->show();
+    CadOgreWidget *view = createOgreView();
     view->show();
 }
 
@@ -101,6 +103,14 @@ CadGraphicsView *MainWindow::createMdiView()
     CadGraphicsView *view = new CadGraphicsView;
     mdiArea->addSubWindow(view);
     return view;
+}
+
+CadOgreWidget *MainWindow::createOgreView()
+{
+    CadOgreWidget *ogrewin = new CadOgreWidget;
+    ogrewin->resize(1000,100);
+    mdiArea->addSubWindow(ogrewin);
+    return ogrewin;
 }
 
 void MainWindow::drawPoint()
