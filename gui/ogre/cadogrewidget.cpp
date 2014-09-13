@@ -77,7 +77,7 @@ void CadOgreWidget::createScene()
 //    headNode->attachObject(ogreHead);
 
     Ogre::ManualObject *line = mSceneManager->createManualObject("Line");
-    line->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_POINT_LIST);
+    line->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_LIST);
     line->position(-100,-100,-100);
     line->position(100,100,100);
     line->end();
