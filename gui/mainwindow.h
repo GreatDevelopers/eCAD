@@ -12,6 +12,7 @@
 
 #include "ui_mainwindow.h"
 #include "cadgraphicsview.h"
+#include "cadogrewidget.h"
 //#include "line.h"
 //#include "circle.h"
 //#include "ellipse.h"
@@ -61,6 +62,7 @@ private slots:
     void print(QPrinter *);
 
     CadGraphicsView *createMdiView();
+    CadOgreWidget *createOgreView();
 };
 
 #endif // MAINWINDOW_H
