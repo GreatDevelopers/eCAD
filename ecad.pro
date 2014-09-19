@@ -21,7 +21,7 @@ INCLUDEPATH += \
     $$PWD/gui \
     $$PWD/gui/entities \
     $$PWD/gui/ogre \
-    /usr/include/OGRE
+    /usr/local/include/OGRE
 
 SOURCES += \
     main.cpp\
