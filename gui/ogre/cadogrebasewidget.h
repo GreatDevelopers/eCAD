@@ -1,32 +1,63 @@
 #ifndef CADOGREBASEWIDGET_H
 #define CADOGREBASEWIDGET_H
 
-#include <Ogre.h>
 #include <GL/glew.h>
 #include <QGLWidget>
 
-#include "eventhandler.h"
+#include <OgreRoot.h>
+#include <OgreCamera.h>
+#include <OgreViewport.h>
+#include <OgreRenderWindow.h>
+#include <OgreEntity.h>
 
-class CadOgreBaseWidget : public QGLWidget
+#include <OgreConfigFile.h>
+
+#include <OISEvents.h>
+#include <OISMouse.h>
+#include <OISKeyboard.h>
+
+#include <SdkTrays.h>
+#include <SdkCameraMan.h>
+
+using namespace Ogre;
+using namespace OgreBites;
+
+class CadOgreBaseWidget : public QGLWidget, public FrameListener,
+    public WindowEventListener,
+//    public OIS::KeyListener,
+//    public OIS::MouseListener,
+    SdkTrayListener
 {
-    Q_OBJECT
+  public:
+    CadOgreBaseWidget();
+    virtual ~CadOgreBaseWidget();
 
-public:
-    CadOgreBaseWidget(Ogre::Root *ogreRoot, OgreEventHandler *ogreEventHandler, QWidget *parent);
-    Ogre::RenderWindow *getEmbeddedOgreWindow();
+    virtual void go();
 
-protected:
-    virtual void paintEvent(QPaintEvent *pEvent);
-//    virtual void resizeEvent(QResizeEvent *rEvent);
-    virtual void update();
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
+  protected:
+    Root *mRoot;
+    Camera *mCamera;
+    RenderWindow *mRenderWindow;
+    RenderSystem *mRenderSystem;
+    SceneManager *mSceneManager;
+    String mResourcesCfg;
+    String mPluginsCfg;
 
-private:
-    Ogre::Root *mOgreRoot;
-    Ogre::RenderWindow *mOgreRenderWindow;
-    OgreEventHandler *mOgreEventHandler;
+    SdkCameraMan *mCameraMan;
+
+  protected:
+    virtual bool setup();
+    virtual bool configure();
+
+    virtual void createScene() = 0;
+    virtual void destroyScene();
+    virtual void createCamera();
+
+    virtual void chooseSceneManager();
+    virtual void createViewports();
+    virtual void setupResources();
+    virtual void loadResources();
 
 };
 
-#endif // CADOGREBASEWIDGET_H
+#endif //CADOGREBASEWIDGET_H

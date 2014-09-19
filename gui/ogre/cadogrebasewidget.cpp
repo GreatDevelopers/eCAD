@@ -1,88 +1,132 @@
 #include "cadogrebasewidget.h"
 
-#include <QResizeEvent>
-#include <QtX11Extras/QX11Info>
-#include <string>
-#include <cassert>
-
-CadOgreBaseWidget::CadOgreBaseWidget(Ogre::Root *ogreRoot, OgreEventHandler *ogreEventHandler, QWidget *parent) :
-    QGLWidget(parent), mOgreEventHandler(ogreEventHandler), mOgreRoot(ogreRoot), mOgreRenderWindow(NULL)
+CadOgreBaseWidget::CadOgreBaseWidget():
+  mRoot(0),
+  mCamera(0),
+  mSceneManager(0),
+  mRenderWindow(0),
+  mResourcesCfg(StringUtil::BLANK),
+  mPluginsCfg(StringUtil::BLANK),
+  mCameraMan(0)
 {
-    if (!parent) {
-        throw std::runtime_error("Parent widget supplied was uninitialised!");
-        // interface requirement
+
+}
+
+CadOgreBaseWidget::~CadOgreBaseWidget()
+{
+  if(mCameraMan)
+    delete mCameraMan;
+
+  delete mRoot;
+}
+
+bool CadOgreBaseWidget::configure()
+{
+  RenderSystemList::const_iterator availableRendererIt = mRoot->getAvailableRenderers().begin();
+
+  while (availableRendererIt != mRoot->getAvailableRenderers().end()) {
+      String rName = (*availableRendererIt)->getName();
+      if (rName == "OpenGL Rendering Subsystem") {
+          break;
+      }
+      ++availableRendererIt;
+  }
+
+  if (availableRendererIt == mRoot->getAvailableRenderers().end()) {
+      throw std::runtime_error("We were unable to find the OpenGL renderer in ogre's list, cannot continue");
+  }
+
+  // use the OpenGL renderer in the root config
+  mRenderSystem = *availableRendererIt;
+  mRoot->setRenderSystem(mRenderSystem);
+  //mRenderWindow = mRoot->initialise(false);
+  mRenderWindow = mRoot->initialise(true,"RenderWindow");
+  return true;
+}
+
+void CadOgreBaseWidget::chooseSceneManager()
+{
+  mSceneManager = mRoot->createSceneManager(ST_GENERIC);
+}
+
+void CadOgreBaseWidget::createCamera()
+{
+  mCamera = mSceneManager->createCamera("PlayerCam");
+  mCamera->setPosition(Vector3(0,0,100));
+  mCamera->lookAt(Vector3(0,0,-300));
+  mCamera->setNearClipDistance(5);
+
+  mCameraMan = new SdkCameraMan(mCamera);
+}
+
+void CadOgreBaseWidget::destroyScene()
+{
+
+}
+
+void CadOgreBaseWidget::createViewports()
+{
+  Viewport *vp = mRenderWindow->addViewport(mCamera);
+  vp->setBackgroundColour(ColourValue::Blue);
+  mCamera->setAspectRatio(Real(vp->getActualWidth())/Real(vp->getActualHeight()));
+}
+
+void CadOgreBaseWidget::setupResources()
+{
+  ConfigFile cf;
+  cf.load(mResourcesCfg);
+
+  ConfigFile::SectionIterator seci = cf.getSectionIterator();
+
+  String secName, typeName, archName;
+  while (seci.hasMoreElements())
+  {
+    secName = seci.peekNextKey();
+    ConfigFile::SettingsMultiMap *settings = seci.getNext();
+    ConfigFile::SettingsMultiMap::iterator i;
+    for(i = settings->begin(); i != settings->end(); ++i)
+    {
+      typeName = i->first;
+      archName = i->second;
+      ResourceGroupManager::getSingleton().addResourceLocation(
+            archName, typeName, secName);
     }
-
-    setAttribute(Qt::WA_PaintOnScreen, true);
-    setAttribute(Qt::WA_NoSystemBackground, true);
-    // button event handler
-
-    setFocusPolicy(Qt::StrongFocus);
-
-    Ogre::String winHandle;
-
-    winHandle = Ogre::StringConverter::toString((unsigned long) (QX11Info::display()));
-    winHandle += " : ";
-    winHandle = Ogre::StringConverter::toString((unsigned long) (QX11Info::appScreen()));
-    winHandle += " : ";
-    winHandle = Ogre::StringConverter::toString((unsigned long) (winId()));
-
-    Ogre::NameValuePairList params;
-    params["parentWindowHandle"] = winHandle;
-    params["FSAA"] = Ogre::String("8");
-
-    int w = width();
-    int h = height();
-    mOgreRenderWindow = mOgreRoot->createRenderWindow("OgreWidget_RenderWindow",
-                                                      qMax(w, 640),
-                                                      qMax(h, 480),
-                                                      false, &params);
-    mOgreRenderWindow->setActive(true);
-    mOgreRenderWindow->setVisible(true);
-
-    WId ogreWinId = 0x0;
-    mOgreRenderWindow->getCustomAttribute("WINDOW", &ogreWinId);
-    assert(ogreWinId);
-    // guaranteed to be valid due to the way it was created
-    QWidget::create(ogreWinId);
-    setAttribute(Qt::WA_OpaquePaintEvent);
-    // qt won't bother updating the area under/behind the render window
+  }
 }
 
-Ogre::RenderWindow *CadOgreBaseWidget::getEmbeddedOgreWindow() {
-    assert(mOgreRenderWindow); // guaranteed to be valid after construction
-    return mOgreRenderWindow;
+void CadOgreBaseWidget::loadResources()
+{
+  ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
+void CadOgreBaseWidget::go()
+{
+  mResourcesCfg = "resources.cfg";
+  mPluginsCfg = "plugins.cfg";
 
-void CadOgreBaseWidget::paintEvent(QPaintEvent *pEvent) {
-    this->update();
+  if(!setup())
+    return;
+
+  mRoot->startRendering();
+
+  destroyScene();
 }
 
+bool CadOgreBaseWidget::setup()
+{
+  mRoot = new Root(mPluginsCfg);
+  setupResources();
+  bool carryOn = configure();
+  if(!carryOn)
+    return false;
 
-//void CadOgreBaseWidget::resizeEvent(QResizeEvent *rEvent) {
-//    if (rEvent) {
-//        QWidget::resizeEvent(rEvent);
-//    }
+  chooseSceneManager();
+  createCamera();
+  createViewports();
 
-//    if (mOgreRenderWindow) {
-//        // since the underlying widget has already been updated we can source the resize values from there
-//        mOgreRenderWindow->reposition(x(), y());
-//        mOgreRenderWindow->resize(width(), height());
-//        mOgreRenderWindow->windowMovedOrResized();
-//    }
-//}
+  TextureManager::getSingleton().setDefaultNumMipmaps(5);
+  loadResources();
 
-void CadOgreBaseWidget::mousePressEvent(QMouseEvent *event) {
-    mOgreEventHandler->ogreMousePressEvent(event);
-}
-
-
-void CadOgreBaseWidget::mouseMoveEvent(QMouseEvent *event) {
-    mOgreEventHandler->ogreMouseMoveEvent(event);
-}
-
-void CadOgreBaseWidget::update() {
-    QWidget::update();
-    mOgreRoot->renderOneFrame();
+  createScene();
+  return true;
 }

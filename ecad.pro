@@ -13,7 +13,7 @@ QT += widgets
 TARGET = eCAD
 TEMPLATE = app
 
-LIBS += -L/usr/local/lib -lOgreMain
+LIBS += -L/usr/local/include/OGRE -lOgreMain -lOIS -lOgreOverlay
 
 DEPENDPATH += .
 
@@ -21,7 +21,9 @@ INCLUDEPATH += \
     $$PWD/gui \
     $$PWD/gui/entities \
     $$PWD/gui/ogre \
-    /usr/include/OGRE
+    /usr/local/include/OGRE \
+    /usr/local/include/OGRE/Overlay \
+    /usr/include/OIS
 
 SOURCES += \
     main.cpp\
