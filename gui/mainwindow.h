@@ -46,9 +46,9 @@ private:
 
 private slots:
     void drawPoint();
-    //    void drawLine();
-    //    void drawCircle();
-    //    void drawEllipse();
+//    void drawLine();
+//    void drawCircle();
+//    void drawEllipse();
     void newFile();
 
     void on_actionSave_triggered();
