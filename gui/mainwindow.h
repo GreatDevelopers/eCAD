@@ -40,6 +40,7 @@ private:
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
+    CadGraphicsView *view;
 
     bool eventFilter(QObject *obj, QEvent *event);
 

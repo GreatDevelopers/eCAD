@@ -56,7 +56,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::newFile()
 {
-    CadGraphicsView *view = createMdiView();
+    createMdiView();
     view->newFile();
     view->show();
 }
@@ -98,14 +98,14 @@ void  MainWindow::print( QPrinter* printer )
 
 CadGraphicsView *MainWindow::createMdiView()
 {
-    CadGraphicsView *view = new CadGraphicsView;
+    view = new CadGraphicsView;
     mdiArea->addSubWindow(view);
     return view;
 }
 
 void MainWindow::drawPoint()
 {
-
+    view->drawPoint();
 }
 
 //void MainWindow::drawLine(){
