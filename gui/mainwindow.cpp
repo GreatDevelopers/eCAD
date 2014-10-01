@@ -196,7 +196,7 @@ void MainWindow::on_actionSave_triggered()
             xmlWriter.writeAttribute("version", "v1.0");
             xmlWriter.writeStartElement("Entities");
 
-            //scene->writeStream(&xmlWriter);
+            view->scene->writeStream(&xmlWriter);
 
             xmlWriter.writeEndElement();   //end of Entities
             xmlWriter.writeEndElement();   //end of SceneData
