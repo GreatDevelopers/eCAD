@@ -38,3 +38,8 @@ void CadGraphicsView::drawPoint()
     scene->setMode(CadGraphicsScene::PointMode);
 }
 
+void CadGraphicsView::setNoMode()
+{
+    scene->setMode(CadGraphicsScene::NoMode);
+}
+

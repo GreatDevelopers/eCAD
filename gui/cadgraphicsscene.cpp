@@ -1,5 +1,6 @@
 #include "cadgraphicsscene.h"
 #include <QGraphicsSceneMouseEvent>
+#include <QDebug>
 
 CadGraphicsScene::CadGraphicsScene(QObject *parent) :
     QGraphicsScene(parent)
@@ -16,6 +17,10 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     Point *pointItem;
 
     switch (entityMode){
+    case NoMode:
+        qDebug() << "No Mode" ;
+        break;
+
     case PointMode:
         pointItem = new Point;
         addItem(pointItem);
