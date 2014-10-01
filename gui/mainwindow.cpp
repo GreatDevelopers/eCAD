@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(actionZoom_Out, SIGNAL(triggered()), this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),this,SLOT(on_actionInsert_Image_triggered()));
 
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(setNoMode()));
+    new QShortcut(QKeySequence(Qt::Key_Escape), this, SLOT(setNoMode()));
 }
 
 
