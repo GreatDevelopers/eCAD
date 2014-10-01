@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QTextEdit>
 #include <QXmlStreamWriter>
+#include <QShortcut>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -37,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(actionZoom_In, SIGNAL(triggered()), this, SLOT(on_actionZoom_In_triggered()));
     connect(actionZoom_Out, SIGNAL(triggered()), this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),this,SLOT(on_actionInsert_Image_triggered()));
+
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(setNoMode()));
 }
 
 
@@ -106,6 +109,11 @@ CadGraphicsView *MainWindow::createMdiView()
 void MainWindow::drawPoint()
 {
     view->drawPoint();
+}
+
+void MainWindow::setNoMode()
+{
+    view->setNoMode();
 }
 
 //void MainWindow::drawLine(){

@@ -11,7 +11,7 @@ class CadGraphicsScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit CadGraphicsScene(QObject *parent = 0);
-    enum Mode { PointMode };
+    enum Mode { NoMode, PointMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);

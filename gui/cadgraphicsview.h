@@ -13,6 +13,7 @@ public:
     CadGraphicsView();
     void newFile();
     void drawPoint();
+    void setNoMode();
 
 protected:
      void wheelEvent(QWheelEvent* event);
