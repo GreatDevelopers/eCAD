@@ -171,9 +171,9 @@ void MainWindow::on_actionOpen_triggered()
             // close file, display new scene, delete old scene, and display useful message
             file.close();
 
-            //graphicsView->setScene( newScene );
-            //delete scene;
-            //scene = newScene;
+            view->setScene( newScene );
+            delete view->scene;
+            view->scene = newScene;
             QMessageBox::warning(this,"Done", QString("Loaded '%1'").arg(filename));
             return;
         }
