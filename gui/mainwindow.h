@@ -12,9 +12,6 @@
 
 #include "ui_mainwindow.h"
 #include "cadgraphicsview.h"
-//#include "line.h"
-//#include "circle.h"
-//#include "ellipse.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -28,14 +25,6 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 private:
-    bool mFirstClick;
-    bool mPaintFlag;
-    double mStartX;
-    double mStartY;
-    double mEndX;
-    double mEndY;
-    double scaleFactor;
-
     QPainter *painter;
     QPrinter *printer;
     QPixmap image;
@@ -46,7 +35,7 @@ private:
 
 private slots:
     void drawPoint();
-//    void drawLine();
+    void drawLine();
 //    void drawCircle();
 //    void drawEllipse();
     void newFile();

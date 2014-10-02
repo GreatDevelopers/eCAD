@@ -13,6 +13,7 @@ public:
     CadGraphicsView();
     void newFile();
     void drawPoint();
+    void drawLine();
     void setNoMode();
     CadGraphicsScene *scene;
 

@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //    connect(ellipseButton, SIGNAL(clicked()), this, SLOT(drawEllipse()));
 
     connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
-    //    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
+    connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
     //    connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
     //    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
 
@@ -116,11 +116,10 @@ void MainWindow::setNoMode()
     view->setNoMode();
 }
 
-//void MainWindow::drawLine(){
-//    line_entity = new line;
-//    scene->addItem(line_entity);
-//    qDebug() << "Line Created";
-//}
+void MainWindow::drawLine()
+{
+   view->drawLine();
+}
 
 //void MainWindow::drawCircle(){
 //    circle_entity = new circle;

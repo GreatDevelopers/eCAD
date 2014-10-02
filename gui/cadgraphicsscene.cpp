@@ -5,6 +5,15 @@
 CadGraphicsScene::CadGraphicsScene(QObject *parent) :
     QGraphicsScene(parent)
 {
+    setFlags();
+}
+
+
+void CadGraphicsScene::setFlags()
+{
+    mFirstClick = true;
+    mSecondClick = false;
+    mPaintFlag = false;
 }
 
 void CadGraphicsScene::setMode(Mode mode)
@@ -15,7 +24,7 @@ void CadGraphicsScene::setMode(Mode mode)
 void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     Point *pointItem;
-
+    Line *lineItem;
     switch (entityMode){
     case NoMode:
         qDebug() << "No Mode" ;
@@ -25,8 +34,37 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         pointItem = new Point;
         addItem(pointItem);
         pointItem->setPos(mouseEvent->scenePos());
-        emit createdPoint(pointItem);
+        //      emit createdPoint(pointItem);
         break;
+
+    case LineMode:
+        if(mFirstClick){
+            pointItem = new Point;
+            addItem(pointItem);
+            pointItem->setPos(mouseEvent->scenePos());
+            start_p = mouseEvent->scenePos();
+            mFirstClick = false;
+            mSecondClick = true;
+        }
+
+        else if(!mFirstClick && mSecondClick){
+            pointItem = new Point;
+            addItem(pointItem);
+            pointItem->setPos(mouseEvent->scenePos());
+            end_p = mouseEvent->scenePos();
+            mPaintFlag = true;
+            mSecondClick = false;
+        }
+        if(mPaintFlag)
+        {
+            lineItem = new Line(start_p, end_p);
+            addItem(lineItem);
+//          entityMode = NoMode;
+            setFlags();
+        }
+
+        break;
+
 
     default:
         ;
