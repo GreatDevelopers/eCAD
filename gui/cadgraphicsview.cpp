@@ -43,3 +43,8 @@ void CadGraphicsView::setNoMode()
     scene->setMode(CadGraphicsScene::NoMode);
 }
 
+void CadGraphicsView::drawLine()
+{
+    scene->setMode(CadGraphicsScene::LineMode);
+}
+

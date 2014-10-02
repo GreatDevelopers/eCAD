@@ -5,13 +5,14 @@
 #include <QXmlStreamWriter>
 
 #include "point.h"
+#include "line.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     explicit CadGraphicsScene(QObject *parent = 0);
-    enum Mode { NoMode, PointMode };
+    enum Mode { NoMode, PointMode, LineMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -24,10 +25,16 @@ public slots:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-
+    void setFlags();
 
 private:
     Mode entityMode;
+    bool mFirstClick;
+    bool mSecondClick;
+    bool mPaintFlag;
+    QVector<QPointF> stuff;
+    QPointF start_p, end_p, move_p, check_p;
+    QPen paintpen, linePen;
 };
 
 
