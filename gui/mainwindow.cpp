@@ -96,7 +96,7 @@ void  MainWindow::print( QPrinter* printer )
                       QDateTime::currentDateTime().toString( Qt::DefaultLocaleShortDate ) );
 
     page.adjust( w/20, h/20, -w/20, -h/20 );
-    //scene->render( &painter, page );
+    view->scene->render( &painter, page );
 }
 
 CadGraphicsView *MainWindow::createMdiView()
