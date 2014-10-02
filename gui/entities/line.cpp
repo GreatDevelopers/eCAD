@@ -10,27 +10,7 @@ Line::Line(QPointF p1, QPointF p2)
 
 QRectF Line::boundingRect() const
 {
-    // outer most edges
-    if(start_p.x() <= end_p.x() && start_p.y() <= end_p.y())
-    {
-        return QRectF(start_p.x(),
-                      start_p.y(),end_p.x(), end_p.y());
-    }
-    else if(start_p.x() >= end_p.x() && start_p.y() >= end_p.y())
-    {
-        return QRectF(end_p.x(), end_p.y(),start_p.x(),
-                      start_p.y());
-    }
-    else if(start_p.x() >= end_p.x() && start_p.y() <= end_p.y())
-    {
-        return QRectF(end_p.x(), start_p.y(),start_p.x(),
-                      end_p.y());
-    }
-    else if(start_p.x() <= end_p.x() && start_p.y() >= end_p.y())
-    {
-        return QRectF(start_p.x(), end_p.y(),end_p.x(),
-                      start_p.y());
-    }
+    return QRectF(start_p,end_p).normalized();
 
 }
 
