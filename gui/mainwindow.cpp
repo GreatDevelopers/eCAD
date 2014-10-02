@@ -171,9 +171,9 @@ void MainWindow::on_actionOpen_triggered()
             // close file, display new scene, delete old scene, and display useful message
             file.close();
 
-            //graphicsView->setScene( newScene );
-            //delete scene;
-            //scene = newScene;
+            view->setScene( newScene );
+            delete view->scene;
+            view->scene = newScene;
             QMessageBox::warning(this,"Done", QString("Loaded '%1'").arg(filename));
             return;
         }
@@ -196,7 +196,7 @@ void MainWindow::on_actionSave_triggered()
             xmlWriter.writeAttribute("version", "v1.0");
             xmlWriter.writeStartElement("Entities");
 
-            //scene->writeStream(&xmlWriter);
+            view->scene->writeStream(&xmlWriter);
 
             xmlWriter.writeEndElement();   //end of Entities
             xmlWriter.writeEndElement();   //end of SceneData

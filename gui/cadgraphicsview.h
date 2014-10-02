@@ -14,12 +14,12 @@ public:
     void newFile();
     void drawPoint();
     void setNoMode();
+    CadGraphicsScene *scene;
 
 protected:
-     void wheelEvent(QWheelEvent* event);
+    void wheelEvent(QWheelEvent* event);
 
 private:
-    CadGraphicsScene *scene;
     QString curFileName;
     bool isUntitled;
     double scaleFactor;
