@@ -11,24 +11,16 @@ class Circle: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    Circle();
+    Circle(QPointF, QPointF);
     QRectF boundingRect() const;
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,
                        QWidget * widget);
 
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
 private:
-    int center_x, center_y, x1, y1, radius;
-    bool mFirstClick;
-    bool mSecondClick;
-    bool mPaintFlag;
     QVector<QPointF> stuff;
-    QPointF center, p1, move_p;
+    QPointF center_p, end_p, move_p;
+    qreal radius;
 };
 
 #endif // CIRCLE_H
