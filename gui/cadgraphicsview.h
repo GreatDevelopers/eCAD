@@ -14,6 +14,7 @@ public:
     void newFile();
     void drawPoint();
     void drawLine();
+    void drawCircle();
     void setNoMode();
     CadGraphicsScene *scene;
 

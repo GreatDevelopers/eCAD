@@ -48,3 +48,8 @@ void CadGraphicsView::drawLine()
     scene->setMode(CadGraphicsScene::LineMode);
 }
 
+void CadGraphicsView::drawCircle()
+{
+    scene->setMode(CadGraphicsScene::CircleMode);
+}
+

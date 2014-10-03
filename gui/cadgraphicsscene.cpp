@@ -25,6 +25,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     Point *pointItem;
     Line *lineItem;
+    Circle *circleItem;
+
     switch (entityMode){
     case NoMode:
         qDebug() << "No Mode" ;
@@ -62,7 +64,31 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 //          entityMode = NoMode;
             setFlags();
         }
+        break;
 
+    case CircleMode:
+        if(mFirstClick){
+            pointItem = new Point;
+            addItem(pointItem);
+            pointItem->setPos(mouseEvent->scenePos());
+            start_p = mouseEvent->scenePos();
+            mFirstClick = false;
+            mSecondClick = true;
+        }
+
+        else if(!mFirstClick && mSecondClick){
+            end_p = mouseEvent->scenePos();
+            mPaintFlag = true;
+            mSecondClick = false;
+        }
+
+        if(mPaintFlag)
+        {
+            circleItem = new Circle(start_p, end_p);
+            addItem(circleItem);
+//          entityMode = NoMode;
+            setFlags();
+        }
         break;
 
 

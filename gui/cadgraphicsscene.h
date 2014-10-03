@@ -6,13 +6,14 @@
 
 #include "point.h"
 #include "line.h"
+#include "circle.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     explicit CadGraphicsScene(QObject *parent = 0);
-    enum Mode { NoMode, PointMode, LineMode };
+    enum Mode { NoMode, PointMode, LineMode, CircleMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
