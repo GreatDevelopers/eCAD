@@ -53,3 +53,8 @@ void CadGraphicsView::drawCircle()
     scene->setMode(CadGraphicsScene::CircleMode);
 }
 
+void CadGraphicsView::drawEllipse()
+{
+    scene->setMode(CadGraphicsScene::EllipseMode);
+}
+

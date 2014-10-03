@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(actionPoints, SIGNAL(triggered()), this, SLOT(drawPoint()));
     connect(actionLine, SIGNAL(triggered()), this, SLOT(drawLine()));
     connect(actionCircle, SIGNAL(triggered()), this, SLOT(drawCircle()));
-    //    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
+    connect(actionEllipse, SIGNAL(triggered()), this, SLOT(drawEllipse()));
 
     connect(actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -126,11 +126,10 @@ void MainWindow::drawCircle()
     view->drawCircle();
 }
 
-//void MainWindow::drawEllipse(){
-//    ellipse_entity = new ellipse;
-//    scene->addItem(ellipse_entity);
-//    qDebug() << "Ellipse Created";
-//}
+void MainWindow::drawEllipse()
+{
+    view->drawEllipse();
+}
 
 void MainWindow::on_actionOpen_triggered()
 {

@@ -37,7 +37,7 @@ private slots:
     void drawPoint();
     void drawLine();
     void drawCircle();
-//    void drawEllipse();
+    void drawEllipse();
     void newFile();
 
     void setNoMode();

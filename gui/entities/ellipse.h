@@ -11,26 +11,17 @@ class Ellipse: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    Ellipse();
+    Ellipse(QPointF, QPointF, QPointF);
     QRectF boundingRect() const;
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,
                        QWidget * widget);
 
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-
 private:
-    int center_x, center_y, x1, y1, x2, y2;
-    int majRadius, minRadius;
-    bool mFirstClick;
-    bool mSecondClick;
-    bool mThirdClick;
-    bool mPaintFlag;
-    QPointF center, p1, p2;
+    QPen paintpen, linepen;
+    QPointF p1, p2, p3;
     QVector<QPointF> stuff;
+    float majRadius, minRadius;
 };
 
 #endif // ELLIPSE_H
