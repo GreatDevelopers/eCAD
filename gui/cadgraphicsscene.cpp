@@ -1,16 +1,16 @@
 #include "cadgraphicsscene.h"
+
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
-CadGraphicsScene::CadGraphicsScene(QObject *parent) :
-    QGraphicsScene(parent)
+CadGraphicsScene::CadGraphicsScene(QObject *parent) : QGraphicsScene(parent)
 {
     setFlags();
 }
 
-
 void CadGraphicsScene::setFlags()
 {
+    // set/unset all the flags
     mFirstClick = true;
     mSecondClick = false;
     mThirdClick = false;
@@ -19,19 +19,22 @@ void CadGraphicsScene::setFlags()
 
 void CadGraphicsScene::setMode(Mode mode)
 {
+    // determine the mode set
     entityMode = mode;
 }
 
 void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
+    // mousePressEvent in the graphicsScene
     Point *pointItem;
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
 
-    switch (entityMode){
+    switch (entityMode)
+    {
     case NoMode:
-        qDebug() << "No Mode" ;
+        qDebug() << "No Mode";
         break;
 
     case PointMode:
@@ -42,7 +45,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case LineMode:
-        if(mFirstClick){
+        if (mFirstClick)
+        {
             pointItem = new Point;
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
@@ -51,7 +55,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             mSecondClick = true;
         }
 
-        else if(!mFirstClick && mSecondClick){
+        else if (!mFirstClick && mSecondClick)
+        {
             pointItem = new Point;
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
@@ -59,7 +64,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             mPaintFlag = true;
             mSecondClick = false;
         }
-        if(mPaintFlag)
+
+        if (mPaintFlag)
         {
             lineItem = new Line(start_p, end_p);
             addItem(lineItem);
@@ -69,7 +75,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case CircleMode:
-        if(mFirstClick){
+        if (mFirstClick)
+        {
             pointItem = new Point;
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
@@ -78,13 +85,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             mSecondClick = true;
         }
 
-        else if(!mFirstClick && mSecondClick){
+        else if (!mFirstClick && mSecondClick)
+        {
             end_p = mouseEvent->scenePos();
             mPaintFlag = true;
             mSecondClick = false;
         }
 
-        if(mPaintFlag)
+        if (mPaintFlag)
         {
             circleItem = new Circle(start_p, end_p);
             addItem(circleItem);
@@ -94,7 +102,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case EllipseMode:
-        if(mFirstClick){
+        if (mFirstClick)
+        {
             pointItem = new Point;
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
@@ -103,27 +112,28 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             mSecondClick = true;
         }
 
-        else if(!mFirstClick && mSecondClick){
+        else if (!mFirstClick && mSecondClick)
+        {
             mid_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = false;
             mThirdClick = true;
-
         }
 
-        else if(!mSecondClick && mThirdClick){
+        else if (!mSecondClick && mThirdClick)
+        {
             end_p = mouseEvent->scenePos();
             mThirdClick = false;
             mPaintFlag = true;
         }
-        if(mPaintFlag)
+
+        if (mPaintFlag)
         {
             ellipseItem = new Ellipse(start_p, mid_p, end_p);
             addItem(ellipseItem);
             setFlags();
         }
         break;
-
 
     default:
         ;
@@ -134,7 +144,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
-    foreach(QGraphicsItem* item, items())
+    foreach (QGraphicsItem* item, items())
     {
         //        if(item->type() == Point::Type )
         //        {
@@ -155,10 +165,12 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
         if (stream->isStartElement() && stream->name() == "Point")
         {
             qreal x = 0.0, y = 0.0;
-            foreach(QXmlStreamAttribute attribute, stream->attributes())
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
             {
-                if (attribute.name() == "xCoord") x = attribute.value().toString().toDouble();
-                if (attribute.name() == "yCoord") y = attribute.value().toString().toDouble();
+                if (attribute.name() == "xCoord")
+                    x = attribute.value().toString().toDouble();
+                if (attribute.name() == "yCoord")
+                    y = attribute.value().toString().toDouble();
             }
             Point *myPoint = new Point;
             addItem(myPoint);

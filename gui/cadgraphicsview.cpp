@@ -9,6 +9,7 @@ CadGraphicsView::CadGraphicsView()
 
 void CadGraphicsView::newFile()
 {
+    // creates a new file/document and insert scene
     static int fileNumber = 1;
     isUntitled = true;
     curFileName = tr("Document %1").arg(fileNumber++);
@@ -20,41 +21,49 @@ void CadGraphicsView::newFile()
     setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-void CadGraphicsView::wheelEvent(QWheelEvent* event) {
+void CadGraphicsView::wheelEvent(QWheelEvent* event)
+{
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
     // Scale the view / do the zoom
-    if(event->delta() > 0) {
-        // Zoom in
+    if (event->delta() > 0)
+    {
+        // Zooming in
         scale(scaleFactor, scaleFactor);
-    } else {
-        // Zooming out
-        scale(1.0 / scaleFactor, 1.0 / scaleFactor);
     }
-}
-
-void CadGraphicsView::drawPoint()
-{
-    scene->setMode(CadGraphicsScene::PointMode);
+    else
+    {
+        // Zooming out
+        scale(1.0/scaleFactor, 1.0/scaleFactor);
+    }
 }
 
 void CadGraphicsView::setNoMode()
 {
+    // sets the mode to NoMode for scene
     scene->setMode(CadGraphicsScene::NoMode);
+}
+
+void CadGraphicsView::drawPoint()
+{
+    // sets the mode to PointMode for scene
+    scene->setMode(CadGraphicsScene::PointMode);
 }
 
 void CadGraphicsView::drawLine()
 {
+    // sets the mode to LineMode for scene
     scene->setMode(CadGraphicsScene::LineMode);
 }
 
 void CadGraphicsView::drawCircle()
 {
+    // sets the mode to CircleMode for scene
     scene->setMode(CadGraphicsScene::CircleMode);
 }
 
 void CadGraphicsView::drawEllipse()
 {
+    // sets the mode to EllipseMode for scene
     scene->setMode(CadGraphicsScene::EllipseMode);
 }
-
