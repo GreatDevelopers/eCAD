@@ -13,6 +13,7 @@ void CadGraphicsScene::setFlags()
 {
     mFirstClick = true;
     mSecondClick = false;
+    mThirdClick = false;
     mPaintFlag = false;
 }
 
@@ -26,6 +27,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     Point *pointItem;
     Line *lineItem;
     Circle *circleItem;
+    Ellipse *ellipseItem;
 
     switch (entityMode){
     case NoMode:
@@ -61,7 +63,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         {
             lineItem = new Line(start_p, end_p);
             addItem(lineItem);
-//          entityMode = NoMode;
+            //          entityMode = NoMode;
             setFlags();
         }
         break;
@@ -86,7 +88,38 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         {
             circleItem = new Circle(start_p, end_p);
             addItem(circleItem);
-//          entityMode = NoMode;
+            //          entityMode = NoMode;
+            setFlags();
+        }
+        break;
+
+    case EllipseMode:
+        if(mFirstClick){
+            pointItem = new Point;
+            addItem(pointItem);
+            pointItem->setPos(mouseEvent->scenePos());
+            start_p = mouseEvent->scenePos();
+            mFirstClick = false;
+            mSecondClick = true;
+        }
+
+        else if(!mFirstClick && mSecondClick){
+            mid_p = mouseEvent->scenePos();
+            mFirstClick = false;
+            mSecondClick = false;
+            mThirdClick = true;
+
+        }
+
+        else if(!mSecondClick && mThirdClick){
+            end_p = mouseEvent->scenePos();
+            mThirdClick = false;
+            mPaintFlag = true;
+        }
+        if(mPaintFlag)
+        {
+            ellipseItem = new Ellipse(start_p, mid_p, end_p);
+            addItem(ellipseItem);
             setFlags();
         }
         break;
@@ -103,14 +136,14 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
     foreach(QGraphicsItem* item, items())
     {
-//        if(item->type() == Point::Type )
-//        {
-            Point* myItem = dynamic_cast<Point*>(item);
-            stream->writeStartElement("Point");
-            stream->writeAttribute("xCoord", QString::number(myItem->x()));
-            stream->writeAttribute("yCoord", QString::number(myItem->y()));
-            stream->writeEndElement();  //end of Point Item
-//        }
+        //        if(item->type() == Point::Type )
+        //        {
+        Point* myItem = dynamic_cast<Point*>(item);
+        stream->writeStartElement("Point");
+        stream->writeAttribute("xCoord", QString::number(myItem->x()));
+        stream->writeAttribute("yCoord", QString::number(myItem->y()));
+        stream->writeEndElement();  //end of Point Item
+        //        }
     }
 }
 

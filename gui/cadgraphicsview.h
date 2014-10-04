@@ -15,6 +15,7 @@ public:
     void drawPoint();
     void drawLine();
     void drawCircle();
+    void drawEllipse();
     void setNoMode();
     CadGraphicsScene *scene;
 
