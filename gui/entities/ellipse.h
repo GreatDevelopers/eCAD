@@ -3,8 +3,7 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
-#include <QDebug>
-#include <QGraphicsSceneMouseEvent>
+
 #include "qmath.h"
 
 class Ellipse: public QObject, public QGraphicsItem

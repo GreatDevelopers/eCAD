@@ -3,8 +3,7 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
-#include <QGraphicsSceneMouseEvent>
-#include <QDebug>
+
 #include "qmath.h"
 
 class Circle: public QObject, public QGraphicsItem

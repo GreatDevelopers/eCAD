@@ -3,10 +3,9 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
-#include <QDebug>
-#include <QGraphicsSceneMouseEvent>
 
-class Line: public QObject, public QGraphicsItem{
+class Line: public QObject, public QGraphicsItem
+{
     Q_OBJECT
 public:
     Line(QPointF, QPointF);

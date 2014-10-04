@@ -3,9 +3,8 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
-#include <QGraphicsSceneMouseEvent>
 
-class Point: public QObject,public QGraphicsItem
+class Point: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
@@ -13,10 +12,9 @@ public:
 
 protected:
     QRectF boundingRect() const;
-    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
-
-private:
-
+    virtual void paint(QPainter * painter,
+                       const QStyleOptionGraphicsItem * option,
+                       QWidget * widget);
 };
 
 #endif // POINT_H
