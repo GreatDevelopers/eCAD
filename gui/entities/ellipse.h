@@ -21,6 +21,7 @@ private:
     QPointF p1, p2, p3;
     QVector<QPointF> stuff;
     float majRadius, minRadius;
+    float theta;
 };
 
 #endif // ELLIPSE_H

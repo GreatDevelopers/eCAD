@@ -7,6 +7,7 @@ Ellipse::Ellipse(QPointF point1, QPointF point2, QPointF point3)
     p1 = point1;
     p2 = point2;
     p3 = point3;
+    theta = atan2((p2.y()-p1.y()),(p2.x()-p1.x())) * (180/M_PI);
     majRadius = qSqrt(qPow((p2.x()-p1.x()), 2) + qPow((p2.y()-p1.y()), 2));
     minRadius = qSqrt(qPow((p3.x()-p1.x()), 2) + qPow((p3.y()-p1.y()), 2));
 }
@@ -31,5 +32,10 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(paintpen);
+    painter->save();
+    painter->translate(p1.x(), p1.y());
+    painter->rotate(theta);
+    painter->translate(-p1.x(), -p1.y());
     painter->drawPath(ellipse);
+    painter->restore();
 }
