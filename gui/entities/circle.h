@@ -15,11 +15,14 @@ public:
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,
                        QWidget * widget);
+    enum { Type = UserType + 3 };
+    int type() const;
+
+    QPointF center_p, end_p, move_p;
+    qreal radius;
 
 private:
     QVector<QPointF> stuff;
-    QPointF center_p, end_p, move_p;
-    qreal radius;
 };
 
 #endif // CIRCLE_H

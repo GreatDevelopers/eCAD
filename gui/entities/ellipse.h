@@ -15,13 +15,15 @@ public:
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,
                        QWidget * widget);
+    enum { Type = UserType + 4 };
+    int type() const;
 
-private:
-    QPen paintpen, linepen;
     QPointF p1, p2, p3;
-    QVector<QPointF> stuff;
     float d12, d13, majRadius, minRadius;
     float theta;
+
+private:
+    QVector<QPointF> stuff;
 };
 
 #endif // ELLIPSE_H

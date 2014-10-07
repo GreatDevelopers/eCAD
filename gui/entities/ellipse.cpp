@@ -25,6 +25,12 @@ Ellipse::Ellipse(QPointF point1, QPointF point2, QPointF point3)
     }
 }
 
+int Ellipse::type() const
+{
+    // Enable the use of qgraphicsitem_cast with ellipse item.
+    return Type;
+}
+
 QRectF Ellipse::boundingRect() const
 {
     // bounding rectangle for ellipse
