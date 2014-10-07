@@ -10,6 +10,12 @@ Circle::Circle(QPointF p1, QPointF p2)
                    + qPow((end_p.y()-center_p.y()), 2));
 }
 
+int Circle::type() const
+{
+    // Enable the use of qgraphicsitem_cast with circle item.
+    return Type;
+}
+
 QRectF Circle::boundingRect() const
 {
     // bounding rectangle for circle

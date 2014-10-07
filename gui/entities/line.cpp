@@ -7,6 +7,12 @@ Line::Line(QPointF p1, QPointF p2)
     end_p = p2;
 }
 
+int Line::type() const
+{
+    // Enable the use of qgraphicsitem_cast with line item.
+    return Type;
+}
+
 QRectF Line::boundingRect() const
 {
     // bounding rectangle for line

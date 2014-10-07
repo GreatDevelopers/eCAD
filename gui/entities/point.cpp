@@ -4,6 +4,12 @@ Point::Point()
 {
 }
 
+int Point::type() const
+{
+    // Enable the use of qgraphicsitem_cast with point item.
+    return Type;
+}
+
 QRectF Point::boundingRect() const
 {
     // bounding rectangle for point
@@ -23,3 +29,5 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(paintpen);
     painter->drawEllipse(boundingRect());
 }
+
+
