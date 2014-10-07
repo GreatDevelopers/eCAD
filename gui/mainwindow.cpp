@@ -55,10 +55,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // shortcut keys
     new QShortcut(QKeySequence(Qt::Key_Escape),
                   this, SLOT(setNoMode()));
+
+    // toggle actions to false
+    toggleActions(0);
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::toggleActions(bool b)
+{
+    actionSave->setEnabled(b);
+    actionPrint->setEnabled(b);
+    actionPrintPreview->setEnabled(b);
+    actionZoom_In->setEnabled(b);
+    actionZoom_Out->setEnabled(b);
+    actionPoints->setEnabled(b);
+    actionLine->setEnabled(b);
+    actionCircle->setEnabled(b);
+    actionEllipse->setEnabled(b);
+    actionInsert_Image->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -79,6 +96,9 @@ void MainWindow::newFile()
     createMdiView();
     view->newFile();
     view->show();
+
+    // toggle actions to true
+    toggleActions(1);
 }
 
 void MainWindow::filePrintPreview()
