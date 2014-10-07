@@ -48,6 +48,8 @@ private slots:
     void on_actionZoom_Out_triggered();
     void on_actionInsert_Image_triggered();
 
+    void toggleActions(bool b);
+
     void filePrintPreview();
     void filePrint();
     void print(QPrinter *);
