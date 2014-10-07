@@ -20,7 +20,7 @@ private:
     QPen paintpen, linepen;
     QPointF p1, p2, p3;
     QVector<QPointF> stuff;
-    float majRadius, minRadius;
+    float d12, d13, majRadius, minRadius;
     float theta;
 };
 
