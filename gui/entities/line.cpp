@@ -1,7 +1,10 @@
 #include "line.h"
 
-Line::Line(QPointF p1, QPointF p2)
+Line::Line(int i, QPointF p1, QPointF p2)
 {
+    // assigns id
+    id = i;
+
     // set values of start point and end point of line
     start_p = p1;
     end_p = p2;

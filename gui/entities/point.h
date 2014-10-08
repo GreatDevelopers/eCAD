@@ -8,9 +8,10 @@ class Point: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    Point();
+    Point(int);
      enum { Type = UserType + 1 };
      int type() const;
+     int id;
 
 protected:
     QRectF boundingRect() const;
