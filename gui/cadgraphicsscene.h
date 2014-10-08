@@ -19,9 +19,6 @@ public:
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
 
-signals:
-    void createdPoint(Point *pointItem);
-
 public slots:
     void setMode(Mode mode);
 
@@ -39,6 +36,16 @@ private:
     QVector<QPointF> stuff;
     QPointF start_p, mid_p, end_p, move_p, check_p;
     QPen paintpen, linePen;
+
+    QList<QGraphicsItemGroup*> groupList;
+    Point *pointItem;
+    Line *lineItem;
+    Circle *circleItem;
+    Ellipse *ellipseItem;
+    QGraphicsItemGroup *pointGroup;
+    QGraphicsItemGroup *lineGroup;
+    QGraphicsItemGroup *circleGroup;
+    QGraphicsItemGroup *ellipseGroup;
 };
 
 #endif // CADGRAPHICSSCENE_H
