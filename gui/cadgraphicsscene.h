@@ -28,6 +28,7 @@ public slots:
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void setFlags();
+    void areItemsSelectable(bool);
 
 private:
     Mode entityMode;

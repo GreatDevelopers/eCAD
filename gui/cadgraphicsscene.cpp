@@ -21,6 +21,20 @@ void CadGraphicsScene::setMode(Mode mode)
 {
     // determine the mode set
     entityMode = mode;
+
+    if (entityMode == NoMode)
+        areItemsSelectable(true);
+    else
+        areItemsSelectable(false);
+}
+
+void CadGraphicsScene::areItemsSelectable(bool b)
+{
+    foreach (QGraphicsItem* item, items())
+    {
+        item->setFlag(QGraphicsItem::ItemIsSelectable, b);
+        item->setFlag(QGraphicsItem::ItemIsMovable, b);
+    }
 }
 
 void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
