@@ -30,20 +30,16 @@ void CadGraphicsScene::setMode(Mode mode)
 
 void CadGraphicsScene::areItemsSelectable(bool b)
 {
-    foreach (QGraphicsItem* item, items())
+    foreach (QGraphicsItemGroup* item, groupList)
     {
-        item->setFlag(QGraphicsItem::ItemIsSelectable, b);
-        item->setFlag(QGraphicsItem::ItemIsMovable, b);
+        item->setFlag(QGraphicsItemGroup::ItemIsSelectable, b);
+        item->setFlag(QGraphicsItemGroup::ItemIsMovable, b);
     }
 }
 
 void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // mousePressEvent in the graphicsScene
-    Point *pointItem;
-    Line *lineItem;
-    Circle *circleItem;
-    Ellipse *ellipseItem;
     static int id = 0;
 
     switch (entityMode)
@@ -53,18 +49,21 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case PointMode:
+        pointGroup = new QGraphicsItemGroup;
         pointItem = new Point(++id);
-        addItem(pointItem);
         pointItem->setPos(mouseEvent->scenePos());
-        //      emit createdPoint(pointItem);
+        pointGroup->addToGroup(pointItem);
+        addItem(pointGroup);
+        groupList.append(pointGroup);
         break;
 
     case LineMode:
         if (mFirstClick)
         {
+            lineGroup = new QGraphicsItemGroup;
             pointItem = new Point(++id);
-            addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
+            lineGroup->addToGroup(pointItem);
             start_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = true;
@@ -73,8 +72,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         else if (!mFirstClick && mSecondClick)
         {
             pointItem = new Point(id);
-            addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
+            lineGroup->addToGroup(pointItem);
             end_p = mouseEvent->scenePos();
             mPaintFlag = true;
             mSecondClick = false;
@@ -83,8 +82,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             lineItem = new Line(id, start_p, end_p);
-            addItem(lineItem);
-            //          entityMode = NoMode;
+            lineGroup->addToGroup(lineItem);
+            addItem(lineGroup);
+            groupList.append(lineGroup);
             setFlags();
         }
         break;
@@ -92,9 +92,10 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case CircleMode:
         if (mFirstClick)
         {
+            circleGroup = new QGraphicsItemGroup;
             pointItem = new Point(++id);
-            addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
+            circleGroup->addToGroup(pointItem);
             start_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = true;
@@ -110,8 +111,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             circleItem = new Circle(id, start_p, end_p);
-            addItem(circleItem);
-            //          entityMode = NoMode;
+            circleGroup->addToGroup(circleItem);
+            addItem(circleGroup);
+            groupList.append(circleGroup);
             setFlags();
         }
         break;
@@ -119,9 +121,10 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case EllipseMode:
         if (mFirstClick)
         {
+            ellipseGroup = new QGraphicsItemGroup;
             pointItem = new Point(++id);
-            addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
+            ellipseGroup->addToGroup(pointItem);
             start_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = true;
@@ -145,7 +148,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             ellipseItem = new Ellipse(id, start_p, mid_p, end_p);
-            addItem(ellipseItem);
+            ellipseGroup->addToGroup(ellipseItem);
+            addItem(ellipseGroup);
+            groupList.append(ellipseGroup);
             setFlags();
         }
         break;
