@@ -30,6 +30,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
+    static int id = 0;
 
     switch (entityMode)
     {
@@ -38,7 +39,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case PointMode:
-        pointItem = new Point;
+        pointItem = new Point(++id);
         addItem(pointItem);
         pointItem->setPos(mouseEvent->scenePos());
         //      emit createdPoint(pointItem);
@@ -47,7 +48,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case LineMode:
         if (mFirstClick)
         {
-            pointItem = new Point;
+            pointItem = new Point(++id);
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
             start_p = mouseEvent->scenePos();
@@ -57,7 +58,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         else if (!mFirstClick && mSecondClick)
         {
-            pointItem = new Point;
+            pointItem = new Point(id);
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
             end_p = mouseEvent->scenePos();
@@ -67,7 +68,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (mPaintFlag)
         {
-            lineItem = new Line(start_p, end_p);
+            lineItem = new Line(id, start_p, end_p);
             addItem(lineItem);
             //          entityMode = NoMode;
             setFlags();
@@ -77,7 +78,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case CircleMode:
         if (mFirstClick)
         {
-            pointItem = new Point;
+            pointItem = new Point(++id);
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
             start_p = mouseEvent->scenePos();
@@ -94,7 +95,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (mPaintFlag)
         {
-            circleItem = new Circle(start_p, end_p);
+            circleItem = new Circle(id, start_p, end_p);
             addItem(circleItem);
             //          entityMode = NoMode;
             setFlags();
@@ -104,7 +105,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case EllipseMode:
         if (mFirstClick)
         {
-            pointItem = new Point;
+            pointItem = new Point(++id);
             addItem(pointItem);
             pointItem->setPos(mouseEvent->scenePos());
             start_p = mouseEvent->scenePos();
@@ -129,7 +130,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (mPaintFlag)
         {
-            ellipseItem = new Ellipse(start_p, mid_p, end_p);
+            ellipseItem = new Ellipse(id, start_p, mid_p, end_p);
             addItem(ellipseItem);
             setFlags();
         }
@@ -150,6 +151,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
         {
             Point* myItem = dynamic_cast<Point*>(item);
             stream->writeStartElement("Point");
+            stream->writeAttribute("id", QString::number(myItem->id));
             stream->writeAttribute("x", QString::number(myItem->x()));
             stream->writeAttribute("y", QString::number(myItem->y()));
             stream->writeEndElement();  //end of Point Item
@@ -159,6 +161,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
         {
             Line* myItem = dynamic_cast<Line*>(item);
             stream->writeStartElement("Line");
+            stream->writeAttribute("id", QString::number(myItem->id));
             stream->writeAttribute("x1", QString::number(myItem->start_p.x()));
             stream->writeAttribute("y1", QString::number(myItem->start_p.y()));
             stream->writeAttribute("x2", QString::number(myItem->end_p.x()));
@@ -170,6 +173,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
         {
             Circle* myItem = dynamic_cast<Circle*>(item);
             stream->writeStartElement("Circle");
+            stream->writeAttribute("id", QString::number(myItem->id));
             stream->writeAttribute("cx", QString::number(myItem->center_p.x()));
             stream->writeAttribute("cy", QString::number(myItem->center_p.y()));
             stream->writeAttribute("radius", QString::number(myItem->radius));
@@ -180,6 +184,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
         {
             Ellipse* myItem = dynamic_cast<Ellipse*>(item);
             stream->writeStartElement("Ellipse");
+            stream->writeAttribute("id", QString::number(myItem->id));
             stream->writeAttribute("cx", QString::number(myItem->p1.x()));
             stream->writeAttribute("cy", QString::number(myItem->p1.y()));
             stream->writeAttribute("majR", QString::number(myItem->majRadius));
@@ -204,9 +209,10 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "yCoord")
                     y = attribute.value().toString().toDouble();
             }
-            Point *myPoint = new Point;
-            addItem(myPoint);
-            myPoint->setPos(x,y);
+//            Point *myPoint = new Point;
+//            addItem(myPoint);
+//            myPoint->setPos(x,y);
         }
     }
 }
+

@@ -1,7 +1,9 @@
 #include "point.h"
 
-Point::Point()
+Point::Point(int i)
 {
+    // assigns id
+    id = i;
 }
 
 int Point::type() const

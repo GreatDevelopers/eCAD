@@ -1,7 +1,10 @@
 #include "circle.h"
 
-Circle::Circle(QPointF p1, QPointF p2)
+Circle::Circle(int i, QPointF p1, QPointF p2)
 {
+    // assigns id
+    id = i;
+
     /* set values of center point, end point
     and calculate radius of circle */
     center_p = p1;

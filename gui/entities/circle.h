@@ -10,13 +10,14 @@ class Circle: public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
-    Circle(QPointF, QPointF);
+    Circle(int, QPointF, QPointF);
     QRectF boundingRect() const;
     virtual void paint(QPainter * painter,
                        const QStyleOptionGraphicsItem * option,
                        QWidget * widget);
     enum { Type = UserType + 3 };
     int type() const;
+    int id;
 
     QPointF center_p, end_p, move_p;
     qreal radius;

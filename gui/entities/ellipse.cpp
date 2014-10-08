@@ -1,7 +1,10 @@
 #include "ellipse.h"
 
-Ellipse::Ellipse(QPointF point1, QPointF point2, QPointF point3)
+Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
 {
+    // assigns id
+    id = i;
+
     /* set values of three points
     and calculate radii of ellipse */
     p1 = point1;
