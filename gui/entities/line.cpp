@@ -25,16 +25,11 @@ QRectF Line::boundingRect() const
 void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
-    // creates the path of line
-    QPainterPath line;
-    line.moveTo(start_p);
-    line.lineTo(end_p);
-
     // draws/paints the path of line
     QPen paintpen(Qt::black);
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(Qt::SolidPattern);
     painter->setPen(paintpen);
-    painter->drawPath(line);
+    painter->drawLine(start_p, end_p);
 }
