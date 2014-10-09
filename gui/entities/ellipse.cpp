@@ -44,11 +44,6 @@ QRectF Ellipse::boundingRect() const
 void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                      QWidget *widget)
 {
-    // creates the path of ellipse
-    QPainterPath ellipse;
-    ellipse.moveTo(p1.x()+majRadius, p1.y());
-    ellipse.arcTo(boundingRect(), 0 , 360);
-
     // draws/paints the path of ellipse
     QPen paintpen(Qt::black);
     paintpen.setWidth(1);
@@ -58,6 +53,6 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->translate(p1.x(), p1.y());
     painter->rotate(theta);
     painter->translate(-p1.x(), -p1.y());
-    painter->drawPath(ellipse);
+    painter->drawEllipse(p1, majRadius, minRadius);
     painter->restore();
 }

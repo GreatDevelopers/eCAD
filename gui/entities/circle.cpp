@@ -29,16 +29,11 @@ QRectF Circle::boundingRect() const
 void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget)
 {
-    // creates the path of circle
-    QPainterPath circle;
-    circle.moveTo(center_p.x()+radius, center_p.y());
-    circle.arcTo(boundingRect(),0,360);
-
     // draws/paints the path of circle
     QPen paintpen(Qt::black);
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(Qt::NoBrush);
     painter->setPen(paintpen);
-    painter->drawPath(circle);
+    painter->drawEllipse(center_p, radius, radius);
 }
