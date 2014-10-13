@@ -55,6 +55,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // shortcut keys
     new QShortcut(QKeySequence(Qt::Key_Escape),
                   this, SLOT(setNoMode()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U),
+                  this, SLOT(showUndoStack()));
+
+    actionUndo->setShortcut(QKeySequence::Undo);
+    actionRedo->setShortcut(QKeySequence::Redo);
 
     // toggle actions to false
     toggleActions(0);
@@ -147,6 +152,12 @@ CadGraphicsView *MainWindow::createMdiView()
     return view;
 }
 
+void MainWindow::showUndoStack()
+{
+    // calls an undo stack function of graphicsView
+    view->showUndoStack();
+}
+
 void MainWindow::drawPoint()
 {
     // calls the drawPoint function of graphicsView
@@ -196,7 +207,8 @@ void MainWindow::on_actionOpen_triggered()
         else
         {
             QXmlStreamReader  stream(&file);
-            CadGraphicsScene* newScene = new CadGraphicsScene();
+            CadGraphicsScene* newScene = new CadGraphicsScene(this,
+                                                              view->undoStack);
             while (!stream.atEnd())
             {
                 stream.readNext();

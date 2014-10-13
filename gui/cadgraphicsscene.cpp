@@ -3,9 +3,11 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
-CadGraphicsScene::CadGraphicsScene(QObject *parent) : QGraphicsScene(parent)
+CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
+    : QGraphicsScene(parent)
 {
     setFlags();
+    mUndoStack = undoStack;
 }
 
 void CadGraphicsScene::setFlags()
@@ -51,8 +53,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case PointMode:
         pointItem = new Point(++id);
         pointItem->setPos(mouseEvent->scenePos());
-        addItem(pointItem);
         groupList.append(pointItem);
+        mUndoStack->push(new CadCommandAdd(this, pointItem));
         break;
 
     case LineMode:
@@ -73,8 +75,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             lineItem = new Line(++id, start_p, end_p);
-            addItem(lineItem);
             groupList.append(lineItem);
+            mUndoStack->push(new CadCommandAdd(this, lineItem));
             setFlags();
         }
         break;
@@ -97,8 +99,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             circleItem = new Circle(++id, start_p, end_p);
-            addItem(circleItem);
             groupList.append(circleItem);
+            mUndoStack->push(new CadCommandAdd(this, circleItem));
             setFlags();
         }
         break;
@@ -129,8 +131,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             ellipseItem = new Ellipse(++id, start_p, mid_p, end_p);
-            addItem(ellipseItem);
             groupList.append(ellipseItem);
+            mUndoStack->push(new CadCommandAdd(this, ellipseItem));
             setFlags();
         }
         break;

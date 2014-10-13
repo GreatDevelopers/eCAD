@@ -33,7 +33,8 @@ HEADERS += \
     gui/entities/ellipse.h \
     gui/entities/point.h \
     gui/entities/line.h \
-    gui/cadgraphicsview.h
+    gui/cadgraphicsview.h \
+    gui/cadcommandadd.h
 
 FORMS += \
     resources/ui/mainwindow.ui

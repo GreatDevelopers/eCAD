@@ -3,6 +3,8 @@
 
 #include <QGraphicsView>
 #include <QWheelEvent>
+#include <QUndoStack>
+#include <QUndoView>
 
 #include "cadgraphicsscene.h"
 
@@ -18,7 +20,10 @@ public:
     void drawCircle();
     void drawEllipse();
     void setNoMode();
+    void showUndoStack();
     CadGraphicsScene *scene;
+    QUndoStack* undoStack;
+    QUndoView* undoView;
 
 protected:
     void wheelEvent(QWheelEvent* event);

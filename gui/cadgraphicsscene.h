@@ -3,17 +3,15 @@
 
 #include <QGraphicsScene>
 #include <QXmlStreamWriter>
+#include <QUndoStack>
 
-#include "point.h"
-#include "line.h"
-#include "circle.h"
-#include "ellipse.h"
+#include "cadcommandadd.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit CadGraphicsScene(QObject *parent = 0);
+    explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode };
 
     void writeStream(QXmlStreamWriter *stream);
@@ -29,6 +27,8 @@ protected:
 
 private:
     Mode entityMode;
+    QUndoStack *mUndoStack;
+
     bool mFirstClick;
     bool mSecondClick;
     bool mThirdClick;
