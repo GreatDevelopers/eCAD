@@ -42,10 +42,6 @@ private:
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
-    QGraphicsItemGroup *pointGroup;
-    QGraphicsItemGroup *lineGroup;
-    QGraphicsItemGroup *circleGroup;
-    QGraphicsItemGroup *ellipseGroup;
 };
 
 #endif // CADGRAPHICSSCENE_H

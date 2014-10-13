@@ -27,9 +27,11 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     // draws/paints the path of line
     QPen paintpen(Qt::black);
-    paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(Qt::SolidPattern);
+    paintpen.setWidth(1);
+    painter->drawEllipse(start_p, 2, 2);
+    painter->drawEllipse(end_p, 2, 2);
     painter->setPen(paintpen);
     painter->drawLine(start_p, end_p);
 }

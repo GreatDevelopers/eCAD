@@ -2,11 +2,11 @@
 #define ELLIPSE_H
 
 #include <QPainter>
-#include <QGraphicsEllipseItem>
+#include <QGraphicsItemGroup>
 
 #include "qmath.h"
 
-class Ellipse: public QObject, public QGraphicsEllipseItem
+class Ellipse: public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 public:
