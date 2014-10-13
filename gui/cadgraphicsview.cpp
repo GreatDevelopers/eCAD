@@ -15,7 +15,10 @@ void CadGraphicsView::newFile()
     curFileName = tr("Document %1").arg(fileNumber++);
     setWindowTitle(curFileName);
 
-    scene = new CadGraphicsScene;
+    undoStack = new QUndoStack(this);
+    undoView = 0;
+
+    scene = new CadGraphicsScene(this, undoStack);
     scene->setSceneRect(0,0,2000,2000);
     setScene(scene);
     setDragMode(QGraphicsView::RubberBandDrag);
@@ -66,4 +69,16 @@ void CadGraphicsView::drawEllipse()
 {
     // sets the mode to EllipseMode for scene
     scene->setMode(CadGraphicsScene::EllipseMode);
+}
+
+void CadGraphicsView::showUndoStack()
+{
+    // shows the undoStack window
+    if (undoView == 0)
+    {
+        undoView = new QUndoView(undoStack);
+        undoView->setWindowTitle("Undo Stack");
+        undoView->setAttribute(Qt::WA_QuitOnClose, false);
+    }
+    undoView->show();
 }

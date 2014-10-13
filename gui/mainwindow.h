@@ -41,6 +41,7 @@ private slots:
     void newFile();
 
     void setNoMode();
+    void showUndoStack();
 
     void on_actionSave_triggered();
     void on_actionOpen_triggered();

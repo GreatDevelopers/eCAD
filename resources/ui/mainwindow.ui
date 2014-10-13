@@ -65,7 +65,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionUndo"/>
-    <addaction name="actionReso"/>
+    <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
@@ -275,7 +275,7 @@
     <string>Undo</string>
    </property>
   </action>
-  <action name="actionReso">
+  <action name="actionRedo">
    <property name="enabled">
     <bool>false</bool>
    </property>
