@@ -58,9 +58,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U),
                   this, SLOT(showUndoStack()));
 
-    actionUndo->setShortcut(QKeySequence::Undo);
-    actionRedo->setShortcut(QKeySequence::Redo);
-
     // toggle actions to false
     toggleActions(0);
 }
@@ -101,6 +98,13 @@ void MainWindow::newFile()
     createMdiView();
     view->newFile();
     view->show();
+
+    QAction* actionUndo = view->undoStack->createUndoAction(this);
+    QAction* actionRedo = view->undoStack->createRedoAction(this);
+    actionUndo->setShortcut(QKeySequence::Undo);
+    actionRedo->setShortcut(QKeySequence::Redo);
+    menuEdit->addAction(actionUndo);
+    menuEdit->addAction(actionRedo);
 
     // toggle actions to true
     toggleActions(1);
