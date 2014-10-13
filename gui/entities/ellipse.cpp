@@ -48,11 +48,18 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     QPen paintpen(Qt::black);
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
+
+    // sets brush for center point
+    painter->setBrush(Qt::SolidPattern);
     painter->setPen(paintpen);
+    painter->drawEllipse(p1, 2, 2);
     painter->save();
     painter->translate(p1.x(), p1.y());
     painter->rotate(theta);
     painter->translate(-p1.x(), -p1.y());
+
+    // sets brush for circumference
+    painter->setBrush(Qt::NoBrush);
     painter->drawEllipse(p1, majRadius, minRadius);
     painter->restore();
 }

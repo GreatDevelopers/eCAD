@@ -49,21 +49,15 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case PointMode:
-        pointGroup = new QGraphicsItemGroup;
         pointItem = new Point(++id);
         pointItem->setPos(mouseEvent->scenePos());
-        pointGroup->addToGroup(pointItem);
-        addItem(pointGroup);
-        groupList.append(pointGroup);
+        addItem(pointItem);
+        groupList.append(pointItem);
         break;
 
     case LineMode:
         if (mFirstClick)
         {
-            lineGroup = new QGraphicsItemGroup;
-            pointItem = new Point(++id);
-            pointItem->setPos(mouseEvent->scenePos());
-            lineGroup->addToGroup(pointItem);
             start_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = true;
@@ -71,9 +65,6 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         else if (!mFirstClick && mSecondClick)
         {
-            pointItem = new Point(id);
-            pointItem->setPos(mouseEvent->scenePos());
-            lineGroup->addToGroup(pointItem);
             end_p = mouseEvent->scenePos();
             mPaintFlag = true;
             mSecondClick = false;
@@ -81,10 +72,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (mPaintFlag)
         {
-            lineItem = new Line(id, start_p, end_p);
-            lineGroup->addToGroup(lineItem);
-            addItem(lineGroup);
-            groupList.append(lineGroup);
+            lineItem = new Line(++id, start_p, end_p);
+            addItem(lineItem);
+            groupList.append(lineItem);
             setFlags();
         }
         break;
@@ -92,10 +82,6 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case CircleMode:
         if (mFirstClick)
         {
-            circleGroup = new QGraphicsItemGroup;
-            pointItem = new Point(++id);
-            pointItem->setPos(mouseEvent->scenePos());
-            circleGroup->addToGroup(pointItem);
             start_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = true;
@@ -110,10 +96,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (mPaintFlag)
         {
-            circleItem = new Circle(id, start_p, end_p);
-            circleGroup->addToGroup(circleItem);
-            addItem(circleGroup);
-            groupList.append(circleGroup);
+            circleItem = new Circle(++id, start_p, end_p);
+            addItem(circleItem);
+            groupList.append(circleItem);
             setFlags();
         }
         break;
@@ -121,10 +106,6 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case EllipseMode:
         if (mFirstClick)
         {
-            ellipseGroup = new QGraphicsItemGroup;
-            pointItem = new Point(++id);
-            pointItem->setPos(mouseEvent->scenePos());
-            ellipseGroup->addToGroup(pointItem);
             start_p = mouseEvent->scenePos();
             mFirstClick = false;
             mSecondClick = true;
@@ -147,10 +128,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         if (mPaintFlag)
         {
-            ellipseItem = new Ellipse(id, start_p, mid_p, end_p);
-            ellipseGroup->addToGroup(ellipseItem);
-            addItem(ellipseGroup);
-            groupList.append(ellipseGroup);
+            ellipseItem = new Ellipse(++id, start_p, mid_p, end_p);
+            addItem(ellipseItem);
+            groupList.append(ellipseItem);
             setFlags();
         }
         break;
@@ -164,7 +144,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
-    foreach (QGraphicsItem* item, items())
+    foreach (QGraphicsItemGroup* item, groupList )
     {
         if(item->type() == Point::Type )
         {

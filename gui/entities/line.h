@@ -2,9 +2,9 @@
 #define LINE_H
 
 #include <QPainter>
-#include <QGraphicsLineItem>
+#include <QGraphicsItemGroup>
 
-class Line: public QObject, public QGraphicsLineItem
+class Line: public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 public:

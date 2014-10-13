@@ -2,9 +2,9 @@
 #define POINT_H
 
 #include <QPainter>
-#include <QGraphicsItem>
+#include <QGraphicsItemGroup>
 
-class Point: public QObject, public QGraphicsItem
+class Point: public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 public:

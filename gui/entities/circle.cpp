@@ -33,7 +33,13 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     QPen paintpen(Qt::black);
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setBrush(Qt::NoBrush);
+
+    // sets brush for center point
+    painter->setBrush(Qt::SolidPattern);
     painter->setPen(paintpen);
+    painter->drawEllipse(center_p, 2, 2);
+
+    // sets brush for circumference
+    painter->setBrush(Qt::NoBrush);
     painter->drawEllipse(center_p, radius, radius);
 }
