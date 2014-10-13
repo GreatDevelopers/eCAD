@@ -6,6 +6,7 @@
 #include <QUndoStack>
 
 #include "cadcommandadd.h"
+#include "cadcommanddelete.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
