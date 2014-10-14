@@ -45,21 +45,42 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                      QWidget *widget)
 {
     // draws/paints the path of ellipse
-    QPen paintpen(Qt::black);
+    QPen paintpen;
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    // sets brush for center point
-    painter->setBrush(Qt::SolidPattern);
-    painter->setPen(paintpen);
-    painter->drawEllipse(p1, 2, 2);
-    painter->save();
-    painter->translate(p1.x(), p1.y());
-    painter->rotate(theta);
-    painter->translate(-p1.x(), -p1.y());
+    if(isSelected())
+    {
+        // sets brush for center point
+        painter->setBrush(Qt::SolidPattern);
+        paintpen.setColor(Qt::red);
+        painter->setPen(paintpen);
+        painter->drawEllipse(p1, 2, 2);
+        painter->save();
+        painter->translate(p1.x(), p1.y());
+        painter->rotate(theta);
+        painter->translate(-p1.x(), -p1.y());
 
-    // sets brush for circumference
-    painter->setBrush(Qt::NoBrush);
-    painter->drawEllipse(p1, majRadius, minRadius);
-    painter->restore();
+        // sets pen for circumference
+        paintpen.setStyle(Qt::DashLine);
+        paintpen.setColor(Qt::black);
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(paintpen);
+        painter->drawEllipse(p1, majRadius, minRadius);
+        painter->restore();
+    }
+    else
+    {
+        painter->setBrush(Qt::SolidPattern);
+        painter->drawEllipse(p1, 2, 2);
+        painter->save();
+        painter->translate(p1.x(), p1.y());
+        painter->rotate(theta);
+        painter->translate(-p1.x(), -p1.y());
+
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(paintpen);
+        painter->drawEllipse(p1, majRadius, minRadius);
+        painter->restore();
+    }
 }

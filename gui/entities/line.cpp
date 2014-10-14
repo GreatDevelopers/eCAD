@@ -26,12 +26,32 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
     // draws/paints the path of line
-    QPen paintpen(Qt::black);
+    QPen paintpen;
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setBrush(Qt::SolidPattern);
     paintpen.setWidth(1);
-    painter->drawEllipse(start_p, 2, 2);
-    painter->drawEllipse(end_p, 2, 2);
-    painter->setPen(paintpen);
-    painter->drawLine(start_p, end_p);
+
+    if(isSelected())
+    {
+        // sets brush for end points
+        painter->setBrush(Qt::SolidPattern);
+        paintpen.setColor(Qt::red);
+        painter->setPen(paintpen);
+        painter->drawEllipse(start_p, 2, 2);
+        painter->drawEllipse(end_p, 2, 2);
+
+        // sets pen for line path
+        paintpen.setStyle(Qt::DashLine);
+        paintpen.setColor(Qt::black);
+        painter->setPen(paintpen);
+        painter->drawLine(start_p, end_p);
+    }
+    else
+    {
+        painter->setBrush(Qt::SolidPattern);
+        paintpen.setColor(Qt::black);
+        painter->setPen(paintpen);
+        painter->drawEllipse(start_p, 2, 2);
+        painter->drawEllipse(end_p, 2, 2);
+        painter->drawLine(start_p, end_p);
+    }
 }

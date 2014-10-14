@@ -34,12 +34,28 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    // sets brush for center point
-    painter->setBrush(Qt::SolidPattern);
-    painter->setPen(paintpen);
-    painter->drawEllipse(center_p, 2, 2);
+    if(isSelected())
+    {
+        // sets brush for center point
+        painter->setBrush(Qt::SolidPattern);
+        paintpen.setColor(Qt::red);
+        painter->setPen(paintpen);
+        painter->drawEllipse(center_p, 2, 2);
 
-    // sets brush for circumference
-    painter->setBrush(Qt::NoBrush);
-    painter->drawEllipse(center_p, radius, radius);
+        // sets pen for circumference
+        paintpen.setStyle(Qt::DashLine);
+        paintpen.setColor(Qt::black);
+        painter->setBrush(Qt::NoBrush);
+        painter->setPen(paintpen);
+        painter->drawEllipse(center_p, radius, radius);
+    }
+    else
+    {
+        painter->setBrush(Qt::SolidPattern);
+        paintpen.setColor(Qt::black);
+        painter->setPen(paintpen);
+        painter->drawEllipse(center_p, 2, 2);
+        painter->setBrush(Qt::NoBrush);
+        painter->drawEllipse(center_p, radius, radius);
+    }
 }

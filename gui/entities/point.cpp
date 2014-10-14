@@ -24,7 +24,11 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget)
 {
     // draws/paints the point
-    QPen paintpen(Qt::black);
+    QPen paintpen;
+    if(isSelected())
+        paintpen.setColor(Qt::red);
+    else
+        paintpen.setColor(Qt::black);
     paintpen.setWidth(2);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(Qt::SolidPattern);
