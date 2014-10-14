@@ -5,7 +5,7 @@
 #-------------------------------------------------
 QMAKE_CXXFLAGS_WARN_OFF -= -Wunused-parameter
 
-QT += core gui printsupport
+QT += core gui printsupport opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,7 +24,8 @@ SOURCES += \
     gui/entities/ellipse.cpp \
     gui/entities/point.cpp \
     gui/entities/line.cpp \
-    gui/cadgraphicsview.cpp
+    gui/cadgraphicsview.cpp \
+    cadtextitem.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -36,7 +37,8 @@ HEADERS += \
     gui/cadgraphicsview.h \
     gui/cadcommandadd.h \
     gui/cadcommanddelete.h \
-    gui/cadcommandmove.h
+    gui/cadcommandmove.h \
+    cadtextitem.h
 
 FORMS += \
     resources/ui/mainwindow.ui

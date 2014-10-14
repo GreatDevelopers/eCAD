@@ -1,5 +1,8 @@
 #include "mainwindow.h"
+#include "cadtextitem.h"
+#include "cadgraphicsscene.h"
 
+#include<QtWidgets>
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QDebug>
@@ -10,6 +13,10 @@
 #include <QTextEdit>
 #include <QXmlStreamWriter>
 #include <QShortcut>
+#include<QGLWidget>
+#include<QGraphicsScene>
+
+const int InsertTextButton = 10;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -36,6 +43,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawCircle()));
     connect(actionEllipse, SIGNAL(triggered()),
             this, SLOT(drawEllipse()));
+
+    connect(actionText, SIGNAL(triggered()),
+            this,SLOT(drawText()));
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
@@ -197,6 +207,11 @@ void MainWindow::drawEllipse()
 {
     // calls the drawEllipse function of graphicsView
     view->drawEllipse();
+}
+
+void MainWindow::drawText(){
+    //calls the drawText function of graphicsView
+    view->drawText();
 }
 
 void MainWindow::deleteItems()
