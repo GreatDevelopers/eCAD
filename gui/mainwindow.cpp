@@ -52,12 +52,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(actionInsert_Image,SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
 
-    // shortcut keys
-    new QShortcut(QKeySequence(Qt::Key_Escape),
-                  this, SLOT(setNoMode()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U),
-                  this, SLOT(showUndoStack()));
-
     // toggle actions to false
     toggleActions(0);
 }
@@ -80,6 +74,24 @@ void MainWindow::toggleActions(bool b)
     actionInsert_Image->setEnabled(b);
 }
 
+void MainWindow::setActions()
+{
+    // shortcut keys
+    new QShortcut(QKeySequence(Qt::Key_Escape),
+                  this, SLOT(setNoMode()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U),
+                  this, SLOT(showUndoStack()));
+    new QShortcut(QKeySequence(Qt::Key_Delete),
+                  this, SLOT(deleteItems()));
+
+    QAction* actionUndo = view->undoStack->createUndoAction(this);
+    QAction* actionRedo = view->undoStack->createRedoAction(this);
+    actionUndo->setShortcut(QKeySequence::Undo);
+    actionRedo->setShortcut(QKeySequence::Redo);
+    menuEdit->addAction(actionUndo);
+    menuEdit->addAction(actionRedo);
+}
+
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::MouseMove)
@@ -99,12 +111,7 @@ void MainWindow::newFile()
     view->newFile();
     view->show();
 
-    QAction* actionUndo = view->undoStack->createUndoAction(this);
-    QAction* actionRedo = view->undoStack->createRedoAction(this);
-    actionUndo->setShortcut(QKeySequence::Undo);
-    actionRedo->setShortcut(QKeySequence::Redo);
-    menuEdit->addAction(actionUndo);
-    menuEdit->addAction(actionRedo);
+    setActions();
 
     // toggle actions to true
     toggleActions(1);
@@ -190,6 +197,12 @@ void MainWindow::drawEllipse()
 {
     // calls the drawEllipse function of graphicsView
     view->drawEllipse();
+}
+
+void MainWindow::deleteItems()
+{
+    // calls the deleteItems function of graphicsScene
+    view->scene->deleteItems();
 }
 
 void MainWindow::on_actionOpen_triggered()
