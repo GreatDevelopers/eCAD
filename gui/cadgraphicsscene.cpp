@@ -1,5 +1,5 @@
 #include "cadgraphicsscene.h"
-
+#include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
@@ -8,6 +8,8 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
 {
     setFlags();
     mUndoStack = undoStack;
+    textItem = 0;
+    myTextColor = Qt::black;
 
     // connect selectionChanged signal to selectGroups slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectGroups()));
@@ -31,6 +33,18 @@ void CadGraphicsScene::setMode(Mode mode)
         areItemsSelectable(true);
     else
         areItemsSelectable(false);
+}
+
+void CadGraphicsScene::editorLostFocus(cadtextitem *item)
+{
+    QTextCursor cursor = item->textCursor();
+    cursor.clearSelection();
+    item->setTextCursor(cursor);
+
+    if (item->toPlainText().isEmpty()) {
+        removeItem(item);
+        item->deleteLater();
+    }
 }
 
 void CadGraphicsScene::areItemsSelectable(bool b)
@@ -171,6 +185,19 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             setFlags();
         }
         break;
+    case InsertText:
+        textItem = new cadtextitem();
+        textItem->setFont(myFont);
+        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+        textItem->setZValue(1000.0);
+        connect(textItem, SIGNAL(lostFocus(cadtextitem*)),
+                this, SLOT(editorLostFocus(cadtextitem*)));
+        connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
+                this, SIGNAL(itemSelected(QGraphicsItem*)));
+        addItem(textItem);
+        textItem->setDefaultTextColor(myTextColor);
+        textItem->setPos(mouseEvent->scenePos());
+        emit textInserted(textItem);
 
     default:
         ;
