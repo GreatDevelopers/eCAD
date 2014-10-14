@@ -15,6 +15,7 @@ public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode };
 
+    void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
 

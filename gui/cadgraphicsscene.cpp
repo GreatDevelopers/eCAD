@@ -32,10 +32,24 @@ void CadGraphicsScene::setMode(Mode mode)
 
 void CadGraphicsScene::areItemsSelectable(bool b)
 {
+    // make items selectable
     foreach (QGraphicsItemGroup* item, groupList)
     {
         item->setFlag(QGraphicsItemGroup::ItemIsSelectable, b);
         item->setFlag(QGraphicsItemGroup::ItemIsMovable, b);
+    }
+}
+
+void CadGraphicsScene::deleteItems()
+{
+    // delete selected items
+    foreach (QGraphicsItemGroup* item, groupList)
+    {
+        if(item->isSelected())
+        {
+            mUndoStack->push(new CadCommandDelete(this, item));
+            item->setSelected(false);
+        }
     }
 }
 

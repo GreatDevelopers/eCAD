@@ -39,6 +39,7 @@ private slots:
     void drawCircle();
     void drawEllipse();
     void newFile();
+    void deleteItems();
 
     void setNoMode();
     void showUndoStack();
@@ -50,6 +51,7 @@ private slots:
     void on_actionInsert_Image_triggered();
 
     void toggleActions(bool b);
+    void setActions();
 
     void filePrintPreview();
     void filePrint();
