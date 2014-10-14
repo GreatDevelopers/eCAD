@@ -8,6 +8,9 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
 {
     setFlags();
     mUndoStack = undoStack;
+
+    // connect selectionChanged signal to selectGroups slot
+    connect(this, SIGNAL(selectionChanged()), this, SLOT(selectGroups()));
 }
 
 void CadGraphicsScene::setFlags()
@@ -49,6 +52,24 @@ void CadGraphicsScene::deleteItems()
         {
             mUndoStack->push(new CadCommandDelete(this, item));
             item->setSelected(false);
+        }
+    }
+}
+
+void CadGraphicsScene::selectGroups()
+{
+    // refresh record of selected itemgroups and their starting positions
+    selectedGroups.clear();
+    foreach(QGraphicsItemGroup* item, groupList)
+    {
+        if(item->isSelected())
+        {
+            if (dynamic_cast<QGraphicsItemGroup*>(item))
+            {
+                selectedGroups.append(qMakePair(
+                                          dynamic_cast<QGraphicsItemGroup*>(item),
+                                          item->scenePos()));
+            }
         }
     }
 }
@@ -156,6 +177,23 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    // if any itemgroups moved, then create undo commands
+    foreach(itemPos item, selectedGroups)
+    {
+        if (item.first->scenePos() != item.second)
+        {
+            mUndoStack->push(new CadCommandMove(item.first, item.second.x(),
+                                                item.second.y(), item.first->x(),
+                                                item.first->y()));
+        }
+    }
+    // refresh record of selected itemgroups and call base mouseReleaseEvent
+    selectGroups();
+    QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)

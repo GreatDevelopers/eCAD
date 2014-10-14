@@ -7,6 +7,7 @@
 
 #include "cadcommandadd.h"
 #include "cadcommanddelete.h"
+#include "cadcommandmove.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
@@ -21,9 +22,11 @@ public:
 
 public slots:
     void setMode(Mode mode);
+    void selectGroups();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void setFlags();
     void areItemsSelectable(bool);
 
@@ -44,6 +47,9 @@ private:
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
+
+    typedef QPair<QGraphicsItemGroup *, QPointF> itemPos;
+    QList<itemPos> selectedGroups;
 };
 
 #endif // CADGRAPHICSSCENE_H
