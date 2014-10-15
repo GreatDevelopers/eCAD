@@ -71,7 +71,8 @@ void CadGraphicsView::drawEllipse()
     scene->setMode(CadGraphicsScene::EllipseMode);
 }
 
-void CadGraphicsView::drawText(){
+void CadGraphicsView::drawText()
+{
     // sets the mode to InsertText for scene
     scene->setMode(CadGraphicsScene::InsertText);
 }

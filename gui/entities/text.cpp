@@ -5,7 +5,6 @@ Text::Text(int i, QGraphicsItem *parent)
 {
     //assigns id
     id = i;
-
 }
 
 int Text::type() const
