@@ -13,7 +13,6 @@
 #include <QTextEdit>
 #include <QXmlStreamWriter>
 #include <QShortcut>
-#include<QGLWidget>
 #include<QGraphicsScene>
 
 const int InsertTextButton = 10;
@@ -43,10 +42,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawCircle()));
     connect(actionEllipse, SIGNAL(triggered()),
             this, SLOT(drawEllipse()));
-
     connect(actionText, SIGNAL(triggered()),
             this,SLOT(drawText()));
-
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
     connect(actionQuit, SIGNAL(triggered()),
@@ -94,8 +91,8 @@ void MainWindow::setActions()
     new QShortcut(QKeySequence(Qt::Key_Delete),
                   this, SLOT(deleteItems()));
 
-    QAction* actionUndo = view->undoStack->createUndoAction(this);
-    QAction* actionRedo = view->undoStack->createRedoAction(this);
+    QAction *actionUndo = view->undoStack->createUndoAction(this);
+    QAction *actionRedo = view->undoStack->createRedoAction(this);
     actionUndo->setShortcut(QKeySequence::Undo);
     actionRedo->setShortcut(QKeySequence::Redo);
     menuEdit->addAction(actionUndo);
@@ -106,7 +103,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::MouseMove)
     {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         QMainWindow::statusBar()->showMessage(QString("Mouse move (%1,%2)").
                                               arg(mouseEvent->pos().x()).
                                               arg(mouseEvent->pos().y()));
@@ -132,7 +129,7 @@ void MainWindow::filePrintPreview()
     // display print preview dialog
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)));
+    connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(print(QPrinter *)));
     preview.exec();
 }
 
@@ -145,7 +142,7 @@ void MainWindow::filePrint()
         print(&printer);
 }
 
-void MainWindow::print(QPrinter* printer)
+void MainWindow::print(QPrinter *printer)
 {
     // print the page
     QPainter painter(printer);
@@ -239,7 +236,7 @@ void MainWindow::on_actionOpen_triggered()
         else
         {
             QXmlStreamReader  stream(&file);
-            CadGraphicsScene* newScene = new CadGraphicsScene(this,
+            CadGraphicsScene *newScene = new CadGraphicsScene(this,
                                                               view->undoStack);
             while (!stream.atEnd())
             {

@@ -40,7 +40,7 @@ private slots:
     void drawLine();
     void drawCircle();
     void drawEllipse();
-    void drawText();
+     void drawText();
     void newFile();
     void deleteItems();
 

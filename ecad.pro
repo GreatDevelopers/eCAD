@@ -25,7 +25,7 @@ SOURCES += \
     gui/entities/point.cpp \
     gui/entities/line.cpp \
     gui/cadgraphicsview.cpp \
-    cadtextitem.cpp
+    gui/entities/cadtextitem.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -38,7 +38,7 @@ HEADERS += \
     gui/cadcommandadd.h \
     gui/cadcommanddelete.h \
     gui/cadcommandmove.h \
-    cadtextitem.h
+    gui/entites/cadtextitem.h
 
 FORMS += \
     resources/ui/mainwindow.ui

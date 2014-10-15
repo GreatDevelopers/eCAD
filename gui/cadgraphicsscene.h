@@ -8,6 +8,7 @@
 #include "cadcommandadd.h"
 #include "cadcommanddelete.h"
 #include "cadcommandmove.h"
+#include "cadtextitem.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {

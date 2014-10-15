@@ -23,11 +23,11 @@ public:
     void setNoMode();
     void showUndoStack();
     CadGraphicsScene *scene;
-    QUndoStack* undoStack;
-    QUndoView* undoView;
+    QUndoStack *undoStack;
+    QUndoView *undoView;
 
 protected:
-    void wheelEvent(QWheelEvent* event);
+    void wheelEvent(QWheelEvent *event);
 
 private:
     QString curFileName;

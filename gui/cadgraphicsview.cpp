@@ -24,7 +24,7 @@ void CadGraphicsView::newFile()
     setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-void CadGraphicsView::wheelEvent(QWheelEvent* event)
+void CadGraphicsView::wheelEvent(QWheelEvent *event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
@@ -75,7 +75,6 @@ void CadGraphicsView::drawText(){
     // sets the mode to InsertText for scene
     scene->setMode(CadGraphicsScene::InsertText);
 }
-
 
 void CadGraphicsView::showUndoStack()
 {
