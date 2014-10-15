@@ -24,7 +24,7 @@ void CadGraphicsView::newFile()
     setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-void CadGraphicsView::wheelEvent(QWheelEvent* event)
+void CadGraphicsView::wheelEvent(QWheelEvent *event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 

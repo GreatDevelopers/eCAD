@@ -6,15 +6,15 @@
 
 #include "qmath.h"
 
-class Ellipse: public QObject, public QGraphicsItemGroup
+class Ellipse : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 public:
     Ellipse(int, QPointF, QPointF, QPointF);
     QRectF boundingRect() const;
-    virtual void paint(QPainter * painter,
-                       const QStyleOptionGraphicsItem * option,
-                       QWidget * widget);
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget);
     enum { Type = UserType + 4 };
     int type() const;
     int id;

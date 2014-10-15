@@ -4,20 +4,20 @@
 #include <QPainter>
 #include <QGraphicsItemGroup>
 
-class Point: public QObject, public QGraphicsItemGroup
+class Point : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 public:
     Point(int);
-     enum { Type = UserType + 1 };
-     int type() const;
-     int id;
+    enum { Type = UserType + 1 };
+    int type() const;
+    int id;
 
 protected:
     QRectF boundingRect() const;
-    virtual void paint(QPainter * painter,
-                       const QStyleOptionGraphicsItem * option,
-                       QWidget * widget);
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget);
 };
 
 #endif // POINT_H
