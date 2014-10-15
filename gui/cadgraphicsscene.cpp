@@ -200,49 +200,52 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
     foreach (QGraphicsItemGroup* item, groupList )
     {
-        if(item->type() == Point::Type )
+        if (items().contains(item))
         {
-            Point* myItem = dynamic_cast<Point*>(item);
-            stream->writeStartElement("Point");
-            stream->writeAttribute("id", QString::number(myItem->id));
-            stream->writeAttribute("x", QString::number(myItem->x()));
-            stream->writeAttribute("y", QString::number(myItem->y()));
-            stream->writeEndElement();  //end of Point Item
-        }
+            if(item->type() == Point::Type )
+            {
+                Point* myItem = dynamic_cast<Point*>(item);
+                stream->writeStartElement("Point");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("x", QString::number(myItem->x()));
+                stream->writeAttribute("y", QString::number(myItem->y()));
+                stream->writeEndElement();  //end of Point Item
+            }
 
-        else if(item->type() == Line::Type )
-        {
-            Line* myItem = dynamic_cast<Line*>(item);
-            stream->writeStartElement("Line");
-            stream->writeAttribute("id", QString::number(myItem->id));
-            stream->writeAttribute("x1", QString::number(myItem->start_p.x()));
-            stream->writeAttribute("y1", QString::number(myItem->start_p.y()));
-            stream->writeAttribute("x2", QString::number(myItem->end_p.x()));
-            stream->writeAttribute("y2", QString::number(myItem->end_p.y()));
-            stream->writeEndElement();  //end of Line Item
-        }
+            else if(item->type() == Line::Type )
+            {
+                Line* myItem = dynamic_cast<Line*>(item);
+                stream->writeStartElement("Line");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("x1", QString::number(myItem->start_p.x()));
+                stream->writeAttribute("y1", QString::number(myItem->start_p.y()));
+                stream->writeAttribute("x2", QString::number(myItem->end_p.x()));
+                stream->writeAttribute("y2", QString::number(myItem->end_p.y()));
+                stream->writeEndElement();  //end of Line Item
+            }
 
-        else if(item->type() == Circle::Type )
-        {
-            Circle* myItem = dynamic_cast<Circle*>(item);
-            stream->writeStartElement("Circle");
-            stream->writeAttribute("id", QString::number(myItem->id));
-            stream->writeAttribute("cx", QString::number(myItem->center_p.x()));
-            stream->writeAttribute("cy", QString::number(myItem->center_p.y()));
-            stream->writeAttribute("radius", QString::number(myItem->radius));
-            stream->writeEndElement();  //end of Circle Item
-        }
+            else if(item->type() == Circle::Type )
+            {
+                Circle* myItem = dynamic_cast<Circle*>(item);
+                stream->writeStartElement("Circle");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("cx", QString::number(myItem->center_p.x()));
+                stream->writeAttribute("cy", QString::number(myItem->center_p.y()));
+                stream->writeAttribute("radius", QString::number(myItem->radius));
+                stream->writeEndElement();  //end of Circle Item
+            }
 
-        else if(item->type() == Ellipse::Type )
-        {
-            Ellipse* myItem = dynamic_cast<Ellipse*>(item);
-            stream->writeStartElement("Ellipse");
-            stream->writeAttribute("id", QString::number(myItem->id));
-            stream->writeAttribute("cx", QString::number(myItem->p1.x()));
-            stream->writeAttribute("cy", QString::number(myItem->p1.y()));
-            stream->writeAttribute("majR", QString::number(myItem->majRadius));
-            stream->writeAttribute("minR", QString::number(myItem->minRadius));
-            stream->writeEndElement();  //end of Ellipse Item
+            else if(item->type() == Ellipse::Type )
+            {
+                Ellipse* myItem = dynamic_cast<Ellipse*>(item);
+                stream->writeStartElement("Ellipse");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("cx", QString::number(myItem->p1.x()));
+                stream->writeAttribute("cy", QString::number(myItem->p1.y()));
+                stream->writeAttribute("majR", QString::number(myItem->majRadius));
+                stream->writeAttribute("minR", QString::number(myItem->minRadius));
+                stream->writeEndElement();  //end of Ellipse Item
+            }
         }
     }
 }
