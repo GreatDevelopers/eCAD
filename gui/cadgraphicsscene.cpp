@@ -1,5 +1,5 @@
 #include "cadgraphicsscene.h"
-
+#include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
@@ -8,6 +8,8 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
 {
     setFlags();
     mUndoStack = undoStack;
+    textItem = 0;
+    myTextColor = Qt::black;
 
     // connect selectionChanged signal to selectGroups slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectGroups()));
@@ -31,6 +33,18 @@ void CadGraphicsScene::setMode(Mode mode)
         areItemsSelectable(true);
     else
         areItemsSelectable(false);
+}
+
+void CadGraphicsScene::editorLostFocus(Text *item)
+{
+    QTextCursor cursor = item->textCursor();
+    cursor.clearSelection();
+    item->setTextCursor(cursor);
+
+    if (item->toPlainText().isEmpty()) {
+        removeItem(item);
+        item->deleteLater();
+    }
 }
 
 void CadGraphicsScene::areItemsSelectable(bool b)
@@ -172,6 +186,22 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         }
         break;
 
+    case InsertText:
+        textItem = new Text(id);
+        textItem->setFont(myFont);
+        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+        textItem->setZValue(1000.0);
+        connect(textItem, SIGNAL(lostFocus(Text*)),
+                this, SLOT(editorLostFocus(Text*)));
+        connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
+                this, SIGNAL(itemSelected(QGraphicsItem*)));
+        addItem(textItem);
+        textItem->setDefaultTextColor(myTextColor);
+        textItem->setPos(mouseEvent->scenePos());
+        emit textInserted(textItem);
+        textItem->setPos(mouseEvent->scenePos());
+        setFlags();
+
     default:
         ;
     }
@@ -246,6 +276,14 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeAttribute("majR", QString::number(myItem->majRadius));
                 stream->writeAttribute("minR", QString::number(myItem->minRadius));
                 stream->writeEndElement();  //end of Ellipse Item
+            }
+
+            else if (item->type() == Text::Type)
+            {
+                Text *myItem = dynamic_cast<Text *>(item);
+                stream->writeStartElement("Text");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeEndElement();  //end of Text Item
             }
         }
     }
