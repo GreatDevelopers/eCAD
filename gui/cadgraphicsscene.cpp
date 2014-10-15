@@ -185,6 +185,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             setFlags();
         }
         break;
+
     case InsertText:
         textItem = new cadtextitem(id);
         textItem->setFont(myFont);
@@ -197,10 +198,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         addItem(textItem);
         textItem->setDefaultTextColor(myTextColor);
         textItem->setPos(mouseEvent->scenePos());
-
         emit textInserted(textItem);
         textItem->setPos(mouseEvent->scenePos());
-
         setFlags();
     default:
         ;
