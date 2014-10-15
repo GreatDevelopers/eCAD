@@ -34,7 +34,7 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    if(isSelected())
+    if (isSelected())
     {
         // sets brush for center point
         painter->setBrush(Qt::SolidPattern);

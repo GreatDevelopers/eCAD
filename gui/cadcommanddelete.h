@@ -13,9 +13,9 @@
 class CadCommandDelete : public QUndoCommand
 {
 public:
-    CadCommandDelete(QGraphicsScene *scene, QGraphicsItemGroup *group )
+    CadCommandDelete(QGraphicsScene *scene, QGraphicsItemGroup *group)
     {
-        m_scene   = scene;
+        m_scene = scene;
         itemGroup = group;
         if (itemGroup->type() == Point::Type)
         {

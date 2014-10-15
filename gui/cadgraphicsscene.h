@@ -42,7 +42,7 @@ private:
     QPointF start_p, mid_p, end_p, move_p, check_p;
     QPen paintpen, linePen;
 
-    QList<QGraphicsItemGroup*> groupList;
+    QList<QGraphicsItemGroup *> groupList;
     Point *pointItem;
     Line *lineItem;
     Circle *circleItem;

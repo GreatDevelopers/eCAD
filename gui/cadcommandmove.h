@@ -13,13 +13,13 @@
 class CadCommandMove : public QUndoCommand
 {
 public:
-    CadCommandMove(QGraphicsItemGroup* group, qreal fromX, qreal fromY,
+    CadCommandMove(QGraphicsItemGroup *group, qreal fromX, qreal fromY,
                    qreal toX, qreal toY)
     {
         itemGroup = group;
         mFrom = QPointF(fromX, fromY);
         mTo = QPointF(toX, toY);
-        setText(QString("Point move %1,%2 -> %3,%4").arg(fromX).arg(fromY)
+        setText(QString("Point move (%1,%2) -> (%3,%4)").arg(fromX).arg(fromY)
                 .arg(toX).arg(toY));
     }
 
@@ -34,7 +34,7 @@ public:
     }
 
 private:
-    QGraphicsItemGroup* itemGroup;
+    QGraphicsItemGroup *itemGroup;
     QPointF mFrom;
     QPointF mTo;
 };

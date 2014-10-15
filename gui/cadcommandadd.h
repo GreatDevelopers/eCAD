@@ -13,10 +13,10 @@
 class CadCommandAdd : public QUndoCommand
 {
 public:
-    CadCommandAdd(QGraphicsScene* scene, QGraphicsItemGroup* group)
+    CadCommandAdd(QGraphicsScene *scene, QGraphicsItemGroup *group)
     {
         itemGroup = group;
-        m_scene   = scene;
+        m_scene = scene;
 
         if (itemGroup->type() == Point::Type)
         {
@@ -52,8 +52,8 @@ public:
 
     ~CadCommandAdd()
     {
-        // if station not on scene then delete station
-        if ( !m_scene->items().contains(itemGroup))
+        // if itemGroup is not on scene then delete that itemGroup
+        if (!m_scene->items().contains(itemGroup))
             delete itemGroup;
     }
 
@@ -68,8 +68,8 @@ public:
     }
 
 private:
-    QGraphicsItemGroup* itemGroup;
-    QGraphicsScene* m_scene;
+    QGraphicsItemGroup *itemGroup;
+    QGraphicsScene *m_scene;
 };
 
 

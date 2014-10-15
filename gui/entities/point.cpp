@@ -25,7 +25,7 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     // draws/paints the point
     QPen paintpen;
-    if(isSelected())
+    if (isSelected())
         paintpen.setColor(Qt::red);
     else
         paintpen.setColor(Qt::black);
@@ -35,5 +35,3 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(paintpen);
     painter->drawEllipse(boundingRect());
 }
-
-

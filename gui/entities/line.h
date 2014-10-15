@@ -4,7 +4,7 @@
 #include <QPainter>
 #include <QGraphicsItemGroup>
 
-class Line: public QObject, public QGraphicsItemGroup
+class Line : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 public:
@@ -18,6 +18,7 @@ public:
     int id;
 
     QPointF start_p, end_p, move_p, check_p;
+
 private:
     QVector<QPointF> stuff;
 };
