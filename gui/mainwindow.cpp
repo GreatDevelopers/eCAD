@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 
+#include <QtWidgets>
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QDebug>
@@ -36,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawCircle()));
     connect(actionEllipse, SIGNAL(triggered()),
             this, SLOT(drawEllipse()));
-
+    connect(actionText, SIGNAL(triggered()),
+            this,SLOT(drawText()));
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
     connect(actionQuit, SIGNAL(triggered()),
@@ -197,6 +199,11 @@ void MainWindow::drawEllipse()
 {
     // calls the drawEllipse function of graphicsView
     view->drawEllipse();
+}
+
+void MainWindow::drawText(){
+    //calls the drawText function of graphicsView
+    view->drawText();
 }
 
 void MainWindow::deleteItems()

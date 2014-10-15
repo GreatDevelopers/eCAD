@@ -8,20 +8,25 @@
 #include "cadcommandadd.h"
 #include "cadcommanddelete.h"
 #include "cadcommandmove.h"
+#include "text.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
-    enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode };
-
+    enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, InsertText };
+    QFont font() const { return myFont; }
+    QColor textColor() const { return myTextColor; }
+    void setTextColor(const QColor &color);
+    void setFont(const QFont &font);
     void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
 
 public slots:
     void setMode(Mode mode);
+    void editorLostFocus(Text *item);
     void selectGroups();
 
 protected:
@@ -30,7 +35,12 @@ protected:
     void setFlags();
     void areItemsSelectable(bool);
 
+signals:
+    void textInserted(QGraphicsTextItem *item);
+    void itemSelected(QGraphicsItem *item);
+
 private:
+    bool isItemChange(int type);
     Mode entityMode;
     QUndoStack *mUndoStack;
 
@@ -47,6 +57,9 @@ private:
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
+    Text *textItem;
+    QColor myTextColor;
+    QFont myFont;
 
     typedef QPair<QGraphicsItemGroup *, QPointF> itemPos;
     QList<itemPos> selectedGroups;
