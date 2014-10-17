@@ -1,7 +1,7 @@
 #include "cadgraphicsscene.h"
 
 #include <QGraphicsSceneMouseEvent>
-#include<QTextCursor>
+#include <QTextCursor>
 #include <QDebug>
 
 CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
