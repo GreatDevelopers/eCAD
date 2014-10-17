@@ -29,7 +29,7 @@ public:
             Line *lineGroup = dynamic_cast<Line *>(itemGroup);
             setText(QString("Line add p1(%1,%2), p2(%3,%4)")
                     .arg(lineGroup->start_p.x()).arg(lineGroup->start_p.y())
-                    .arg(lineGroup->end_p.x()).arg(lineGroup->end_p.x()));
+                    .arg(lineGroup->end_p.x()).arg(lineGroup->end_p.y()));
         }
         if (itemGroup->type() == Circle::Type)
         {
