@@ -16,8 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setupUi(this);
     setWindowTitle(tr("eCAD"));
     setCentralWidget(mdiArea);
-
-    qApp->installEventFilter(this);
+    Ui_MainWindow::statusBar->showMessage("Welcome to eCAD");
 
 //    connect(pointButton, SIGNAL(clicked()),
 //            this, SLOT(drawPoint()));
@@ -94,14 +93,15 @@ void MainWindow::setActions()
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::MouseMove)
+    if (event->type() == QEvent::GraphicsSceneMouseMove)
     {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        QMainWindow::statusBar()->showMessage(QString("Mouse move (%1,%2)").
-                                              arg(mouseEvent->pos().x()).
-                                              arg(mouseEvent->pos().y()));
+        QGraphicsSceneMouseEvent *mouseEvent =
+                static_cast<QGraphicsSceneMouseEvent *>(event);
+        QString showMessage = QString("Mouse move (%1,%2)").
+                arg(mouseEvent->scenePos().x()).
+                arg(mouseEvent->scenePos().y());
+        Ui_MainWindow::statusBar->showMessage(showMessage);
     }
-    return false;
 }
 
 void MainWindow::newFile()
@@ -109,8 +109,8 @@ void MainWindow::newFile()
     // creates a new file
     createMdiView();
     view->newFile();
+    view->scene->installEventFilter(this);
     view->show();
-
     setActions();
 
     // toggle actions to true

@@ -5,6 +5,7 @@ CadGraphicsView::CadGraphicsView()
     scaleFactor = 1.15;
     setAttribute(Qt::WA_DeleteOnClose);
     isUntitled = true;
+    setMouseTracking(true);
 }
 
 void CadGraphicsView::newFile()
