@@ -9,6 +9,8 @@
 #include "line.h"
 #include "circle.h"
 #include "ellipse.h"
+#include "mtext.h"
+
 
 class CadCommandDelete : public QUndoCommand
 {
