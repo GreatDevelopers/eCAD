@@ -9,6 +9,7 @@
 #include "line.h"
 #include "circle.h"
 #include "ellipse.h"
+#include "mtext.h"
 
 class CadCommandMove : public QUndoCommand
 {

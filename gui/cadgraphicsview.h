@@ -19,6 +19,7 @@ public:
     void drawLine();
     void drawCircle();
     void drawEllipse();
+    void drawText();
     void setNoMode();
     void showUndoStack();
     CadGraphicsScene *scene;
