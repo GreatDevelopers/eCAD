@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawCircle()));
     connect(actionEllipse, SIGNAL(triggered()),
             this, SLOT(drawEllipse()));
+    connect(actionMText, SIGNAL(triggered()),
+            this,SLOT(drawText()));
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
@@ -72,6 +74,7 @@ void MainWindow::toggleActions(bool b)
     actionCircle->setEnabled(b);
     actionEllipse->setEnabled(b);
     actionInsert_Image->setEnabled(b);
+    actionMText->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -197,6 +200,11 @@ void MainWindow::drawEllipse()
 {
     // calls the drawEllipse function of graphicsView
     view->drawEllipse();
+}
+
+void MainWindow::drawText(){
+    //calls the drawText function of graphicsView
+    view->drawText();
 }
 
 void MainWindow::deleteItems()
