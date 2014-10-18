@@ -34,7 +34,7 @@ public:
 
 public slots:
     void setMode(Mode mode);
-    void selectGroups();
+    void selectItems();
     void editorLostFocus(mText *item);
 
 protected:
@@ -59,7 +59,7 @@ private:
     QPointF start_p, mid_p, end_p, move_p, check_p;
     QPen paintpen, linePen;
 
-    QList<QGraphicsItemGroup *> groupList;
+    QList<QGraphicsItem *> itemList;
     Point *pointItem;
     Line *lineItem;
     Circle *circleItem;
@@ -68,8 +68,8 @@ private:
     QColor myTextColor;
     QFont myFont;
 
-    typedef QPair<QGraphicsItemGroup *, QPointF> itemPos;
-    QList<itemPos> selectedGroups;
+    typedef QPair<QGraphicsItem *, QPointF> itemPos;
+    QList<itemPos> selectedItems;
 };
 
 #endif // CADGRAPHICSSCENE_H

@@ -18,8 +18,13 @@ int Line::type() const
 
 QRectF Line::boundingRect() const
 {
+    qreal extra = 1.0;
+
     // bounding rectangle for line
-    return QRectF(start_p, end_p).normalized();
+    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
+                                      line().p2().y() - line().p1().y()))
+            .normalized()
+            .adjusted(-extra, -extra, extra, extra);
 }
 
 void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

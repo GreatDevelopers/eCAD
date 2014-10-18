@@ -12,8 +12,8 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     textItem = 0;
     myTextColor = Qt::black;
 
-    // connect selectionChanged signal to selectGroups slot
-    connect(this, SIGNAL(selectionChanged()), this, SLOT(selectGroups()));
+    // connect selectionChanged signal to selectItems slot
+    connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
 }
 
 void CadGraphicsScene::setFlags()
@@ -51,17 +51,17 @@ void CadGraphicsScene::editorLostFocus(mText *item)
 void CadGraphicsScene::areItemsSelectable(bool b)
 {
     // make items selectable
-    foreach (QGraphicsItemGroup *item, groupList)
+    foreach (QGraphicsItem *item, itemList)
     {
-        item->setFlag(QGraphicsItemGroup::ItemIsSelectable, b);
-        item->setFlag(QGraphicsItemGroup::ItemIsMovable, b);
+        item->setFlag(QGraphicsItem::ItemIsSelectable, b);
+        item->setFlag(QGraphicsItem::ItemIsMovable, b);
     }
 }
 
 void CadGraphicsScene::deleteItems()
 {
     // delete selected items
-    foreach (QGraphicsItemGroup *item, groupList)
+    foreach (QGraphicsItem *item, itemList)
     {
         if (item->isSelected())
         {
@@ -71,18 +71,18 @@ void CadGraphicsScene::deleteItems()
     }
 }
 
-void CadGraphicsScene::selectGroups()
+void CadGraphicsScene::selectItems()
 {
-    // refresh record of selected itemgroups and their starting positions
-    selectedGroups.clear();
-    foreach (QGraphicsItemGroup *item, groupList)
+    // refresh record of selected items and their starting positions
+    selectedItems.clear();
+    foreach (QGraphicsItem *item, itemList)
     {
         if (item->isSelected())
         {
-            if (dynamic_cast<QGraphicsItemGroup *>(item))
+            if (dynamic_cast<QGraphicsItem *>(item))
             {
-                selectedGroups.append(qMakePair(
-                                          dynamic_cast<QGraphicsItemGroup *>(item),
+                selectedItems.append(qMakePair(
+                                          dynamic_cast<QGraphicsItem *>(item),
                                           item->scenePos()));
             }
         }
@@ -103,7 +103,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case PointMode:
         pointItem = new Point(++id);
         pointItem->setPos(mouseEvent->scenePos());
-        groupList.append(pointItem);
+        itemList.append(pointItem);
         mUndoStack->push(new CadCommandAdd(this, pointItem));
         break;
 
@@ -125,7 +125,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             lineItem = new Line(++id, start_p, end_p);
-            groupList.append(lineItem);
+            lineItem->setLine(start_p.x(), start_p.y(), end_p.x(), end_p.y());
+            itemList.append(lineItem);
             mUndoStack->push(new CadCommandAdd(this, lineItem));
             setFlags();
         }
@@ -149,7 +150,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             circleItem = new Circle(++id, start_p, end_p);
-            groupList.append(circleItem);
+            itemList.append(circleItem);
             mUndoStack->push(new CadCommandAdd(this, circleItem));
             setFlags();
         }
@@ -181,7 +182,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (mPaintFlag)
         {
             ellipseItem = new Ellipse(++id, start_p, mid_p, end_p);
-            groupList.append(ellipseItem);
+            itemList.append(ellipseItem);
             mUndoStack->push(new CadCommandAdd(this, ellipseItem));
             setFlags();
         }
@@ -212,8 +213,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    // if any itemgroups moved, then create undo commands
-    foreach (itemPos item, selectedGroups)
+    // if any items moved, then create undo commands
+    foreach (itemPos item, selectedItems)
     {
         if (item.first->scenePos() != item.second)
         {
@@ -222,15 +223,15 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                                                 item.first->y()));
         }
     }
-    // refresh record of selected itemgroups and call base mouseReleaseEvent
-    selectGroups();
+    // refresh record of selected items and call base mouseReleaseEvent
+    selectItems();
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
     // write entities in a file
-    foreach (QGraphicsItemGroup *item, groupList)
+    foreach (QGraphicsItem *item, itemList)
     {
         if (items().contains(item))
         {

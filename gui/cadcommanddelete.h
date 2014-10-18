@@ -3,7 +3,7 @@
 
 #include <QUndoCommand>
 #include <QGraphicsScene>
-#include <QGraphicsItemGroup>
+#include <QGraphicsItem>
 
 #include "point.h"
 #include "line.h"
@@ -14,54 +14,54 @@
 class CadCommandDelete : public QUndoCommand
 {
 public:
-    CadCommandDelete(QGraphicsScene *scene, QGraphicsItemGroup *group)
+    CadCommandDelete(QGraphicsScene *scene, QGraphicsItem *item)
     {
         m_scene = scene;
-        itemGroup = group;
-        if (itemGroup->type() == Point::Type)
+        m_item = item;
+        if (m_item->type() == Point::Type)
         {
             setText(QString("Point delete p(%1,%2)")
-                    .arg(itemGroup->scenePos().x())
-                    .arg(itemGroup->scenePos().y()));
+                    .arg(m_item->scenePos().x())
+                    .arg(m_item->scenePos().y()));
         }
-        if (itemGroup->type() == Line::Type)
+        if (m_item->type() == Line::Type)
         {
-            Line *lineGroup = dynamic_cast<Line *>(itemGroup);
+            Line *lineItem = dynamic_cast<Line *>(m_item);
             setText(QString("Line delete p1(%1,%2), p2(%3,%4)")
-                    .arg(lineGroup->start_p.x()).arg(lineGroup->start_p.y())
-                    .arg(lineGroup->end_p.x()).arg(lineGroup->end_p.x()));
+                    .arg(lineItem->start_p.x()).arg(lineItem->start_p.y())
+                    .arg(lineItem->end_p.x()).arg(lineItem->end_p.x()));
         }
-        if (itemGroup->type() == Circle::Type)
+        if (m_item->type() == Circle::Type)
         {
-            Circle *circleGroup = dynamic_cast<Circle *>(itemGroup);
+            Circle *circleItem = dynamic_cast<Circle *>(m_item);
             setText(QString("Circle delete c(%1,%2), r(%3)")
-                    .arg(circleGroup->center_p.x())
-                    .arg(circleGroup->center_p.y())
-                    .arg(circleGroup->radius));
+                    .arg(circleItem->center_p.x())
+                    .arg(circleItem->center_p.y())
+                    .arg(circleItem->radius));
         }
-        if (itemGroup->type() == Ellipse::Type)
+        if (m_item->type() == Ellipse::Type)
         {
-            Ellipse *ellipseGroup = dynamic_cast<Ellipse *>(itemGroup);
+            Ellipse *ellipseItem = dynamic_cast<Ellipse *>(m_item);
             setText(QString("Ellipse delete c(%1,%2), mjR(%3), mnR(%4)")
-                    .arg(ellipseGroup->p1.x())
-                    .arg(ellipseGroup->p1.y())
-                    .arg(ellipseGroup->majRadius)
-                    .arg(ellipseGroup->minRadius));
+                    .arg(ellipseItem->p1.x())
+                    .arg(ellipseItem->p1.y())
+                    .arg(ellipseItem->majRadius)
+                    .arg(ellipseItem->minRadius));
         }
     }
 
     virtual void undo()
     {
-        m_scene->addItem(itemGroup);
+        m_scene->addItem(m_item);
     }
 
     virtual void redo()
     {
-        m_scene->removeItem(itemGroup);
+        m_scene->removeItem(m_item);
     }
 
 private:
-    QGraphicsItemGroup *itemGroup;
+    QGraphicsItem *m_item;
     QGraphicsScene *m_scene;
 };
 
