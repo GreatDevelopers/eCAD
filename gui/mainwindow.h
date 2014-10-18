@@ -29,6 +29,7 @@ private:
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
+    QGraphicsView *graphicsView;
     CadGraphicsView *view;
 
     bool eventFilter(QObject *obj, QEvent *event);
@@ -38,6 +39,7 @@ private slots:
     void drawLine();
     void drawCircle();
     void drawEllipse();
+    void drawText();
     void newFile();
     void deleteItems();
 

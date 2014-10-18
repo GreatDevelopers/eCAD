@@ -72,6 +72,12 @@ void CadGraphicsView::drawEllipse()
     scene->setMode(CadGraphicsScene::EllipseMode);
 }
 
+void CadGraphicsView::drawText()
+{
+    // sets the mode to TextMode for scene
+    scene->setMode(CadGraphicsScene::TextMode);
+}
+
 void CadGraphicsView::showUndoStack()
 {
     // shows the undoStack window
