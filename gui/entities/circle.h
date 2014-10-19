@@ -2,11 +2,11 @@
 #define CIRCLE_H
 
 #include <QPainter>
-#include <QGraphicsItemGroup>
+#include <QGraphicsItem>
 
 #include "qmath.h"
 
-class Circle : public QObject, public QGraphicsItemGroup
+class Circle : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
