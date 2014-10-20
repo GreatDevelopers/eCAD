@@ -189,8 +189,11 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case TextMode:
-        textItem = new mText(id);
+        textItem = new mText(++id);
         textItem->setFont(myFont);
+        textItem->setPos(mouseEvent->scenePos());
+        itemList.append(textItem);
+        mUndoStack->push(new CadCommandAdd(this, textItem));
         textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
         textItem->setZValue(1000.0);
         connect(textItem, SIGNAL(lostFocus(mText*)),
