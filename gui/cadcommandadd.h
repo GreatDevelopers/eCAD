@@ -49,6 +49,11 @@ public:
                     .arg(ellipseItem->majRadius)
                     .arg(ellipseItem->minRadius));
         }
+        if (m_item->type() == mText::Type)
+        {
+            mText *mTextItem = dynamic_cast<mText *>(m_item);
+            setText(QString("Text added"));
+        }
     }
 
     ~CadCommandAdd()

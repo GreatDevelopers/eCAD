@@ -189,8 +189,11 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
 
     case TextMode:
-        textItem = new mText(id);
+        textItem = new mText(++id);
         textItem->setFont(myFont);
+        textItem->setPos(mouseEvent->scenePos());
+        itemList.append(textItem);
+        mUndoStack->push(new CadCommandAdd(this, textItem));
         textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
         textItem->setZValue(1000.0);
         connect(textItem, SIGNAL(lostFocus(mText*)),
@@ -278,6 +281,16 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeAttribute("majR", QString::number(myItem->majRadius));
                 stream->writeAttribute("minR", QString::number(myItem->minRadius));
                 stream->writeEndElement();  //end of Ellipse Item
+            }
+
+
+            else if (item->type() == mText::Type)
+            {
+                mText *myItem = dynamic_cast<mText *>(item);
+                stream->writeStartElement("Ellipse");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("textwidth", QString::number(myItem->textWidth()));
+                stream->writeEndElement();  //end of Text Item
             }
         }
     }
