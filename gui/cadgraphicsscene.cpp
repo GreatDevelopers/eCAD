@@ -282,6 +282,16 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeAttribute("minR", QString::number(myItem->minRadius));
                 stream->writeEndElement();  //end of Ellipse Item
             }
+
+
+            else if (item->type() == mText::Type)
+            {
+                mText *myItem = dynamic_cast<mText *>(item);
+                stream->writeStartElement("Ellipse");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("textwidth", QString::number(myItem->textWidth()));
+                stream->writeEndElement();  //end of Text Item
+            }
         }
     }
 }
