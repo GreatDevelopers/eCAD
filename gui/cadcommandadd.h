@@ -56,13 +56,6 @@ public:
         }
     }
 
-    ~CadCommandAdd()
-    {
-        // if m_item is not on scene then delete that m_item
-        if (!m_scene->items().contains(m_item))
-            delete m_item;
-    }
-
     virtual void undo()
     {
         m_scene->removeItem(m_item);
