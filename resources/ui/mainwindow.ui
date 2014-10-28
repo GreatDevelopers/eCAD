@@ -190,6 +190,7 @@
    <addaction name="actionLine"/>
    <addaction name="actionCircle"/>
    <addaction name="actionEllipse"/>
+   <addaction name="actionMText"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -523,6 +524,10 @@
   <action name="actionMText">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/MText.png</normaloff>:/icons/images/MText.png</iconset>
    </property>
    <property name="text">
     <string>MText</string>
