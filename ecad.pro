@@ -14,7 +14,8 @@ TEMPLATE = app
 
 INCLUDEPATH += \
     $$PWD/gui \
-    $$PWD/gui/entities
+    $$PWD/gui/entities \
+    $$PWD/gui/commands
 
 SOURCES += \
     main.cpp\
@@ -35,9 +36,9 @@ HEADERS += \
     gui/entities/point.h \
     gui/entities/line.h \
     gui/cadgraphicsview.h \
-    gui/cadcommandadd.h \
-    gui/cadcommanddelete.h \
-    gui/cadcommandmove.h \
+    gui/commands/cadcommandadd.h \
+    gui/commands/cadcommanddelete.h \
+    gui/commands/cadcommandmove.h \
     gui/entities/mtext.h
 
 FORMS += \
