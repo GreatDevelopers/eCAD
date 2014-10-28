@@ -4,5 +4,6 @@
         <file>images/ellipse.png</file>
         <file>images/line.png</file>
         <file>images/points.png</file>
+        <file>images/MText.png</file>
     </qresource>
 </RCC>
