@@ -35,9 +35,9 @@ HEADERS += \
     gui/entities/point.h \
     gui/entities/line.h \
     gui/cadgraphicsview.h \
-    gui/cadcommandadd.h \
-    gui/cadcommanddelete.h \
-    gui/cadcommandmove.h \
+    gui/cadcommands/cadcommandadd.h \
+    gui/cadcommands/cadcommanddelete.h \
+    gui/cadcommands/cadcommandmove.h \
     gui/entities/mtext.h
 
 FORMS += \
