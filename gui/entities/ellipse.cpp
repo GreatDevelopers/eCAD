@@ -37,8 +37,16 @@ int Ellipse::type() const
 QRectF Ellipse::boundingRect() const
 {
     // bounding rectangle for ellipse
-    return QRectF(p1.x()-majRadius, p1.y()-minRadius,
-                  2*majRadius, 2*minRadius).normalized();
+    float topLeftX = majRadius * cos(theta);
+    float topLeftY = majRadius * sin(theta);
+    float bottomRightX = minRadius * cos(theta + M_PI/2);
+    float bottomRightY = minRadius *sin(theta + M_PI/2);
+
+    float halfWidth = sqrt((topLeftX * topLeftX) + (bottomRightX * bottomRightX));
+    float halfHeight = sqrt((topLeftY * topLeftY) + (bottomRightY * bottomRightY));
+
+    return QRectF(p1.x() - 1.5 * halfWidth, p1.y() - 1.5 * halfHeight,
+                  3 * halfWidth, p1.y() + 3 * halfHeight);
 }
 
 void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
