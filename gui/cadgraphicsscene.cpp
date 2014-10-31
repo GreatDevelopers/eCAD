@@ -184,6 +184,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     case TextMode:
         textItem = new mText(++id);
+        textItem->setPos(mouseEvent->scenePos());
         itemList.append(textItem);
         mUndoStack->push(new CadCommandAdd(this, textItem));
         textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
@@ -191,7 +192,6 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 this, SLOT(editorLostFocus(mText*)));
         connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
                 this, SIGNAL(itemSelected(QGraphicsItem*)));
-        textItem->setPos(mouseEvent->scenePos());
         setFlags();
 
      default:
@@ -274,9 +274,9 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
             else if (item->type() == mText::Type)
             {
                 mText *myItem = dynamic_cast<mText *>(item);
-                stream->writeStartElement("Ellipse");
+                stream->writeStartElement("Text");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("textwidth", QString::number(myItem->textWidth()));
+                stream->writeAttribute("text", myItem->toPlainText());
                 stream->writeEndElement();  //end of Text Item
             }
         }
