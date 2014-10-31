@@ -16,18 +16,6 @@ public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode };
 
-    QFont font() const
-    {
-        return myFont;
-    }
-
-    QColor textColor() const
-    {
-        return myTextColor;
-    }
-
-    void setTextColor(const QColor &color);
-    void setFont(const QFont &font);
     void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -44,7 +32,6 @@ protected:
     void areItemsSelectable(bool);
 
 signals:
-    void textInserted(QGraphicsTextItem *item);
     void itemSelected(QGraphicsItem *item);
 
 private:
@@ -65,8 +52,6 @@ private:
     Circle *circleItem;
     Ellipse *ellipseItem;
     mText *textItem;
-    QColor myTextColor;
-    QFont myFont;
 
     typedef QPair<QGraphicsItem *, QPointF> itemPos;
     QList<itemPos> selectedItems;
