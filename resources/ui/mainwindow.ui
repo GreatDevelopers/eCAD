@@ -40,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>725</width>
-     <height>29</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -527,7 +527,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/MText.png</normaloff>:/icons/images/MText.png</iconset>
+     <normaloff>:/icons/images/menutext.png</normaloff>:/icons/images/menutext.png</iconset>
    </property>
    <property name="text">
     <string>MText</string>
