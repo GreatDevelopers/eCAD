@@ -5,9 +5,9 @@
 #include <QXmlStreamWriter>
 #include <QUndoStack>
 
-#include "cadcommandadd.h"
-#include "cadcommanddelete.h"
-#include "cadcommandmove.h"
+#include "cadcommands/cadcommandadd.h"
+#include "cadcommands/cadcommanddelete.h"
+#include "cadcommands/cadcommandmove.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
