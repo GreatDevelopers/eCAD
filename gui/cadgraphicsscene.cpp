@@ -87,115 +87,117 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // mousePressEvent in the graphicsScene
     static int id = 0;
-
-    switch (entityMode)
+    if(mouseEvent->button() == Qt::LeftButton)
     {
-    case NoMode:
-        qDebug() << "No Mode";
-        break;
-
-    case PointMode:
-        pointItem = new Point(++id);
-        pointItem->setPos(mouseEvent->scenePos());
-        itemList.append(pointItem);
-        mUndoStack->push(new CadCommandAdd(this, pointItem));
-        break;
-
-    case LineMode:
-        if (mFirstClick)
+        switch (entityMode)
         {
-            start_p = mouseEvent->scenePos();
-            mFirstClick = false;
-            mSecondClick = true;
-        }
+        case NoMode:
+            qDebug() << "No Mode";
+            break;
 
-        else if (!mFirstClick && mSecondClick)
-        {
-            end_p = mouseEvent->scenePos();
-            mPaintFlag = true;
-            mSecondClick = false;
-        }
+        case PointMode:
+            pointItem = new Point(++id);
+            pointItem->setPos(mouseEvent->scenePos());
+            itemList.append(pointItem);
+            mUndoStack->push(new CadCommandAdd(this, pointItem));
+            break;
 
-        if (mPaintFlag)
-        {
-            lineItem = new Line(++id, start_p, end_p);
-            lineItem->setLine(start_p.x(), start_p.y(), end_p.x(), end_p.y());
-            itemList.append(lineItem);
-            mUndoStack->push(new CadCommandAdd(this, lineItem));
+        case LineMode:
+            if (mFirstClick)
+            {
+                start_p = mouseEvent->scenePos();
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                end_p = mouseEvent->scenePos();
+                mPaintFlag = true;
+                mSecondClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                lineItem = new Line(++id, start_p, end_p);
+                lineItem->setLine(start_p.x(), start_p.y(), end_p.x(), end_p.y());
+                itemList.append(lineItem);
+                mUndoStack->push(new CadCommandAdd(this, lineItem));
+                setFlags();
+            }
+            break;
+
+        case CircleMode:
+            if (mFirstClick)
+            {
+                start_p = mouseEvent->scenePos();
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                end_p = mouseEvent->scenePos();
+                mPaintFlag = true;
+                mSecondClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                circleItem = new Circle(++id, start_p, end_p);
+                itemList.append(circleItem);
+                mUndoStack->push(new CadCommandAdd(this, circleItem));
+                setFlags();
+            }
+            break;
+
+        case EllipseMode:
+            if (mFirstClick)
+            {
+                start_p = mouseEvent->scenePos();
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                mid_p = mouseEvent->scenePos();
+                mFirstClick = false;
+                mSecondClick = false;
+                mThirdClick = true;
+            }
+
+            else if (!mSecondClick && mThirdClick)
+            {
+                end_p = mouseEvent->scenePos();
+                mThirdClick = false;
+                mPaintFlag = true;
+            }
+
+            if (mPaintFlag)
+            {
+                ellipseItem = new Ellipse(++id, start_p, mid_p, end_p);
+                itemList.append(ellipseItem);
+                mUndoStack->push(new CadCommandAdd(this, ellipseItem));
+                setFlags();
+            }
+            break;
+
+        case TextMode:
+            textItem = new mText(++id);
+            textItem->setPos(mouseEvent->scenePos());
+            itemList.append(textItem);
+            mUndoStack->push(new CadCommandAdd(this, textItem));
+            textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+            connect(textItem, SIGNAL(lostFocus(mText*)),
+                    this, SLOT(editorLostFocus(mText*)));
+            connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
+                    this, SIGNAL(itemSelected(QGraphicsItem*)));
             setFlags();
+
+        default:
+            ;
         }
-        break;
-
-    case CircleMode:
-        if (mFirstClick)
-        {
-            start_p = mouseEvent->scenePos();
-            mFirstClick = false;
-            mSecondClick = true;
-        }
-
-        else if (!mFirstClick && mSecondClick)
-        {
-            end_p = mouseEvent->scenePos();
-            mPaintFlag = true;
-            mSecondClick = false;
-        }
-
-        if (mPaintFlag)
-        {
-            circleItem = new Circle(++id, start_p, end_p);
-            itemList.append(circleItem);
-            mUndoStack->push(new CadCommandAdd(this, circleItem));
-            setFlags();
-        }
-        break;
-
-    case EllipseMode:
-        if (mFirstClick)
-        {
-            start_p = mouseEvent->scenePos();
-            mFirstClick = false;
-            mSecondClick = true;
-        }
-
-        else if (!mFirstClick && mSecondClick)
-        {
-            mid_p = mouseEvent->scenePos();
-            mFirstClick = false;
-            mSecondClick = false;
-            mThirdClick = true;
-        }
-
-        else if (!mSecondClick && mThirdClick)
-        {
-            end_p = mouseEvent->scenePos();
-            mThirdClick = false;
-            mPaintFlag = true;
-        }
-
-        if (mPaintFlag)
-        {
-            ellipseItem = new Ellipse(++id, start_p, mid_p, end_p);
-            itemList.append(ellipseItem);
-            mUndoStack->push(new CadCommandAdd(this, ellipseItem));
-            setFlags();
-        }
-        break;
-
-    case TextMode:
-        textItem = new mText(++id);
-        textItem->setPos(mouseEvent->scenePos());
-        itemList.append(textItem);
-        mUndoStack->push(new CadCommandAdd(this, textItem));
-        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-        connect(textItem, SIGNAL(lostFocus(mText*)),
-                this, SLOT(editorLostFocus(mText*)));
-        connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
-                this, SIGNAL(itemSelected(QGraphicsItem*)));
-        setFlags();
-
-     default:
-        ;
     }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
