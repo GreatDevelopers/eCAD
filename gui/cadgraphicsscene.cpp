@@ -278,6 +278,8 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 mText *myItem = dynamic_cast<mText *>(item);
                 stream->writeStartElement("Text");
                 stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("x", QString::number(myItem->x()));
+                stream->writeAttribute("y", QString::number(myItem->y()));
                 stream->writeAttribute("text", myItem->toPlainText());
                 stream->writeEndElement();  //end of Text Item
             }
