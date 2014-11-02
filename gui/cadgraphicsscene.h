@@ -19,6 +19,9 @@ public:
     void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
+    void copy();
+    void cut();
+    void paste();
 
 public slots:
     void setMode(Mode mode);
@@ -55,6 +58,7 @@ private:
     Circle *circleItem;
     Ellipse *ellipseItem;
     mText *textItem;
+    void setNewItem(QGraphicsItem *item);
 
     typedef QPair<QGraphicsItem *, QPointF> itemPos;
     QList<itemPos> selectedItems;
