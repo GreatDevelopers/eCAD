@@ -28,6 +28,18 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
     }
 }
 
+Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM)
+{
+    // assigns id
+    id = i;
+
+    /* set values of center point
+    and radii of ellipse */
+    p1 = point1;
+    minRadius = rad;
+    majRadius = radM;
+}
+
 int Ellipse::type() const
 {
     // Enable the use of qgraphicsitem_cast with ellipse item.
