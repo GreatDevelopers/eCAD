@@ -44,6 +44,9 @@ private:
     bool mPaintFlag;
     QVector<QPointF> stuff;
     QPointF start_p, mid_p, end_p, move_p, check_p;
+    qreal _x, _y, _rad, _radM;
+    int _id;
+    QString _str;
     QPen paintpen, linePen;
 
     QList<QGraphicsItem *> itemList;

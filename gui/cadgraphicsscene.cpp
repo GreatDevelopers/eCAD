@@ -187,8 +187,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             textItem = new mText(++id);
             textItem->setPos(mouseEvent->scenePos());
             itemList.append(textItem);
-            mUndoStack->push(new CadCommandAdd(this, textItem));
             textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+            mUndoStack->push(new CadCommandAdd(this, textItem));
             connect(textItem, SIGNAL(lostFocus(mText*)),
                     this, SLOT(editorLostFocus(mText*)));
             connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
@@ -272,7 +272,6 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeEndElement();  //end of Ellipse Item
             }
 
-
             else if (item->type() == mText::Type)
             {
                 mText *myItem = dynamic_cast<mText *>(item);
@@ -294,17 +293,99 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
         stream->readNext();
         if (stream->isStartElement() && stream->name() == "Point")
         {
-            qreal x = 0.0, y = 0.0;
             foreach (QXmlStreamAttribute attribute, stream->attributes())
             {
-                if (attribute.name() == "xCoord")
-                    x = attribute.value().toString().toDouble();
-                if (attribute.name() == "yCoord")
-                    y = attribute.value().toString().toDouble();
+                if (attribute.name() == "id")
+                    _id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x")
+                    _x = attribute.value().toString().toDouble();
+                if (attribute.name() == "y")
+                    _y = attribute.value().toString().toDouble();
             }
-//            Point *myPoint = new Point;
-//            addItem(myPoint);
-//            myPoint->setPos(x,y);
+            pointItem = new Point(_id);
+            pointItem->setPos(_x, _y);
+            itemList.append(pointItem);
+            mUndoStack->push(new CadCommandAdd(this, pointItem));
+        }
+
+        if (stream->isStartElement() && stream->name() == "Line")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    _id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x1")
+                    start_p.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y1")
+                    start_p.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "x2")
+                    end_p.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y2")
+                    end_p.setY(attribute.value().toString().toDouble());
+            }
+            lineItem = new Line(_id, start_p, end_p);
+            lineItem->setLine(start_p.x(), start_p.y(), end_p.x(), end_p.y());
+            itemList.append(lineItem);
+            mUndoStack->push(new CadCommandAdd(this, lineItem));
+        }
+
+        if (stream->isStartElement() && stream->name() == "Circle")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    _id = attribute.value().toString().toDouble();
+                if (attribute.name() == "cx")
+                    start_p.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "cy")
+                    start_p.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "radius")
+                    _rad = attribute.value().toString().toDouble();
+            }
+            circleItem = new Circle(_id, start_p, _rad);
+            itemList.append(circleItem);
+            mUndoStack->push(new CadCommandAdd(this, circleItem));
+        }
+
+        if (stream->isStartElement() && stream->name() == "Ellipse")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    _id = attribute.value().toString().toDouble();
+                if (attribute.name() == "cx")
+                    start_p.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "cy")
+                    start_p.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "majR")
+                    _radM = attribute.value().toString().toDouble();
+                if (attribute.name() == "minR")
+                    _rad = attribute.value().toString().toDouble();
+            }
+            ellipseItem = new Ellipse(_id, start_p, _rad, _radM);
+            itemList.append(ellipseItem);
+            mUndoStack->push(new CadCommandAdd(this, ellipseItem));
+        }
+
+        if (stream->isStartElement() && stream->name() == "Text")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    _id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x")
+                    start_p.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y")
+                    start_p.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "text")
+                    _str = attribute.value().toString();
+            }
+            textItem = new mText(_id);
+            textItem->setPos(start_p.x(), start_p.y());
+            textItem->setPlainText(_str);
+            textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+            itemList.append(textItem);
+            mUndoStack->push(new CadCommandAdd(this, textItem));
         }
     }
 }

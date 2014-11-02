@@ -11,6 +11,7 @@ class Ellipse : public QObject, public QGraphicsItem
     Q_OBJECT
 public:
     Ellipse(int, QPointF, QPointF, QPointF);
+    Ellipse(int, QPointF, qreal, qreal);
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,

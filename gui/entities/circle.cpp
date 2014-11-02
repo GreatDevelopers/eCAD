@@ -13,6 +13,17 @@ Circle::Circle(int i, QPointF p1, QPointF p2)
                    + qPow((end_p.y()-center_p.y()), 2));
 }
 
+Circle::Circle(int i, QPointF p1, qreal rad)
+{
+    // assigns id
+    id = i;
+
+    /* set values of center point
+       and radius of circle */
+    center_p = p1;
+    radius = rad;
+}
+
 int Circle::type() const
 {
     // Enable the use of qgraphicsitem_cast with circle item.
