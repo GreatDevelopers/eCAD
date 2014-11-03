@@ -18,14 +18,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(mdiArea);
     Ui_MainWindow::statusBar->showMessage("Welcome to eCAD");
 
-//    connect(pointButton, SIGNAL(clicked()),
-//            this, SLOT(drawPoint()));
-//    connect(lineButton, SIGNAL(clicked()),
-//            this, SLOT(drawLine()));
-//    connect(circleButton, SIGNAL(clicked()),
-//            this, SLOT(drawCircle()));
-//    connect(ellipseButton, SIGNAL(clicked()),
-//            this, SLOT(drawEllipse()));
+    //    connect(pointButton, SIGNAL(clicked()),
+    //            this, SLOT(drawPoint()));
+    //    connect(lineButton, SIGNAL(clicked()),
+    //            this, SLOT(drawLine()));
+    //    connect(circleButton, SIGNAL(clicked()),
+    //            this, SLOT(drawCircle()));
+    //    connect(ellipseButton, SIGNAL(clicked()),
+    //            this, SLOT(drawEllipse()));
 
     connect(actionPoints, SIGNAL(triggered()),
             this, SLOT(drawPoint()));
@@ -52,6 +52,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
+    connect(actionCopy,SIGNAL(triggered()),
+            this,SLOT(copy()));
+    connect(actionCut,SIGNAL(triggered()),
+            this,SLOT(cut()));
+    connect(actionPaste,SIGNAL(triggered()),
+            this,SLOT(paste()));
 
     // toggle actions to false
     toggleActions(0);
@@ -74,6 +80,9 @@ void MainWindow::toggleActions(bool b)
     actionEllipse->setEnabled(b);
     actionMText->setEnabled(b);
     actionInsert_Image->setEnabled(b);
+    actionCut->setEnabled(b);
+    actionCopy->setEnabled(b);
+    actionPaste->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -214,13 +223,31 @@ void MainWindow::deleteItems()
     view->scene->deleteItems();
 }
 
+void MainWindow::copy()
+{
+    // calls the copy function of graphicsScene
+    view->scene->copy();
+}
+
+void MainWindow::cut()
+{
+    // calls the cut function of graphicsScene
+    view->scene->cut();
+}
+
+void MainWindow::paste()
+{
+    // calls the paste function of graphicsScene
+    view->scene->paste();
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
     // open file dialog box
     QString filename = QFileDialog::getOpenFileName(this,
-                                                  tr("Open File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
+                                                    tr("Open File"),
+                                                    QString(),
+                                                    tr("file Name(*.xml)"));
     QMainWindow::statusBar()->showMessage("File opened successfully");
     if (!filename.isEmpty())
     {
@@ -277,9 +304,9 @@ void MainWindow::on_actionSave_triggered()
 {
     // save file dialog box
     QString filename = QFileDialog::getSaveFileName(this,
-                                                  tr("Save File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
+                                                    tr("Save File"),
+                                                    QString(),
+                                                    tr("file Name(*.xml)"));
     if(!filename.isEmpty())
     {
         QFile file(filename);
@@ -325,7 +352,7 @@ void MainWindow::on_actionInsert_Image_triggered()
 {
     // insert image dialog
     QString imagePath = QFileDialog::getOpenFileName(this, tr("open File"),"",
-                                                    tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
+                                                     tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
     imageObject = new QImage();
     imageObject->load(imagePath);
     image = QPixmap::fromImage(*imageObject);

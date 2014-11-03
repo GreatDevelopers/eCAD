@@ -41,6 +41,9 @@ private slots:
     void drawEllipse();
     void drawText();
     void newFile();
+    void cut();
+    void copy();
+    void paste();
     void deleteItems();
 
     void setNoMode();
