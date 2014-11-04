@@ -50,14 +50,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(on_actionZoom_In_triggered()));
     connect(actionZoom_Out, SIGNAL(triggered()),
             this, SLOT(on_actionZoom_Out_triggered()));
-    connect(actionInsert_Image, SIGNAL(triggered()),
+    connect(actionInsert_Image,SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
-    connect(actionCopy, SIGNAL(triggered()),
-            this, SLOT(copy()));
-    connect(actionCut, SIGNAL(triggered()),
-            this,SLOT(cut()));
-    connect(actionPaste, SIGNAL(triggered()),
-            this, SLOT(paste()));
 
     // toggle actions to false
     toggleActions(0);
@@ -80,9 +74,6 @@ void MainWindow::toggleActions(bool b)
     actionEllipse->setEnabled(b);
     actionMText->setEnabled(b);
     actionInsert_Image->setEnabled(b);
-    actionCut->setEnabled(b);
-    actionPaste->setEnabled(b);
-    actionCopy->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -197,24 +188,6 @@ void MainWindow::drawLine()
 {
     // calls the drawLine function of graphicsView
     view->drawLine();
-}
-
-void MainWindow::copy()
-{
-    // calls the copy function of graphicsScene
-    view->scene->copy();
-}
-
-void MainWindow::cut()
-{
-    // calls the cut function of graphicsScene
-    view->scene->cut();
-}
-
-void MainWindow::paste()
-{
-    // calls the paste function of graphicsScene
-    view->scene->paste();
 }
 
 void MainWindow::drawCircle()
