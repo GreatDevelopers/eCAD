@@ -282,26 +282,35 @@
   </action>
   <action name="actionCut">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Cut </string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
   <action name="actionCopy">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Copy</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
   </action>
   <action name="actionPaste">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="actionEdit_Preferences">
@@ -469,7 +478,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../images.qrc">
+    <iconset>
      <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
    </property>
    <property name="text">
@@ -484,7 +493,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../images.qrc">
+    <iconset>
      <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
    </property>
    <property name="text">
@@ -507,7 +516,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../images.qrc">
+    <iconset>
      <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
    </property>
    <property name="text">
@@ -522,7 +531,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../images.qrc">
+    <iconset>
      <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
    </property>
    <property name="text">
@@ -553,7 +562,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../images.qrc">
+    <iconset>
      <normaloff>:/icons/images/menutext.png</normaloff>:/icons/images/menutext.png</iconset>
    </property>
    <property name="text">
