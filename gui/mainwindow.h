@@ -56,6 +56,7 @@ private slots:
     void setActions();
 
     void filePrintPreview();
+    void closeEvent(QCloseEvent *event);
     void filePrint();
     void print(QPrinter *);
 
