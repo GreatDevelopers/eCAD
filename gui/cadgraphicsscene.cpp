@@ -66,6 +66,56 @@ void CadGraphicsScene::deleteItems()
     }
 }
 
+void CadGraphicsScene::cut()
+{
+    foreach (QGraphicsItem *item, itemList)
+    {
+        if (item->isSelected())
+        {
+            // Cuts the selected item
+            removeItem(item);
+            update();
+        }
+    }
+}
+
+void CadGraphicsScene::copy()
+{
+    foreach (QGraphicsItem *item, itemList)
+    {
+        QString str;
+        // Stores the Point
+        if (item->isSelected() == Point::Type)
+        {
+            str = QString("Point copy p(%1,%2)")
+                    .arg(item->x())
+                    .arg(item->y());
+        }
+    }
+}
+
+void CadGraphicsScene::paste()
+{
+    foreach (QGraphicsItem *item, itemList)
+    {
+        // Calls setNewItem function
+        setNewItem(item);
+    }
+}
+
+void CadGraphicsScene::setNewItem(QGraphicsItem *item)
+{
+    static int id = 0;
+    if(item->isSelected() == PointMode)
+    {
+        // Create a New point
+        pointItem = new Point(++id);
+        pointItem->setPos(item->scenePos());
+        itemList.append(pointItem);
+        mUndoStack->push(new CadCommandAdd(this, pointItem));
+    }
+}
+
 void CadGraphicsScene::selectItems()
 {
     // refresh record of selected items and their starting positions
