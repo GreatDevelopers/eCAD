@@ -69,16 +69,21 @@ void CadGraphicsScene::deleteItems()
 void CadGraphicsScene::selectItems()
 {
     // refresh record of selected items and their starting positions
-    selectedItems.clear();
+    selectedPoints.clear();
+    selectedLines.clear();
     foreach (QGraphicsItem *item, itemList)
     {
         if (item->isSelected())
         {
-            if (dynamic_cast<QGraphicsItem *>(item))
+            if (item->type() == Point::Type)
             {
-                selectedItems.append(qMakePair(
-                                          dynamic_cast<QGraphicsItem *>(item),
-                                          item->scenePos()));
+                Point *myItem = dynamic_cast<Point *>(item);
+                selectedPoints.append(qMakePair(myItem, myItem->scenePos()));
+            }
+            if(item->type() == Line::Type)
+            {
+                Line *myItem = dynamic_cast<Line *>(item);
+                selectedLines.append(qMakePair(myItem, myItem->line()));
             }
         }
     }
@@ -256,15 +261,30 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // if any items moved, then create undo commands
-    foreach (itemPos item, selectedItems)
+    foreach (pointPos item, selectedPoints)
     {
-        if (item.first->scenePos() != item.second)
+        if(item.first->type() == Point::Type)
         {
-            mUndoStack->push(new CadCommandMove(item.first, item.second.x(),
-                                                item.second.y(), item.first->x(),
-                                                item.first->y()));
+            Point *myItem = dynamic_cast<Point *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second,
+                                                myItem->scenePos()));
         }
     }
+
+    foreach (linePos item, selectedLines)
+    {
+        if(item.first->type() == Line::Type)
+        {
+            Line *myItem = dynamic_cast<Line *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second.p1(),
+                                                item.second.p2(),
+                                                item.second.p1()
+                                                + item.first->scenePos(),
+                                                item.second.p2()
+                                                + item.first->scenePos()));
+        }
+    }
+
     // refresh record of selected items and call base mouseReleaseEvent
     selectItems();
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
@@ -292,10 +312,18 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 Line *myItem = dynamic_cast<Line *>(item);
                 stream->writeStartElement("Line");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("x1", QString::number(myItem->start_p.x()));
-                stream->writeAttribute("y1", QString::number(myItem->start_p.y()));
-                stream->writeAttribute("x2", QString::number(myItem->end_p.x()));
-                stream->writeAttribute("y2", QString::number(myItem->end_p.y()));
+                stream->writeAttribute("x1", QString::number(myItem->start_p.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y1", QString::number(myItem->start_p.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x2", QString::number(myItem->end_p.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y2", QString::number(myItem->end_p.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
                 stream->writeEndElement();  //end of Line Item
             }
 
