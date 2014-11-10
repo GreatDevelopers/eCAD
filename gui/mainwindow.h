@@ -12,6 +12,7 @@
 
 #include "ui_mainwindow.h"
 #include "cadgraphicsview.h"
+#include "cadscriptwidget.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -31,6 +32,7 @@ private:
     QImage *imageObject;
     QGraphicsView *graphicsView;
     CadGraphicsView *view;
+    CadScriptWidget *scriptWidget;
 
     bool eventFilter(QObject *obj, QEvent *event);
 
