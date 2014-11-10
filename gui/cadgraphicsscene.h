@@ -60,8 +60,10 @@ private:
     mText *textItem;
     void setNewItem(QGraphicsItem *item);
 
-    typedef QPair<QGraphicsItem *, QPointF> itemPos;
-    QList<itemPos> selectedItems;
+    typedef QPair<QGraphicsItem *, QPointF> pointPos;
+    typedef QPair<QGraphicsItem *, QLineF> linePos;
+    QList<pointPos> selectedPoints;
+    QList<linePos> selectedLines;
 };
 
 #endif // CADGRAPHICSSCENE_H
