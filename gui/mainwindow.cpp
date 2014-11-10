@@ -122,6 +122,13 @@ void MainWindow::newFile()
     view->show();
     setActions();
 
+    // creates a new script widget
+    scriptWidget = new CadScriptWidget;
+    scriptWidget->setMinimumHeight(50);
+    scriptWidget->setMaximumHeight(100);
+
+    addDockWidget(Qt::BottomDockWidgetArea, scriptWidget);
+
     // toggle actions to true
     toggleActions(1);
 }
