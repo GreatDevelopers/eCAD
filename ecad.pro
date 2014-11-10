@@ -38,7 +38,9 @@ HEADERS += \
     gui/cadcommands/cadcommandadd.h \
     gui/cadcommands/cadcommanddelete.h \
     gui/cadcommands/cadcommandmove.h \
-    gui/entities/mtext.h
+    gui/entities/mtext.h \
+    gui/gEntity.h \
+    gui/clipboard.h
 
 FORMS += \
     resources/ui/mainwindow.ui

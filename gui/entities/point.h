@@ -4,14 +4,22 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-class Point : public QObject, public QGraphicsItem
+#include "gEntity.h"
+
+class Point : public gEntity
 {
     Q_OBJECT
 public:
+    Point(QObject* parent = 0) : gEntity(parent)
+    {
+
+    }
     Point(int);
     enum { Type = UserType + 1 };
     int type() const;
     int id;
+
+    gEntity *my_clone();
 
 protected:
     QRectF boundingRect() const;
