@@ -4,13 +4,23 @@
 #include <QTextCursor>
 #include <QDebug>
 
+MyClipBoard *MyClipBoard::inst = 0;
+
 CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     : QGraphicsScene(parent)
 {
     setFlags();
     id = 0;
     mUndoStack = undoStack;
+    contextmenu = new QMenu;
+    cutaction = contextmenu->addAction("cut");
+    copyaction = contextmenu->addAction("copy");
+    pasteaction = contextmenu->addAction("paste");
+    contextitem = 0;
 
+    //connect context menu items to action slots
+    connect(contextmenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(contextMenuaction(QAction*)));
     // connect selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
 }
@@ -86,56 +96,6 @@ void CadGraphicsScene::selectItems()
                 selectedLines.append(qMakePair(myItem, myItem->line()));
             }
         }
-    }
-}
-
-void CadGraphicsScene::cut()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        if (item->isSelected())
-        {
-            // Cuts the selected item
-            removeItem(item);
-            update();
-        }
-    }
-}
-
-void CadGraphicsScene::copy()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        QString str;
-        // Stores the Point
-        if (item->isSelected() == Point::Type)
-        {
-            str = QString("Point copy p(%1,%2)")
-                    .arg(item->x())
-                    .arg(item->y());
-        }
-    }
-}
-
-void CadGraphicsScene::paste()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        // Calls setNewItem function
-        setNewItem(item);
-    }
-}
-
-void CadGraphicsScene::setNewItem(QGraphicsItem *item)
-{
-    static int id = 0;
-    if(item->isSelected() == PointMode)
-    {
-        // Create a New point
-        pointItem = new Point(++id);
-        pointItem->setPos(item->scenePos());
-        itemList.append(pointItem);
-        mUndoStack->push(new CadCommandAdd(this, pointItem));
     }
 }
 
@@ -281,8 +241,43 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             ;
         }
     }
+    else
+    {
+        if (mouseEvent->button() == Qt::RightButton)
+        {
+            contextitem = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
+            cpos = mouseEvent->scenePos();
+
+            if (!contextitem)
+            {
+                cutaction->setEnabled(false);
+                copyaction->setEnabled(false);
+
+                if (MyClipBoard::instance()->isempty())
+                {
+                    pasteaction->setEnabled(false);
+                }
+                else
+                {
+                    pasteaction->setEnabled(true);
+                }
+            }
+            else
+            {
+                cutaction->setEnabled(true);
+                copyaction->setEnabled(true);
+                pasteaction->setEnabled(false);
+            }
+        }
+    }
+
 
     QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEvent)
+{
+    contextmenu->exec(mouseEvent->screenPos());
 }
 
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -494,3 +489,44 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
         }
     }
 }
+
+void CadGraphicsScene::cut(gEntity *obj)
+{
+    removeItem(obj);
+    MyClipBoard::instance()->push(obj);
+}
+
+void CadGraphicsScene::copy(gEntity *obj)
+{
+    MyClipBoard::instance()->push(obj->clone());
+}
+
+void CadGraphicsScene::paste(const QPointF &pos)
+{
+    gEntity *last = MyClipBoard::instance()->pop();
+    if (last)
+    {
+        addItem(static_cast<QGraphicsItem *>(last));
+        last->setPos(pos);
+        last->setFlag(QGraphicsItem::ItemIsSelectable);
+        last->setFlag(QGraphicsItem::ItemIsMovable);
+        mUndoStack->push(new CadCommandAdd(this, last));
+    }
+}
+
+void CadGraphicsScene::contextMenuaction(QAction *a)
+{
+    if (a == cutaction)
+    {
+        cut(static_cast<gEntity *>(contextitem));
+    }
+    else if (a == copyaction)
+    {
+        copy(static_cast<gEntity *>(contextitem));
+    }
+    else if (a == pasteaction)
+    {
+        paste(cpos);
+    }
+}
+
