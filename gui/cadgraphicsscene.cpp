@@ -4,13 +4,23 @@
 #include <QTextCursor>
 #include <QDebug>
 
+MyClipBoard* MyClipBoard::inst = 0;
+
 CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     : QGraphicsScene(parent)
 {
     setFlags();
     id = 0;
     mUndoStack = undoStack;
+    m_context = new QMenu;
+    a_cut = m_context->addAction("cut");
+    a_copy = m_context->addAction("copy");
+    a_paste = m_context->addAction("paste");
+    context_item = 0;
 
+    //connect context menu items to action slots
+    connect(m_context, SIGNAL(triggered(QAction *)), this,
+            SLOT(contmenu(QAction *)));
     // connect selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
 }
@@ -86,56 +96,6 @@ void CadGraphicsScene::selectItems()
                 selectedLines.append(qMakePair(myItem, myItem->line()));
             }
         }
-    }
-}
-
-void CadGraphicsScene::cut()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        if (item->isSelected())
-        {
-            // Cuts the selected item
-            removeItem(item);
-            update();
-        }
-    }
-}
-
-void CadGraphicsScene::copy()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        QString str;
-        // Stores the Point
-        if (item->isSelected() == Point::Type)
-        {
-            str = QString("Point copy p(%1,%2)")
-                    .arg(item->x())
-                    .arg(item->y());
-        }
-    }
-}
-
-void CadGraphicsScene::paste()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        // Calls setNewItem function
-        setNewItem(item);
-    }
-}
-
-void CadGraphicsScene::setNewItem(QGraphicsItem *item)
-{
-    static int id = 0;
-    if(item->isSelected() == PointMode)
-    {
-        // Create a New point
-        pointItem = new Point(++id);
-        pointItem->setPos(item->scenePos());
-        itemList.append(pointItem);
-        mUndoStack->push(new CadCommandAdd(this, pointItem));
     }
 }
 
@@ -254,8 +214,37 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             ;
         }
     }
+    else
+    {
+        if(mouseEvent->button() & Qt::RightButton)
+        {
+            context_item = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
+            cpos = mouseEvent->scenePos();
+
+            if (!context_item)
+             {
+                 a_cut->setEnabled(false);
+                 a_copy->setEnabled(false);
+
+                 if(MyClipBoard::instance()->isempty())
+                     a_paste->setEnabled(false);
+                 else a_paste->setEnabled(true);
+             }
+             else
+             {
+                 a_cut->setEnabled(true);
+                 a_copy->setEnabled(true);
+                 a_paste->setEnabled(false);
+             }
+        }
+    }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    m_context->exec(event->screenPos());
 }
 
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -467,3 +456,44 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
         }
     }
 }
+
+void CadGraphicsScene::cut(gEntity *obj)
+{
+    removeItem(obj);
+    MyClipBoard::instance()->push(obj);
+}
+
+void CadGraphicsScene::copy(gEntity *obj)
+{
+    MyClipBoard::instance()->push(obj->my_clone());
+}
+
+void CadGraphicsScene::paste(const QPointF& pos)
+{
+    gEntity *last = MyClipBoard::instance()->pop();
+    if(last)
+    {
+        addItem(static_cast<QGraphicsItem *>(last));
+        last->setPos(pos);
+        last->setFlag(QGraphicsItem::ItemIsSelectable);
+        last->setFlag(QGraphicsItem::ItemIsMovable);
+        mUndoStack->push(new CadCommandAdd(this, last));
+    }
+}
+
+void CadGraphicsScene::contmenu(QAction *a)
+{
+    if(a == a_cut)
+    {
+        cut(static_cast<gEntity *>(context_item));
+    }
+    else if(a == a_copy)
+    {
+        copy(static_cast<gEntity *>(context_item));
+    }
+    else if(a == a_paste)
+    {
+        paste(cpos);
+    }
+}
+
