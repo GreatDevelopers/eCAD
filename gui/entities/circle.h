@@ -20,7 +20,7 @@ public:
     int type() const;
     int id;
 
-    QPointF center_p, end_p, move_p;
+    QPointF centerP, endP;
     qreal radius;
 
 private:

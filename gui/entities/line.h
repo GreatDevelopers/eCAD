@@ -17,7 +17,7 @@ public:
     int type() const;
     int id;
 
-    QPointF start_p, end_p, move_p, check_p;
+    QPointF startP, endP;
 
 private:
     QVector<QPointF> stuff;

@@ -16,7 +16,7 @@ class CadCommandMove : public QUndoCommand
 public:
     CadCommandMove(QGraphicsItem *item, QPointF oldPos, QPointF newPos)
     {
-        m_item = dynamic_cast<Point *>(item);
+        cadItem = dynamic_cast<Point *>(item);
         oPos = oldPos;
         nPos = newPos;
         setText(QString("Point move (%1,%2) -> (%3,%4)").arg(oPos.x())
@@ -26,7 +26,7 @@ public:
     CadCommandMove(QGraphicsLineItem *item, QPointF oldStart, QPointF oldEnd,
                    QPointF newStart,QPointF newEnd)
     {
-        m_item = dynamic_cast<Line *>(item);
+        cadItem = dynamic_cast<Line *>(item);
         oStart = oldStart;
         oEnd = oldEnd;
         nStart = newStart;
@@ -38,30 +38,30 @@ public:
 
     virtual void undo()
     {
-        if (m_item->type() == Point::Type)
+        if (cadItem->type() == Point::Type)
         {
-            m_item->setPos(oPos);
+            cadItem->setPos(oPos);
         }
-        if (m_item->type() == Line::Type)
+        if (cadItem->type() == Line::Type)
         {
-            m_item->setPos(oStart.x() - nStart.x(), oStart.y() - nStart.y());
+            cadItem->setPos(oStart.x() - nStart.x(), oStart.y() - nStart.y());
         }
     }
 
     virtual void redo()
     {
-        if (m_item->type() == Point::Type)
+        if (cadItem->type() == Point::Type)
         {
-            m_item->setPos(nPos);
+            cadItem->setPos(nPos);
         }
-        if (m_item->type() == Line::Type)
+        if (cadItem->type() == Line::Type)
         {
-            m_item->setPos(nStart.x() - oStart.x(), nStart.y() - oStart.y());
+            cadItem->setPos(nStart.x() - oStart.x(), nStart.y() - oStart.y());
         }
     }
 
 private:
-    QGraphicsItem *m_item;
+    QGraphicsItem *cadItem;
     QPointF oPos, nPos;
     QPointF oStart, oEnd, nStart, nEnd;
 };
