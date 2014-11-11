@@ -35,3 +35,11 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(paintpen);
     painter->drawEllipse(boundingRect());
 }
+
+gEntity *Point::my_clone()
+{
+    Point *p = new Point;
+    p->scenePos();
+    return p;
+}
+
