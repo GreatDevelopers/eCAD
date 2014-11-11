@@ -187,22 +187,22 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case LineMode:
             if (mFirstClick)
             {
-                start_p = mouseEvent->scenePos();
+                startP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                end_p = mouseEvent->scenePos();
+                endP = mouseEvent->scenePos();
                 mPaintFlag = true;
                 mSecondClick = false;
             }
 
             if (mPaintFlag)
             {
-                lineItem = new Line(++id, start_p, end_p);
-                lineItem->setLine(start_p.x(), start_p.y(), end_p.x(), end_p.y());
+                lineItem = new Line(++id, startP, endP);
+                lineItem->setLine(startP.x(), startP.y(), endP.x(), endP.y());
                 itemList.append(lineItem);
                 mUndoStack->push(new CadCommandAdd(this, lineItem));
                 setFlags();
@@ -212,21 +212,21 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case CircleMode:
             if (mFirstClick)
             {
-                start_p = mouseEvent->scenePos();
+                startP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                end_p = mouseEvent->scenePos();
+                endP = mouseEvent->scenePos();
                 mPaintFlag = true;
                 mSecondClick = false;
             }
 
             if (mPaintFlag)
             {
-                circleItem = new Circle(++id, start_p, end_p);
+                circleItem = new Circle(++id, startP, endP);
                 itemList.append(circleItem);
                 mUndoStack->push(new CadCommandAdd(this, circleItem));
                 setFlags();
@@ -236,14 +236,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case EllipseMode:
             if (mFirstClick)
             {
-                start_p = mouseEvent->scenePos();
+                startP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                mid_p = mouseEvent->scenePos();
+                midP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = false;
                 mThirdClick = true;
@@ -251,14 +251,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
             else if (!mSecondClick && mThirdClick)
             {
-                end_p = mouseEvent->scenePos();
+                endP = mouseEvent->scenePos();
                 mThirdClick = false;
                 mPaintFlag = true;
             }
 
             if (mPaintFlag)
             {
-                ellipseItem = new Ellipse(++id, start_p, mid_p, end_p);
+                ellipseItem = new Ellipse(++id, startP, midP, endP);
                 itemList.append(ellipseItem);
                 mUndoStack->push(new CadCommandAdd(this, ellipseItem));
                 setFlags();
@@ -271,10 +271,10 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             itemList.append(textItem);
             textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
             mUndoStack->push(new CadCommandAdd(this, textItem));
-            connect(textItem, SIGNAL(lostFocus(mText*)),
-                    this, SLOT(editorLostFocus(mText*)));
-            connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
-                    this, SIGNAL(itemSelected(QGraphicsItem*)));
+            connect(textItem, SIGNAL(lostFocus(mText *)),
+                    this, SLOT(editorLostFocus(mText *)));
+            connect(textItem, SIGNAL(selectedChange(QGraphicsItem *)),
+                    this, SIGNAL(itemSelected(QGraphicsItem *)));
             setFlags();
 
         default:
@@ -339,16 +339,16 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 Line *myItem = dynamic_cast<Line *>(item);
                 stream->writeStartElement("Line");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("x1", QString::number(myItem->start_p.x()
+                stream->writeAttribute("x1", QString::number(myItem->startP.x()
                                                              + myItem->scenePos()
                                                              .x()));
-                stream->writeAttribute("y1", QString::number(myItem->start_p.y()
+                stream->writeAttribute("y1", QString::number(myItem->startP.y()
                                                              + myItem->scenePos()
                                                              .y()));
-                stream->writeAttribute("x2", QString::number(myItem->end_p.x()
+                stream->writeAttribute("x2", QString::number(myItem->endP.x()
                                                              + myItem->scenePos()
                                                              .x()));
-                stream->writeAttribute("y2", QString::number(myItem->end_p.y()
+                stream->writeAttribute("y2", QString::number(myItem->endP.y()
                                                              + myItem->scenePos()
                                                              .y()));
                 stream->writeEndElement();  //end of Line Item
@@ -359,8 +359,8 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 Circle *myItem = dynamic_cast<Circle *>(item);
                 stream->writeStartElement("Circle");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("cx", QString::number(myItem->center_p.x()));
-                stream->writeAttribute("cy", QString::number(myItem->center_p.y()));
+                stream->writeAttribute("cx", QString::number(myItem->centerP.x()));
+                stream->writeAttribute("cy", QString::number(myItem->centerP.y()));
                 stream->writeAttribute("radius", QString::number(myItem->radius));
                 stream->writeEndElement();  //end of Circle Item
             }
@@ -403,12 +403,12 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x")
-                    _x = attribute.value().toString().toDouble();
+                    x = attribute.value().toString().toDouble();
                 if (attribute.name() == "y")
-                    _y = attribute.value().toString().toDouble();
+                    y = attribute.value().toString().toDouble();
             }
             pointItem = new Point(id);
-            pointItem->setPos(_x, _y);
+            pointItem->setPos(x, y);
             itemList.append(pointItem);
             mUndoStack->push(new CadCommandAdd(this, pointItem));
         }
@@ -420,16 +420,16 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x1")
-                    start_p.setX(attribute.value().toString().toDouble());
+                    startP.setX(attribute.value().toString().toDouble());
                 if (attribute.name() == "y1")
-                    start_p.setY(attribute.value().toString().toDouble());
+                    startP.setY(attribute.value().toString().toDouble());
                 if (attribute.name() == "x2")
-                    end_p.setX(attribute.value().toString().toDouble());
+                    endP.setX(attribute.value().toString().toDouble());
                 if (attribute.name() == "y2")
-                    end_p.setY(attribute.value().toString().toDouble());
+                    endP.setY(attribute.value().toString().toDouble());
             }
-            lineItem = new Line(id, start_p, end_p);
-            lineItem->setLine(start_p.x(), start_p.y(), end_p.x(), end_p.y());
+            lineItem = new Line(id, startP, endP);
+            lineItem->setLine(startP.x(), startP.y(), endP.x(), endP.y());
             itemList.append(lineItem);
             mUndoStack->push(new CadCommandAdd(this, lineItem));
         }
@@ -441,13 +441,13 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "cx")
-                    start_p.setX(attribute.value().toString().toDouble());
+                    startP.setX(attribute.value().toString().toDouble());
                 if (attribute.name() == "cy")
-                    start_p.setY(attribute.value().toString().toDouble());
+                    startP.setY(attribute.value().toString().toDouble());
                 if (attribute.name() == "radius")
-                    _rad = attribute.value().toString().toDouble();
+                    rad = attribute.value().toString().toDouble();
             }
-            circleItem = new Circle(id, start_p, _rad);
+            circleItem = new Circle(id, startP, rad);
             itemList.append(circleItem);
             mUndoStack->push(new CadCommandAdd(this, circleItem));
         }
@@ -459,15 +459,15 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "cx")
-                    start_p.setX(attribute.value().toString().toDouble());
+                    startP.setX(attribute.value().toString().toDouble());
                 if (attribute.name() == "cy")
-                    start_p.setY(attribute.value().toString().toDouble());
+                    startP.setY(attribute.value().toString().toDouble());
                 if (attribute.name() == "majR")
-                    _radM = attribute.value().toString().toDouble();
+                    radM = attribute.value().toString().toDouble();
                 if (attribute.name() == "minR")
-                    _rad = attribute.value().toString().toDouble();
+                    rad = attribute.value().toString().toDouble();
             }
-            ellipseItem = new Ellipse(id, start_p, _rad, _radM);
+            ellipseItem = new Ellipse(id, startP, rad, radM);
             itemList.append(ellipseItem);
             mUndoStack->push(new CadCommandAdd(this, ellipseItem));
         }
@@ -479,15 +479,15 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x")
-                    start_p.setX(attribute.value().toString().toDouble());
+                    startP.setX(attribute.value().toString().toDouble());
                 if (attribute.name() == "y")
-                    start_p.setY(attribute.value().toString().toDouble());
+                    startP.setY(attribute.value().toString().toDouble());
                 if (attribute.name() == "text")
-                    _str = attribute.value().toString();
+                    str = attribute.value().toString();
             }
             textItem = new mText(id);
-            textItem->setPos(start_p.x(), start_p.y());
-            textItem->setPlainText(_str);
+            textItem->setPos(startP.x(), startP.y());
+            textItem->setPlainText(str);
             textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
             itemList.append(textItem);
             mUndoStack->push(new CadCommandAdd(this, textItem));

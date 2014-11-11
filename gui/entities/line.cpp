@@ -6,8 +6,8 @@ Line::Line(int i, QPointF p1, QPointF p2)
     id = i;
 
     // set values of start point and end point of line
-    start_p = p1;
-    end_p = p2;
+    startP = p1;
+    endP = p2;
 }
 
 int Line::type() const
@@ -41,22 +41,22 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::red);
         painter->setPen(paintpen);
-        painter->drawEllipse(start_p, 2, 2);
-        painter->drawEllipse(end_p, 2, 2);
+        painter->drawEllipse(startP, 2, 2);
+        painter->drawEllipse(endP, 2, 2);
 
         // sets pen for line path
         paintpen.setStyle(Qt::DashLine);
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);
-        painter->drawLine(start_p, end_p);
+        painter->drawLine(startP, endP);
     }
     else
     {
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);
-        painter->drawEllipse(start_p, 2, 2);
-        painter->drawEllipse(end_p, 2, 2);
-        painter->drawLine(start_p, end_p);
+        painter->drawEllipse(startP, 2, 2);
+        painter->drawEllipse(endP, 2, 2);
+        painter->drawLine(startP, endP);
     }
 }

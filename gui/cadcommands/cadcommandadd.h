@@ -16,59 +16,59 @@ class CadCommandAdd : public QUndoCommand
 public:
     CadCommandAdd(QGraphicsScene *scene, QGraphicsItem *item)
     {
-        m_item = item;
-        m_scene = scene;
+        cadItem = item;
+        cadScene = scene;
 
-        if (m_item->type() == Point::Type)
+        if (cadItem->type() == Point::Type)
         {
             setText(QString("Point add p(%1,%2)")
-                    .arg(m_item->scenePos().x())
-                    .arg(m_item->scenePos().y()));
+                    .arg(cadItem->scenePos().x())
+                    .arg(cadItem->scenePos().y()));
         }
-        if (m_item->type() == Line::Type)
+        if (cadItem->type() == Line::Type)
         {
-            Line *lineItem = dynamic_cast<Line *>(m_item);
+            Line *lineItem = dynamic_cast<Line *>(cadItem);
             setText(QString("Line add p1(%1,%2), p2(%3,%4)")
-                    .arg(lineItem->start_p.x()).arg(lineItem->start_p.y())
-                    .arg(lineItem->end_p.x()).arg(lineItem->end_p.y()));
+                    .arg(lineItem->startP.x()).arg(lineItem->startP.y())
+                    .arg(lineItem->endP.x()).arg(lineItem->endP.y()));
         }
-        if (m_item->type() == Circle::Type)
+        if (cadItem->type() == Circle::Type)
         {
-            Circle *circleItem = dynamic_cast<Circle *>(m_item);
+            Circle *circleItem = dynamic_cast<Circle *>(cadItem);
             setText(QString("Circle add c(%1,%2), r(%3)")
-                    .arg(circleItem->center_p.x())
-                    .arg(circleItem->center_p.y())
+                    .arg(circleItem->centerP.x())
+                    .arg(circleItem->centerP.y())
                     .arg(circleItem->radius));
         }
-        if (m_item->type() == Ellipse::Type)
+        if (cadItem->type() == Ellipse::Type)
         {
-            Ellipse *ellipseItem = dynamic_cast<Ellipse *>(m_item);
+            Ellipse *ellipseItem = dynamic_cast<Ellipse *>(cadItem);
             setText(QString("Ellipse add c(%1,%2), mjR(%3), mnR(%4)")
                     .arg(ellipseItem->p1.x())
                     .arg(ellipseItem->p1.y())
                     .arg(ellipseItem->majRadius)
                     .arg(ellipseItem->minRadius));
         }
-        if (m_item->type() == mText::Type)
+        if (cadItem->type() == mText::Type)
         {
-            mText *mTextItem = dynamic_cast<mText *>(m_item);
+            mText *mTextItem = dynamic_cast<mText *>(cadItem);
             setText(QString("Text added"));
         }
     }
 
     virtual void undo()
     {
-        m_scene->removeItem(m_item);
+        cadScene->removeItem(cadItem);
     }
 
     virtual void redo()
     {
-        m_scene->addItem(m_item);
+        cadScene->addItem(cadItem);
     }
 
 private:
-    QGraphicsItem *m_item;
-    QGraphicsScene *m_scene;
+    QGraphicsItem *cadItem;
+    QGraphicsScene *cadScene;
 };
 
 

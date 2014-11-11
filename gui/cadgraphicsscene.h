@@ -48,10 +48,10 @@ private:
     bool mThirdClick;
     bool mPaintFlag;
     QVector<QPointF> stuff;
-    QPointF start_p, mid_p, end_p, move_p, check_p;
-    qreal _x, _y, _rad, _radM;
+    QPointF startP, midP, endP, moveP, checkP;
+    qreal x, y, rad, radM;
     int id;
-    QString _str;
+    QString str;
     QPen paintpen, linePen;
 
     QList<QGraphicsItem *> itemList;

@@ -7,10 +7,10 @@ Circle::Circle(int i, QPointF p1, QPointF p2)
 
     /* set values of center point, end point
     and calculate radius of circle */
-    center_p = p1;
-    end_p = p2;
-    radius = qSqrt(qPow((end_p.x()-center_p.x()), 2)
-                   + qPow((end_p.y()-center_p.y()), 2));
+    centerP = p1;
+    endP = p2;
+    radius = qSqrt(qPow((endP.x()-centerP.x()), 2)
+                   + qPow((endP.y()-centerP.y()), 2));
 }
 
 Circle::Circle(int i, QPointF p1, qreal rad)
@@ -20,7 +20,7 @@ Circle::Circle(int i, QPointF p1, qreal rad)
 
     /* set values of center point
        and radius of circle */
-    center_p = p1;
+    centerP = p1;
     radius = rad;
 }
 
@@ -33,7 +33,7 @@ int Circle::type() const
 QRectF Circle::boundingRect() const
 {
     // bounding rectangle for circle
-    return QRectF((center_p.x()-radius), (center_p.y()-radius),
+    return QRectF((centerP.x()-radius), (centerP.y()-radius),
                   (2*radius), (2*radius));
 }
 
@@ -51,22 +51,22 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::red);
         painter->setPen(paintpen);
-        painter->drawEllipse(center_p, 2, 2);
+        painter->drawEllipse(centerP, 2, 2);
 
         // sets pen for circumference
         paintpen.setStyle(Qt::DashLine);
         paintpen.setColor(Qt::black);
         painter->setBrush(Qt::NoBrush);
         painter->setPen(paintpen);
-        painter->drawEllipse(center_p, radius, radius);
+        painter->drawEllipse(centerP, radius, radius);
     }
     else
     {
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);
-        painter->drawEllipse(center_p, 2, 2);
+        painter->drawEllipse(centerP, 2, 2);
         painter->setBrush(Qt::NoBrush);
-        painter->drawEllipse(center_p, radius, radius);
+        painter->drawEllipse(centerP, radius, radius);
     }
 }
