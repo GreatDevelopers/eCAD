@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QXmlStreamWriter>
 #include <QUndoStack>
+#include <cmath>
 
 #include "cadcommands/cadcommandadd.h"
 #include "cadcommands/cadcommanddelete.h"
@@ -22,6 +23,7 @@ public:
     void copy();
     void cut();
     void paste();
+    void drawBackground(QPainter *painter, const QRectF &rect);
 
 public slots:
     void setMode(Mode mode);
