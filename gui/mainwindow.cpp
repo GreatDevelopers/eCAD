@@ -52,12 +52,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
-    connect(actionCopy, SIGNAL(triggered()),
-            this, SLOT(copy()));
-    connect(actionCut, SIGNAL(triggered()),
-            this,SLOT(cut()));
-    connect(actionPaste, SIGNAL(triggered()),
-            this, SLOT(paste()));
 
     // toggle actions to false
     toggleActions(0);
@@ -218,24 +212,6 @@ void MainWindow::deleteItems()
 {
     // calls the deleteItems function of graphicsScene
     view->scene->deleteItems();
-}
-
-void MainWindow::copy()
-{
-    // calls the copy function of graphicsScene
-    view->scene->copy();
-}
-
-void MainWindow::cut()
-{
-    // calls the cut function of graphicsScene
-    view->scene->cut();
-}
-
-void MainWindow::paste()
-{
-    // calls the paste function of graphicsScene
-    view->scene->paste();
 }
 
 void MainWindow::on_actionOpen_triggered()

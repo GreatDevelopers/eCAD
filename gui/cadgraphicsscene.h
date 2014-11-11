@@ -5,10 +5,13 @@
 #include <QXmlStreamWriter>
 #include <QUndoStack>
 #include <cmath>
+#include <QMenu>
 
 #include "cadcommands/cadcommandadd.h"
 #include "cadcommands/cadcommanddelete.h"
 #include "cadcommands/cadcommandmove.h"
+#include "gEntity.h"
+#include "clipboard.h"
 
 class CadGraphicsScene : public QGraphicsScene
 {
@@ -20,17 +23,18 @@ public:
     void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
-    void copy();
-    void cut();
-    void paste();
     void drawBackground(QPainter *painter, const QRectF &rect);
-
 public slots:
     void setMode(Mode mode);
     void selectItems();
     void editorLostFocus(mText *item);
+    void cut(gEntity *);
+    void copy(gEntity *);
+    void paste(const QPointF &pos);
+    void contmenu(QAction *);
 
 protected:
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void setFlags();
@@ -60,7 +64,13 @@ private:
     Circle *circleItem;
     Ellipse *ellipseItem;
     mText *textItem;
-    void setNewItem(QGraphicsItem *item);
+
+    QMenu *m_context;
+    QAction *a_cut;
+    QAction *a_copy;
+    QAction *a_paste;
+    QGraphicsItem *context_item;
+    QPointF cpos;
 
     typedef QPair<QGraphicsItem *, QPointF> pointPos;
     typedef QPair<QGraphicsItem *, QLineF> linePos;
