@@ -4,14 +4,20 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-class Point : public QObject, public QGraphicsItem
+#include "getEntity.h"
+#include "clipboardstack.h"
+
+class Point : public getEntity
 {
     Q_OBJECT
 public:
+    Point(QObject *parent = 0) : getEntity(parent) {}
     Point(int);
     enum { Type = UserType + 1 };
     int type() const;
     int id;
+
+    getEntity *clone();
 
 protected:
     QRectF boundingRect() const;
