@@ -70,3 +70,12 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawEllipse(centerP, radius, radius);
     }
 }
+
+getEntity *Circle::clone()
+{
+    Circle *c = new Circle;
+    c->centerP = centerP;
+    c->radius = radius;
+    return c;
+}
+

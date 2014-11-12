@@ -104,3 +104,12 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->restore();
     }
 }
+
+getEntity *Ellipse::clone()
+{
+    Ellipse *e = new Ellipse;
+    e->p1 = p1;
+    e->minRadius = minRadius;
+    e->majRadius = majRadius;
+    return e;
+}
