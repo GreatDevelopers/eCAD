@@ -52,12 +52,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
+
     connect(actionCopy, SIGNAL(triggered()),
             this, SLOT(copy()));
     connect(actionCut, SIGNAL(triggered()),
             this,SLOT(cut()));
     connect(actionPaste, SIGNAL(triggered()),
             this, SLOT(paste()));
+
+    connect(actionCommand_Console, SIGNAL(triggered()),
+            this, SLOT(toggleWidgets()));
+    connect(actionScripting, SIGNAL(triggered()),
+            this, SLOT(toggleWidgets()));
 
     // toggle actions to false
     toggleActions(0);
@@ -80,6 +86,8 @@ void MainWindow::toggleActions(bool b)
     actionEllipse->setEnabled(b);
     actionMText->setEnabled(b);
     actionInsert_Image->setEnabled(b);
+    actionCommand_Console->setEnabled(b);
+    actionScripting->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -122,8 +130,35 @@ void MainWindow::newFile()
     view->show();
     setActions();
 
+    // creates a new command widget
+    commandWidget = new CadCommandWidget;
+    commandWidget->setMinimumHeight(50);
+    commandWidget->setMaximumHeight(100);
+    addDockWidget(Qt::BottomDockWidgetArea, commandWidget);
+    commandWidget->hide();
+
+    // creates a new script widget
+    scriptWidget = new CadScriptWidget;
+    actionScripting->setChecked(true);
+    addDockWidget(Qt::RightDockWidgetArea, scriptWidget);
+
     // toggle actions to true
     toggleActions(1);
+}
+
+void MainWindow::toggleWidgets()
+{
+    // toggles Command Widget
+    if (actionCommand_Console->isChecked())
+        commandWidget->show();
+    else
+        commandWidget->hide();
+
+    // toggles Script Widget
+    if (actionScripting->isChecked())
+        scriptWidget->show();
+    else
+        scriptWidget->hide();
 }
 
 void MainWindow::filePrintPreview()

@@ -83,6 +83,8 @@
      </property>
      <addaction name="actionLayers"/>
      <addaction name="actionBlocks"/>
+     <addaction name="actionCommand_Console"/>
+     <addaction name="actionScripting"/>
     </widget>
     <addaction name="actionGrid"/>
     <addaction name="actionZoom_In"/>
@@ -846,6 +848,28 @@
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
+  </action>
+  <action name="actionCommand_Console">
+  <property name="checkable">
+  <bool>true</bool>
+  </property>
+  <property name="enabled">
+  <bool>false</bool>
+  </property>
+  <property name="text">
+  <string>Command Console</string>
+  </property>
+  </action>
+  <action name="actionScripting">
+  <property name="checkable">
+  <bool>true</bool>
+  </property>
+  <property name="enabled">
+  <bool>false</bool>
+  </property>
+  <property name="text">
+  <string>Scripting</string>
+  </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
