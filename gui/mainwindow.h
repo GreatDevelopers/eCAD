@@ -12,6 +12,8 @@
 
 #include "ui_mainwindow.h"
 #include "cadgraphicsview.h"
+#include "cadcommandwidget.h"
+#include "cadscriptwidget.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -31,6 +33,8 @@ private:
     QImage *imageObject;
     QGraphicsView *graphicsView;
     CadGraphicsView *view;
+    CadCommandWidget *commandWidget;
+    CadScriptWidget *scriptWidget;
 
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -48,6 +52,7 @@ private slots:
 
     void setNoMode();
     void showUndoStack();
+    void toggleWidgets();
 
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
