@@ -4,13 +4,23 @@
 #include <QTextCursor>
 #include <QDebug>
 
+clipboardStack *clipboardStack::inst = 0;
+
 CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     : QGraphicsScene(parent)
 {
     setFlags();
     id = 0;
     mUndoStack = undoStack;
+    contextMenu = new QMenu;
+    cutAction = contextMenu->addAction("cut");
+    copyAction = contextMenu->addAction("copy");
+    pasteAction = contextMenu->addAction("paste");
+    contextItem = 0;
 
+    //connect context menu items to action slots
+    connect(contextMenu, SIGNAL(triggered(QAction *)),
+            this, SLOT(menuAction(QAction *)));
     // connect selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
 }
@@ -86,56 +96,6 @@ void CadGraphicsScene::selectItems()
                 selectedLines.append(qMakePair(myItem, myItem->line()));
             }
         }
-    }
-}
-
-void CadGraphicsScene::cut()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        if (item->isSelected())
-        {
-            // Cuts the selected item
-            removeItem(item);
-            update();
-        }
-    }
-}
-
-void CadGraphicsScene::copy()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        QString str;
-        // Stores the Point
-        if (item->isSelected() == Point::Type)
-        {
-            str = QString("Point copy p(%1,%2)")
-                    .arg(item->x())
-                    .arg(item->y());
-        }
-    }
-}
-
-void CadGraphicsScene::paste()
-{
-    foreach (QGraphicsItem *item, itemList)
-    {
-        // Calls setNewItem function
-        setNewItem(item);
-    }
-}
-
-void CadGraphicsScene::setNewItem(QGraphicsItem *item)
-{
-    static int id = 0;
-    if(item->isSelected() == PointMode)
-    {
-        // Create a New point
-        pointItem = new Point(++id);
-        pointItem->setPos(item->scenePos());
-        itemList.append(pointItem);
-        mUndoStack->push(new CadCommandAdd(this, pointItem));
     }
 }
 
@@ -281,8 +241,42 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             ;
         }
     }
+    else
+    {
+        if (mouseEvent->button() == Qt::RightButton)
+        {
+            contextItem = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
+            contextPosition = mouseEvent->scenePos();
+
+            if (!contextItem)
+            {
+                cutAction->setEnabled(false);
+                copyAction->setEnabled(false);
+
+                if (clipboardStack::instance()->isEmpty())
+                {
+                    pasteAction->setEnabled(false);
+                }
+                else
+                {
+                    pasteAction->setEnabled(true);
+                }
+            }
+            else
+            {
+                cutAction->setEnabled(true);
+                copyAction->setEnabled(true);
+                pasteAction->setEnabled(false);
+            }
+        }
+    }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEvent)
+{
+    contextMenu->exec(mouseEvent->screenPos());
 }
 
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -492,5 +486,45 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             itemList.append(textItem);
             mUndoStack->push(new CadCommandAdd(this, textItem));
         }
+    }
+}
+
+void CadGraphicsScene::cut(getEntity *obj)
+{
+    removeItem(obj);
+    clipboardStack::instance()->push(obj);
+}
+
+void CadGraphicsScene::copy(getEntity *obj)
+{
+    clipboardStack::instance()->push(obj->clone());
+}
+
+void CadGraphicsScene::paste(const QPointF &pos)
+{
+    getEntity *pasteEntity = clipboardStack::instance()->pop();
+    if (pasteEntity)
+    {
+        addItem(static_cast<QGraphicsItem *>(pasteEntity));
+        pasteEntity->setPos(pos);
+        pasteEntity->setFlag(QGraphicsItem::ItemIsSelectable);
+        pasteEntity->setFlag(QGraphicsItem::ItemIsMovable);
+        mUndoStack->push(new CadCommandAdd(this, pasteEntity));
+    }
+}
+
+void CadGraphicsScene::menuAction(QAction *action)
+{
+    if (action == cutAction)
+    {
+        cut(static_cast<getEntity *>(contextItem));
+    }
+    else if (action == copyAction)
+    {
+        copy(static_cast<getEntity *>(contextItem));
+    }
+    else if (action == pasteAction)
+    {
+        paste(contextPosition);
     }
 }

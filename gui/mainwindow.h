@@ -46,9 +46,6 @@ private slots:
     void drawText();
     void newFile();
     void deleteItems();
-    void cut();
-    void copy();
-    void paste();
 
     void setNoMode();
     void showUndoStack();

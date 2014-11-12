@@ -42,7 +42,9 @@ HEADERS += \
     gui/cadcommands/cadcommandmove.h \
     gui/entities/mtext.h \
     gui/cadscriptwidget.h \
-    gui/cadcommandwidget.h
+    gui/cadcommandwidget.h \
+    gui/getEntity.h \
+    gui/clipboardstack.h
 
 FORMS += \
     resources/ui/mainwindow.ui
