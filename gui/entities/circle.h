@@ -5,11 +5,14 @@
 #include <QGraphicsItem>
 
 #include "qmath.h"
+#include "getEntity.h"
+#include "clipboardstack.h"
 
-class Circle : public QObject, public QGraphicsItem
+class Circle : public getEntity
 {
     Q_OBJECT
 public:
+    Circle(QObject *parent = 0) : getEntity(parent) {}
     Circle(int, QPointF, QPointF);
     Circle(int, QPointF, qreal);
     QRectF boundingRect() const;
@@ -22,6 +25,8 @@ public:
 
     QPointF centerP, endP;
     qreal radius;
+
+    getEntity *clone();
 
 private:
     QVector<QPointF> stuff;

@@ -5,11 +5,14 @@
 #include <QGraphicsItem>
 
 #include "qmath.h"
+#include "getEntity.h"
+#include "clipboardstack.h"
 
-class Ellipse : public QObject, public QGraphicsItem
+class Ellipse : public getEntity
 {
     Q_OBJECT
 public:
+    Ellipse(QObject *parent = 0) : getEntity(parent) {}
     Ellipse(int, QPointF, QPointF, QPointF);
     Ellipse(int, QPointF, qreal, qreal);
     QRectF boundingRect() const;
@@ -23,6 +26,8 @@ public:
     QPointF p1, p2, p3;
     float d12, d13, majRadius, minRadius;
     float theta;
+
+    getEntity *clone();
 
 private:
     QVector<QPointF> stuff;

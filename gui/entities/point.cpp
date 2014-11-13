@@ -29,13 +29,11 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         paintpen.setColor(Qt::red);
     else
         paintpen.setColor(Qt::black);
-    painter->save();
     paintpen.setWidth(2);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(Qt::SolidPattern);
     painter->setPen(paintpen);
     painter->drawEllipse(boundingRect());
-    painter->restore();
 }
 
 getEntity *Point::clone()
