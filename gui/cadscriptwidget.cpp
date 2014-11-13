@@ -5,17 +5,17 @@ CadScriptWidget::CadScriptWidget()
     setWindowTitle("Scripting Console");
 
     // widgets and buttons
-    QTextEdit *tEdit = new QTextEdit;
-    QWidget *w = new QWidget;
-    QPushButton *newSript = new QPushButton("New");
-    QPushButton *loadScript = new QPushButton("Load");
-    QPushButton *saveScript = new QPushButton("Save");
-    QPushButton *clearScript = new QPushButton("Clear");
-    QPushButton *executeScript = new QPushButton("Execute");
+    tEdit = new QTextEdit;
+    w = new QWidget;
+    newSript = new QPushButton("New");
+    loadScript = new QPushButton("Load");
+    saveScript = new QPushButton("Save");
+    clearScript = new QPushButton("Clear");
+    executeScript = new QPushButton("Execute");
 
     // layouts
-    QHBoxLayout *hBox = new QHBoxLayout;
-    QVBoxLayout *vBox = new QVBoxLayout;
+    hBox = new QHBoxLayout;
+    vBox = new QVBoxLayout;
 
     hBox->addWidget(newSript);
     hBox->addWidget(loadScript);
@@ -28,4 +28,26 @@ CadScriptWidget::CadScriptWidget()
 
     w->setLayout(vBox);
     setWidget(w);
+
+    jsEngine = new QJSEngine;
+
+    connect(executeScript, SIGNAL(pressed()), this, SLOT(execute()));
+    setupJSEngine();
+}
+
+void CadScriptWidget::setupJSEngine()
+{
+    QJSValue cadContext = jsEngine->newQObject(this);
+    jsEngine->globalObject().setProperty("cad", cadContext);
+}
+
+void CadScriptWidget::execute()
+{
+    QString text = tEdit->toPlainText();
+    QJSValue result = jsEngine->evaluate(text);
+}
+
+void CadScriptWidget::drawPoint(int x, int y)
+{
+    qDebug() << x << "," << y;
 }
