@@ -255,6 +255,7 @@ void MainWindow::on_actionOpen_triggered()
                                                   tr("Open File"),
                                                   QString(),
                                                   tr("file Name(*.xml)"));
+    newFile();
     QMainWindow::statusBar()->showMessage("File opened successfully");
     if (!filename.isEmpty())
     {
