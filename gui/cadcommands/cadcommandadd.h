@@ -52,7 +52,9 @@ public:
         if (cadItem->type() == mText::Type)
         {
             mText *mTextItem = dynamic_cast<mText *>(cadItem);
-            setText(QString("Text added"));
+            setText(QString("Text add p(%1,%2)")
+                    .arg(mTextItem->scenePos().x())
+                    .arg(mTextItem->scenePos().y()));
         }
     }
 
