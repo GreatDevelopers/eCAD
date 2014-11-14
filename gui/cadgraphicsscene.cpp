@@ -79,7 +79,7 @@ void CadGraphicsScene::deleteItems()
 void CadGraphicsScene::selectItems()
 {
     // refresh record of selected items and their starting positions
-    selectedPoints.clear();
+    otherSelectedEntities.clear();
     selectedLines.clear();
     foreach (QGraphicsItem *item, itemList)
     {
@@ -88,12 +88,36 @@ void CadGraphicsScene::selectItems()
             if (item->type() == Point::Type)
             {
                 Point *myItem = dynamic_cast<Point *>(item);
-                selectedPoints.append(qMakePair(myItem, myItem->scenePos()));
+                otherSelectedEntities.append(qMakePair(myItem,
+                                                       myItem->scenePos()));
             }
-            if(item->type() == Line::Type)
+
+            else if(item->type() == Line::Type)
             {
                 Line *myItem = dynamic_cast<Line *>(item);
-                selectedLines.append(qMakePair(myItem, myItem->line()));
+                selectedLines.append(qMakePair(myItem,
+                                               myItem->line()));
+            }
+
+            else if (item->type() == Circle::Type)
+            {
+                Circle *myItem = dynamic_cast<Circle *>(item);
+                otherSelectedEntities.append(qMakePair(myItem,
+                                                       myItem->scenePos()));
+            }
+
+            else if (item->type() == Ellipse::Type)
+            {
+                Ellipse *myItem = dynamic_cast<Ellipse *>(item);
+                otherSelectedEntities.append(qMakePair(myItem,
+                                                       myItem->scenePos()));
+            }
+
+            else if (item->type() == mText::Type)
+            {
+                mText *myItem = dynamic_cast<mText *>(item);
+                otherSelectedEntities.append(qMakePair(myItem,
+                                                       myItem->scenePos()));
             }
         }
     }
@@ -282,11 +306,34 @@ void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEve
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // if any items moved, then create undo commands
-    foreach (pointPos item, selectedPoints)
+    foreach (otheEntitiesPos item, otherSelectedEntities)
     {
-        if(item.first->type() == Point::Type)
+        if (item.first->type() == Point::Type)
         {
             Point *myItem = dynamic_cast<Point *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second,
+                                                myItem->scenePos()));
+        }
+
+        else if (item.first->type() == Circle::Type)
+        {
+            Circle *myItem = dynamic_cast<Circle *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second,
+                                                myItem->centerP
+                                                + myItem->scenePos()));
+        }
+
+        else if (item.first->type() == Ellipse::Type)
+        {
+            Ellipse *myItem = dynamic_cast<Ellipse *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second,
+                                                myItem->p1
+                                                + myItem->scenePos()));
+        }
+
+        else if (item.first->type() == mText::Type)
+        {
+            mText *myItem = dynamic_cast<mText *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
@@ -294,7 +341,7 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     foreach (linePos item, selectedLines)
     {
-        if(item.first->type() == Line::Type)
+        if (item.first->type() == Line::Type)
         {
             Line *myItem = dynamic_cast<Line *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second.p1(),
@@ -353,8 +400,12 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 Circle *myItem = dynamic_cast<Circle *>(item);
                 stream->writeStartElement("Circle");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("cx", QString::number(myItem->centerP.x()));
-                stream->writeAttribute("cy", QString::number(myItem->centerP.y()));
+                stream->writeAttribute("cx", QString::number(myItem->centerP.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("cy", QString::number(myItem->centerP.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
                 stream->writeAttribute("radius", QString::number(myItem->radius));
                 stream->writeEndElement();  //end of Circle Item
             }
@@ -364,8 +415,12 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 Ellipse *myItem = dynamic_cast<Ellipse *>(item);
                 stream->writeStartElement("Ellipse");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("cx", QString::number(myItem->p1.x()));
-                stream->writeAttribute("cy", QString::number(myItem->p1.y()));
+                stream->writeAttribute("cx", QString::number(myItem->p1.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("cy", QString::number(myItem->p1.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
                 stream->writeAttribute("majR", QString::number(myItem->majRadius));
                 stream->writeAttribute("minR", QString::number(myItem->minRadius));
                 stream->writeEndElement();  //end of Ellipse Item
