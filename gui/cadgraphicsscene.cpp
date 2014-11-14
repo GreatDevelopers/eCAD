@@ -319,16 +319,14 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         {
             Circle *myItem = dynamic_cast<Circle *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->centerP
-                                                + myItem->scenePos()));
+                                                myItem->scenePos()));
         }
 
         else if (item.first->type() == Ellipse::Type)
         {
             Ellipse *myItem = dynamic_cast<Ellipse *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->p1
-                                                + myItem->scenePos()));
+                                                myItem->scenePos()));
         }
 
         else if (item.first->type() == mText::Type)
