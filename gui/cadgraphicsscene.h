@@ -73,10 +73,8 @@ private:
     QGraphicsItem *contextItem;
     QPointF contextPosition;
 
-    typedef QPair<QGraphicsItem *, QPointF> otheEntitiesPos;
-    typedef QPair<QGraphicsItem *, QLineF> linePos;
-    QList<otheEntitiesPos> otherSelectedEntities;
-    QList<linePos> selectedLines;
+    typedef QPair<QGraphicsItem *, QPointF> entityPos;
+    QList<entityPos> selectedEntities;
 };
 
 #endif // CADGRAPHICSSCENE_H

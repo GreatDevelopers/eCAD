@@ -79,8 +79,7 @@ void CadGraphicsScene::deleteItems()
 void CadGraphicsScene::selectItems()
 {
     // refresh record of selected items and their starting positions
-    otherSelectedEntities.clear();
-    selectedLines.clear();
+    selectedEntities.clear();
     foreach (QGraphicsItem *item, itemList)
     {
         if (item->isSelected())
@@ -88,36 +87,36 @@ void CadGraphicsScene::selectItems()
             if (item->type() == Point::Type)
             {
                 Point *myItem = dynamic_cast<Point *>(item);
-                otherSelectedEntities.append(qMakePair(myItem,
-                                                       myItem->scenePos()));
+                selectedEntities.append(qMakePair(myItem,
+                                                  myItem->scenePos()));
             }
 
             else if(item->type() == Line::Type)
             {
                 Line *myItem = dynamic_cast<Line *>(item);
-                selectedLines.append(qMakePair(myItem,
-                                               myItem->line()));
+                selectedEntities.append(qMakePair(myItem,
+                                                  myItem->scenePos()));
             }
 
             else if (item->type() == Circle::Type)
             {
                 Circle *myItem = dynamic_cast<Circle *>(item);
-                otherSelectedEntities.append(qMakePair(myItem,
-                                                       myItem->scenePos()));
+                selectedEntities.append(qMakePair(myItem,
+                                                  myItem->scenePos()));
             }
 
             else if (item->type() == Ellipse::Type)
             {
                 Ellipse *myItem = dynamic_cast<Ellipse *>(item);
-                otherSelectedEntities.append(qMakePair(myItem,
-                                                       myItem->scenePos()));
+                selectedEntities.append(qMakePair(myItem,
+                                                  myItem->scenePos()));
             }
 
             else if (item->type() == mText::Type)
             {
                 mText *myItem = dynamic_cast<mText *>(item);
-                otherSelectedEntities.append(qMakePair(myItem,
-                                                       myItem->scenePos()));
+                selectedEntities.append(qMakePair(myItem,
+                                                  myItem->scenePos()));
             }
         }
     }
@@ -306,11 +305,18 @@ void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEve
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // if any items moved, then create undo commands
-    foreach (otheEntitiesPos item, otherSelectedEntities)
+    foreach (entityPos item, selectedEntities)
     {
         if (item.first->type() == Point::Type)
         {
             Point *myItem = dynamic_cast<Point *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second,
+                                                myItem->scenePos()));
+        }
+
+        else if (item.first->type() == Line::Type)
+        {
+            Line *myItem = dynamic_cast<Line *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
@@ -334,20 +340,6 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             mText *myItem = dynamic_cast<mText *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
-        }
-    }
-
-    foreach (linePos item, selectedLines)
-    {
-        if (item.first->type() == Line::Type)
-        {
-            Line *myItem = dynamic_cast<Line *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second.p1(),
-                                                item.second.p2(),
-                                                item.second.p1()
-                                                + item.first->scenePos(),
-                                                item.second.p2()
-                                                + item.first->scenePos()));
         }
     }
 

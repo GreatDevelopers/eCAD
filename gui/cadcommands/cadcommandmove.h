@@ -26,6 +26,15 @@ public:
             setText(QString("Point moved to (%1,%2)")
                     .arg(nPos.x()).arg(nPos.y()));
         }
+        if (cadItem->type() == Line::Type)
+        {
+            Line *lineItem = dynamic_cast<Line *>(cadItem);
+            setText(QString("Line moved to p1((%1,%2), p2(%3,%4))")
+                    .arg(lineItem->line().p1().x() + nPos.x())
+                    .arg(lineItem->line().p1().y() + nPos.y())
+                    .arg(lineItem->line().p2().x() + nPos.x())
+                    .arg(lineItem->line().p2().y() + nPos.y()));
+        }
         if (cadItem->type() == Circle::Type)
         {
             Circle *circleItem = dynamic_cast<Circle *>(cadItem);
@@ -48,40 +57,14 @@ public:
         }
     }
 
-    CadCommandMove(QGraphicsLineItem *item, QPointF oldStart, QPointF oldEnd,
-                   QPointF newStart,QPointF newEnd)
-    {
-        Line *lineItem = dynamic_cast<Line *>(cadItem);
-        oStart = oldStart;
-        oEnd = oldEnd;
-        nStart = newStart;
-        nEnd = newEnd;
-        setText(QString("Line moved to p1((%1,%2), p2(%3,%4))")
-                .arg(nStart.x()).arg(nStart.y()).arg(nEnd.x()).arg(nEnd.y()));
-    }
-
     virtual void undo()
     {
-        if (cadItem->type() == Line::Type)
-        {
-            cadItem->setPos(oStart.x() - nStart.x(), oStart.y() - nStart.y());
-        }
-        else
-        {
-            cadItem->setPos(oPos);
-        }
+        cadItem->setPos(oPos);
     }
 
     virtual void redo()
     {
-        if (cadItem->type() == Line::Type)
-        {
-            cadItem->setPos(nStart.x() - oStart.x(), nStart.y() - oStart.y());
-        }
-        else
-        {
-            cadItem->setPos(nPos);
-        }
+        cadItem->setPos(nPos);
     }
 
 private:
