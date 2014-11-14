@@ -18,29 +18,31 @@ public:
     {
         oPos = oldPos;
         nPos = newPos;
+        cadItem = item;
 
-        cadItem = dynamic_cast<QGraphicsItem *>(item);
         if (cadItem->type() == Point::Type)
         {
-            cadItem = dynamic_cast<Point *>(item);
+            Point *pointItem = dynamic_cast<Point *>(cadItem);
             setText(QString("Point moved to (%1,%2)")
                     .arg(nPos.x()).arg(nPos.y()));
         }
         if (cadItem->type() == Circle::Type)
         {
-            cadItem = dynamic_cast<Circle *>(item);
+            Circle *circleItem = dynamic_cast<Circle *>(cadItem);
             setText(QString("Circle's center moved to (%1,%2)")
-                    .arg(nPos.x()).arg(nPos.y()));
+                    .arg(nPos.x() + circleItem->centerP.x())
+                    .arg(nPos.y() + circleItem->centerP.y()));
         }
         if (cadItem->type() == Ellipse::Type)
         {
-            cadItem = dynamic_cast<Ellipse *>(item);
+            Ellipse *ellipseItem = dynamic_cast<Ellipse *>(cadItem);
             setText(QString("Ellipse's center moved to (%1,%2)")
-                    .arg(nPos.x()).arg(nPos.y()));
+                    .arg(nPos.x() + ellipseItem->p1.x())
+                    .arg(nPos.y() + ellipseItem->p1.y()));
         }
         if (cadItem->type() == mText::Type)
         {
-            cadItem = dynamic_cast<mText *>(item);
+            mText *textItem = dynamic_cast<mText *>(cadItem);
             setText(QString("Text moved to (%1,%2)")
                     .arg(nPos.x()).arg(nPos.y()));
         }
@@ -49,7 +51,7 @@ public:
     CadCommandMove(QGraphicsLineItem *item, QPointF oldStart, QPointF oldEnd,
                    QPointF newStart,QPointF newEnd)
     {
-        cadItem = dynamic_cast<Line *>(item);
+        Line *lineItem = dynamic_cast<Line *>(cadItem);
         oStart = oldStart;
         oEnd = oldEnd;
         nStart = newStart;
@@ -72,13 +74,13 @@ public:
 
     virtual void redo()
     {
-        if (cadItem->type() == Point::Type || cadItem->type() == mText::Type)
-        {
-            cadItem->setPos(nPos);
-        }
         if (cadItem->type() == Line::Type)
         {
             cadItem->setPos(nStart.x() - oStart.x(), nStart.y() - oStart.y());
+        }
+        else
+        {
+            cadItem->setPos(nPos);
         }
     }
 
