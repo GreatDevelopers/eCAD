@@ -259,6 +259,61 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             connect(textItem, SIGNAL(selectedChange(QGraphicsItem *)),
                     this, SIGNAL(itemSelected(QGraphicsItem *)));
             setFlags();
+            break;
+
+        case ArcMode:
+        {
+            int radius = 2;
+            QGraphicsEllipseItem * ellipse = this->addEllipse(mouseEvent->scenePos().x() - radius, mouseEvent->scenePos().y() - radius, radius*2, radius*2);
+
+            ellipse->setBrush(Qt::black);
+            points.append(mouseEvent->scenePos());
+            if(points.size() == 3)
+            {
+                if(false)
+                {
+                    // use math to define the circle
+                    QLineF lineBC(points.at(1), points.at(2));
+                    QLineF lineAC(points.at(0), points.at(2));
+                    QLineF lineBA(points.at(1), points.at(0));
+                    qreal rad = qAbs(lineBC.length()/(2*qSin(qDegreesToRadians(lineAC.angleTo(lineBA)))));
+
+                    QLineF bisectorBC(lineBC.pointAt(0.5), lineBC.p2());
+                    bisectorBC.setAngle(lineBC.normalVector().angle());
+
+                    QLineF bisectorBA(lineBA.pointAt(0.5), lineBA.p2());
+                    bisectorBA.setAngle(lineBA.normalVector().angle());
+
+                    QPointF center;
+                    bisectorBA.intersect(bisectorBC, &center);
+
+                    bool drawCircle = true;
+
+                    QGraphicsEllipseItem * ellipse = new QGraphicsEllipseItem(center.x() - rad, center.y() - rad, rad*2, rad*2);
+                    if(drawCircle)
+                        this->addItem(ellipse);
+
+                    QPainterPath path;
+                    QLineF lineOA(center, points.at(0));
+                    QLineF lineOC(center, points.at(2));
+                    path.arcMoveTo(ellipse->boundingRect(),lineOA.angle());
+                    path.arcTo(ellipse->boundingRect(), lineOA.angle(), lineOC.angle() - lineOA.angle());
+                    QGraphicsPathItem * pathItem = new QGraphicsPathItem(path);
+                    pathItem->setPen(QPen(Qt::red,10));
+                    this->addItem(pathItem);
+
+                    if(!drawCircle)
+                        delete ellipse;
+                }
+                else
+                {
+                    static int i = 0;
+                    itemList.append(new Arc(i++, points.at(0), points.at(1), points.at(2)));
+                    this->addItem(itemList.last());
+                }
+                points.clear();
+            }
+        }
 
         default:
             ;
