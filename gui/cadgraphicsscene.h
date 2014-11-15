@@ -13,70 +13,69 @@
 #include "getEntity.h"
 #include "clipboardstack.h"
 
-class CadGraphicsScene : public QGraphicsScene
-{
-    Q_OBJECT
-public:
-    explicit CadGraphicsScene(QObject *parent, QUndoStack *);
-    enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode };
+class CadGraphicsScene : public QGraphicsScene {
+        Q_OBJECT
+    public:
+        explicit CadGraphicsScene(QObject* parent, QUndoStack*);
+        enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode };
 
-    void deleteItems();
-    void writeStream(QXmlStreamWriter *stream);
-    void readStream(QXmlStreamReader *stream);
-    void drawBackground(QPainter *painter, const QRectF &rect);
+        void deleteItems();
+        void writeStream(QXmlStreamWriter* stream);
+        void readStream(QXmlStreamReader* stream);
+        void drawBackground(QPainter* painter, const QRectF& rect);
 
-public slots:
-    void setMode(Mode mode);
-    void selectItems();
-    void editorLostFocus(mText *item);
-    void cut(getEntity *);
-    void copy(getEntity *);
-    void paste(const QPointF &pos);
-    void menuAction(QAction *);
+    public slots:
+        void setMode(Mode mode);
+        void selectItems();
+        void editorLostFocus(mText* item);
+        void cut(getEntity*);
+        void copy(getEntity*);
+        void paste(const QPointF& pos);
+        void menuAction(QAction*);
 
-protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEvent);
-    void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
-    void setFlags();
-    void areItemsSelectable(bool);
+    protected:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent* mouseEvent);
+        void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent);
+        void setFlags();
+        void areItemsSelectable(bool);
 
-signals:
-    void itemSelected(QGraphicsItem *item);
+    signals:
+        void itemSelected(QGraphicsItem* item);
 
-private:
-    Mode entityMode;
-    QUndoStack *mUndoStack;
+    private:
+        Mode entityMode;
+        QUndoStack* mUndoStack;
 
-    bool mFirstClick;
-    bool mSecondClick;
-    bool mThirdClick;
-    bool mPaintFlag;
-    QVector<QPointF> stuff;
-    QPointF startP, midP, endP, moveP, checkP;
-    qreal x, y, rad, radM;
-    int id;
-    QString str;
-    QPen paintpen, linePen;
+        bool mFirstClick;
+        bool mSecondClick;
+        bool mThirdClick;
+        bool mPaintFlag;
+        QVector<QPointF> stuff;
+        QPointF startP, midP, endP, moveP, checkP;
+        qreal x, y, rad, radM;
+        int id;
+        QString str;
+        QPen paintpen, linePen;
 
-    QList<QGraphicsItem *> itemList;
-    Point *pointItem;
-    Line *lineItem;
-    Circle *circleItem;
-    Ellipse *ellipseItem;
-    mText *textItem;
+        QList<QGraphicsItem*> itemList;
+        Point* pointItem;
+        Line* lineItem;
+        Circle* circleItem;
+        Ellipse* ellipseItem;
+        mText* textItem;
 
-    QMenu *contextMenu;
-    QAction *cutAction;
-    QAction *copyAction;
-    QAction *pasteAction;
-    QGraphicsItem *contextItem;
-    QPointF contextPosition;
+        QMenu* contextMenu;
+        QAction* cutAction;
+        QAction* copyAction;
+        QAction* pasteAction;
+        QGraphicsItem* contextItem;
+        QPointF contextPosition;
 
-    typedef QPair<QGraphicsItem *, QPointF> otheEntitiesPos;
-    typedef QPair<QGraphicsItem *, QLineF> linePos;
-    QList<otheEntitiesPos> otherSelectedEntities;
-    QList<linePos> selectedLines;
+        typedef QPair<QGraphicsItem*, QPointF> otheEntitiesPos;
+        typedef QPair<QGraphicsItem*, QLineF> linePos;
+        QList<otheEntitiesPos> otherSelectedEntities;
+        QList<linePos> selectedLines;
 };
 
 #endif // CADGRAPHICSSCENE_H

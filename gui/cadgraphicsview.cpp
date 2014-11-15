@@ -1,15 +1,13 @@
 #include "cadgraphicsview.h"
 
-CadGraphicsView::CadGraphicsView()
-{
+CadGraphicsView::CadGraphicsView() {
     scaleFactor = 1.15;
     setAttribute(Qt::WA_DeleteOnClose);
     isUntitled = true;
     setMouseTracking(true);
 }
 
-void CadGraphicsView::newFile()
-{
+void CadGraphicsView::newFile() {
     // creates a new file/document and insert scene
     static int fileNumber = 1;
     isUntitled = true;
@@ -20,13 +18,12 @@ void CadGraphicsView::newFile()
     undoView = 0;
 
     scene = new CadGraphicsScene(this, undoStack);
-    scene->setSceneRect(0,0,2000,2000);
+    scene->setSceneRect(0, 0, 2000, 2000);
     setScene(scene);
     setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-void CadGraphicsView::wheelEvent(QWheelEvent *event)
-{
+void CadGraphicsView::wheelEvent(QWheelEvent* event) {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
     static double currentScale = 1.0;  // stores the current scale value.
@@ -34,8 +31,7 @@ void CadGraphicsView::wheelEvent(QWheelEvent *event)
     static const double scaleMax = 5;
 
     // Scale the view / do the zoom
-    if (event->delta() > 0)
-    {
+    if (event->delta() > 0) {
         // Zooming in
         if (currentScale < scaleMax) {
             scale(scaleFactor, scaleFactor);
@@ -49,50 +45,43 @@ void CadGraphicsView::wheelEvent(QWheelEvent *event)
     }
 }
 
-void CadGraphicsView::setNoMode()
-{
+void CadGraphicsView::setNoMode() {
     // sets the mode to NoMode for scene
     scene->setMode(CadGraphicsScene::NoMode);
 }
 
-void CadGraphicsView::drawPoint()
-{
+void CadGraphicsView::drawPoint() {
     // sets the mode to PointMode for scene
     scene->setMode(CadGraphicsScene::PointMode);
 }
 
-void CadGraphicsView::drawLine()
-{
+void CadGraphicsView::drawLine() {
     // sets the mode to LineMode for scene
     scene->setMode(CadGraphicsScene::LineMode);
 }
 
-void CadGraphicsView::drawCircle()
-{
+void CadGraphicsView::drawCircle() {
     // sets the mode to CircleMode for scene
     scene->setMode(CadGraphicsScene::CircleMode);
 }
 
-void CadGraphicsView::drawEllipse()
-{
+void CadGraphicsView::drawEllipse() {
     // sets the mode to EllipseMode for scene
     scene->setMode(CadGraphicsScene::EllipseMode);
 }
 
-void CadGraphicsView::drawText()
-{
+void CadGraphicsView::drawText() {
     // sets the mode to TextMode for scene
     scene->setMode(CadGraphicsScene::TextMode);
 }
 
-void CadGraphicsView::showUndoStack()
-{
+void CadGraphicsView::showUndoStack() {
     // shows the undoStack window
-    if (undoView == 0)
-    {
+    if (undoView == 0) {
         undoView = new QUndoView(undoStack);
         undoView->setWindowTitle("Undo Stack");
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
     }
+
     undoView->show();
 }

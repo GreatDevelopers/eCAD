@@ -15,57 +15,56 @@
 #include "cadcommandwidget.h"
 #include "cadscriptwidget.h"
 
-class MainWindow : public QMainWindow, public Ui::MainWindow
-{
-    Q_OBJECT
+class MainWindow : public QMainWindow, public Ui::MainWindow {
+        Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    public:
+        explicit MainWindow(QWidget* parent = 0);
+        ~MainWindow();
 
-protected:
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    protected:
+        void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
 
-private:
-    QPainter *painter;
-    QPrinter *printer;
-    QPixmap image;
-    QImage *imageObject;
-    QGraphicsView *graphicsView;
-    CadGraphicsView *view;
-    CadCommandWidget *commandWidget;
-    CadScriptWidget *scriptWidget;
+    private:
+        QPainter* painter;
+        QPrinter* printer;
+        QPixmap image;
+        QImage* imageObject;
+        QGraphicsView* graphicsView;
+        CadGraphicsView* view;
+        CadCommandWidget* commandWidget;
+        CadScriptWidget* scriptWidget;
 
-    bool eventFilter(QObject *obj, QEvent *event);
+        bool eventFilter(QObject* obj, QEvent* event);
 
-private slots:
-    void drawPoint();
-    void drawLine();
-    void drawCircle();
-    void drawEllipse();
-    void drawText();
-    void newFile();
-    void deleteItems();
+    private slots:
+        void drawPoint();
+        void drawLine();
+        void drawCircle();
+        void drawEllipse();
+        void drawText();
+        void newFile();
+        void deleteItems();
 
-    void setNoMode();
-    void showUndoStack();
-    void toggleWidgets();
+        void setNoMode();
+        void showUndoStack();
+        void toggleWidgets();
 
-    void on_actionSave_triggered();
-    void on_actionOpen_triggered();
-    void on_actionZoom_In_triggered();
-    void on_actionZoom_Out_triggered();
-    void on_actionInsert_Image_triggered();
+        void on_actionSave_triggered();
+        void on_actionOpen_triggered();
+        void on_actionZoom_In_triggered();
+        void on_actionZoom_Out_triggered();
+        void on_actionInsert_Image_triggered();
 
-    void toggleActions(bool b);
-    void setActions();
+        void toggleActions(bool b);
+        void setActions();
 
-    void filePrintPreview();
-    void closeEvent(QCloseEvent *event);
-    void filePrint();
-    void print(QPrinter *);
+        void filePrintPreview();
+        void closeEvent(QCloseEvent* event);
+        void filePrint();
+        void print(QPrinter*);
 
-    CadGraphicsView *createMdiView();
+        CadGraphicsView* createMdiView();
 };
 
 #endif // MAINWINDOW_H

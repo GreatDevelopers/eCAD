@@ -11,21 +11,20 @@
 #include <QXmlStreamWriter>
 #include <QShortcut>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
-{
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     setupUi(this);
     setWindowTitle(tr("eCAD"));
     setCentralWidget(mdiArea);
     Ui_MainWindow::statusBar->showMessage("Welcome to eCAD");
 
-//    connect(pointButton, SIGNAL(clicked()),
-//            this, SLOT(drawPoint()));
-//    connect(lineButton, SIGNAL(clicked()),
-//            this, SLOT(drawLine()));
-//    connect(circleButton, SIGNAL(clicked()),
-//            this, SLOT(drawCircle()));
-//    connect(ellipseButton, SIGNAL(clicked()),
-//            this, SLOT(drawEllipse()));
+    //    connect(pointButton, SIGNAL(clicked()),
+    //            this, SLOT(drawPoint()));
+    //    connect(lineButton, SIGNAL(clicked()),
+    //            this, SLOT(drawLine()));
+    //    connect(circleButton, SIGNAL(clicked()),
+    //            this, SLOT(drawCircle()));
+    //    connect(ellipseButton, SIGNAL(clicked()),
+    //            this, SLOT(drawEllipse()));
 
     connect(actionPoints, SIGNAL(triggered()),
             this, SLOT(drawPoint()));
@@ -36,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(actionEllipse, SIGNAL(triggered()),
             this, SLOT(drawEllipse()));
     connect(actionMText, SIGNAL(triggered()),
-            this,SLOT(drawText()));
+            this, SLOT(drawText()));
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
@@ -50,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(on_actionZoom_In_triggered()));
     connect(actionZoom_Out, SIGNAL(triggered()),
             this, SLOT(on_actionZoom_Out_triggered()));
-    connect(actionInsert_Image,SIGNAL(triggered()),
+    connect(actionInsert_Image, SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
 
     connect(actionCommand_Console, SIGNAL(triggered()),
@@ -62,12 +61,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     toggleActions(0);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
 }
 
-void MainWindow::toggleActions(bool b)
-{
+void MainWindow::toggleActions(bool b) {
     actionSave->setEnabled(b);
     actionPrint->setEnabled(b);
     actionPrintPreview->setEnabled(b);
@@ -83,8 +80,7 @@ void MainWindow::toggleActions(bool b)
     actionScripting->setEnabled(b);
 }
 
-void MainWindow::setActions()
-{
+void MainWindow::setActions() {
     // shortcut keys
     new QShortcut(QKeySequence(Qt::Key_Escape),
                   this, SLOT(setNoMode()));
@@ -93,29 +89,26 @@ void MainWindow::setActions()
     new QShortcut(QKeySequence(Qt::Key_Delete),
                   this, SLOT(deleteItems()));
 
-    QAction *actionUndo = view->undoStack->createUndoAction(this);
-    QAction *actionRedo = view->undoStack->createRedoAction(this);
+    QAction* actionUndo = view->undoStack->createUndoAction(this);
+    QAction* actionRedo = view->undoStack->createRedoAction(this);
     actionUndo->setShortcut(QKeySequence::Undo);
     actionRedo->setShortcut(QKeySequence::Redo);
     menuEdit->addAction(actionUndo);
     menuEdit->addAction(actionRedo);
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::GraphicsSceneMouseMove)
-    {
-        QGraphicsSceneMouseEvent *mouseEvent =
-                static_cast<QGraphicsSceneMouseEvent *>(event);
+bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
+    if (event->type() == QEvent::GraphicsSceneMouseMove) {
+        QGraphicsSceneMouseEvent* mouseEvent =
+            static_cast<QGraphicsSceneMouseEvent*>(event);
         QString showMessage = QString("Mouse move (%1,%2)").
-                arg(mouseEvent->scenePos().x()).
-                arg(mouseEvent->scenePos().y());
+                              arg(mouseEvent->scenePos().x()).
+                              arg(mouseEvent->scenePos().y());
         Ui_MainWindow::statusBar->showMessage(showMessage);
     }
 }
 
-void MainWindow::newFile()
-{
+void MainWindow::newFile() {
     // creates a new file
     createMdiView();
     view->newFile();
@@ -139,41 +132,41 @@ void MainWindow::newFile()
     toggleActions(1);
 }
 
-void MainWindow::toggleWidgets()
-{
+void MainWindow::toggleWidgets() {
     // toggles Command Widget
-    if (actionCommand_Console->isChecked())
+    if (actionCommand_Console->isChecked()) {
         commandWidget->show();
-    else
+    } else {
         commandWidget->hide();
+    }
 
     // toggles Script Widget
-    if (actionScripting->isChecked())
+    if (actionScripting->isChecked()) {
         scriptWidget->show();
-    else
+    } else {
         scriptWidget->hide();
+    }
 }
 
-void MainWindow::filePrintPreview()
-{
+void MainWindow::filePrintPreview() {
     // display print preview dialog
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(print(QPrinter *)));
+    connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)));
     preview.exec();
 }
 
-void MainWindow::filePrint()
-{
+void MainWindow::filePrint() {
     // display print dialog and if accepted print
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog dialog(&printer, this);
-    if (dialog.exec() == QDialog::Accepted)
+
+    if (dialog.exec() == QDialog::Accepted) {
         print(&printer);
+    }
 }
 
-void MainWindow::print(QPrinter *printer)
-{
+void MainWindow::print(QPrinter* printer) {
     // print the page
     QPainter painter(printer);
     int w = printer->pageRect().width();
@@ -181,111 +174,98 @@ void MainWindow::print(QPrinter *printer)
     QRect page(0, 0, w, h);
 
     QFont font = painter.font();
-    font.setPixelSize((w+h)/100);
+    font.setPixelSize((w + h) / 100);
     painter.setFont(font);
 
     painter.drawText(page, Qt::AlignBottom | Qt::AlignRight,
                      QDateTime::currentDateTime().
                      toString(Qt::DefaultLocaleShortDate));
 
-    page.adjust(w/20, h/20, -w/20, -h/20);
+    page.adjust(w / 20, h / 20, -w / 20, -h / 20);
     view->scene->render(&painter, page);
 }
 
-CadGraphicsView *MainWindow::createMdiView()
-{
+CadGraphicsView* MainWindow::createMdiView() {
     // creates a graphicsView and add it to the MDI window
     view = new CadGraphicsView;
     mdiArea->addSubWindow(view);
     return view;
 }
 
-void MainWindow::showUndoStack()
-{
+void MainWindow::showUndoStack() {
     // calls an undo stack function of graphicsView
     view->showUndoStack();
 }
 
-void MainWindow::drawPoint()
-{
+void MainWindow::drawPoint() {
     // calls the drawPoint function of graphicsView
     view->drawPoint();
 }
 
-void MainWindow::setNoMode()
-{
+void MainWindow::setNoMode() {
     // calls the setNoMode function of graphicsView
     view->setNoMode();
 }
 
-void MainWindow::drawLine()
-{
+void MainWindow::drawLine() {
     // calls the drawLine function of graphicsView
     view->drawLine();
 }
 
-void MainWindow::drawCircle()
-{
+void MainWindow::drawCircle() {
     // calls the drawCircle function of graphicsView
     view->drawCircle();
 }
 
-void MainWindow::drawEllipse()
-{
+void MainWindow::drawEllipse() {
     // calls the drawEllipse function of graphicsView
     view->drawEllipse();
 }
 
-void MainWindow::drawText()
-{
+void MainWindow::drawText() {
     // calls the drawEllipse function of graphicsView
     view->drawText();
 }
 
-void MainWindow::deleteItems()
-{
+void MainWindow::deleteItems() {
     // calls the deleteItems function of graphicsScene
     view->scene->deleteItems();
 }
 
-void MainWindow::on_actionOpen_triggered()
-{
+void MainWindow::on_actionOpen_triggered() {
     // open file dialog box
     QString filename = QFileDialog::getOpenFileName(this,
-                                                  tr("Open File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
+                                                    tr("Open File"),
+                                                    QString(),
+                                                    tr("file Name(*.xml)"));
     newFile();
     QMainWindow::statusBar()->showMessage("File opened successfully");
-    if (!filename.isEmpty())
-    {
+
+    if (!filename.isEmpty()) {
         QFile file(filename);
-        if (!file.open(QIODevice::ReadOnly))
-        {
+
+        if (!file.open(QIODevice::ReadOnly)) {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
-        }
-        else
-        {
+        } else {
             QXmlStreamReader  stream(&file);
-            CadGraphicsScene *newScene = new CadGraphicsScene(this,
+            CadGraphicsScene* newScene = new CadGraphicsScene(this,
                                                               view->undoStack);
-            while (!stream.atEnd())
-            {
+
+            while (!stream.atEnd()) {
                 stream.readNext();
-                if (stream.isStartElement())
-                {
-                    if (stream.name() == "SceneData")
+
+                if (stream.isStartElement()) {
+                    if (stream.name() == "SceneData") {
                         newScene->readStream(&stream);
-                    else
+                    } else
                         stream.raiseError(QString("Unrecognised element '%1'").
                                           arg(stream.name().toString()));
                 }
             }
 
             // check if error occured
-            if (stream.hasError())
-            {
+            if (stream.hasError()) {
                 file.close();
                 QMessageBox::warning(this, "Error",
                                      QString("Failed to load '%1' (%2)").
@@ -298,7 +278,7 @@ void MainWindow::on_actionOpen_triggered()
             and display useful message */
             file.close();
 
-            view->setScene( newScene );
+            view->setScene(newScene);
             delete view->scene;
             view->scene = newScene;
             QMessageBox::warning(this, "Done",
@@ -308,23 +288,20 @@ void MainWindow::on_actionOpen_triggered()
     }
 }
 
-void MainWindow::on_actionSave_triggered()
-{
+void MainWindow::on_actionSave_triggered() {
     // save file dialog box
     QString filename = QFileDialog::getSaveFileName(this,
-                                                  tr("Save File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
-    if(!filename.isEmpty())
-    {
+                                                    tr("Save File"),
+                                                    QString(),
+                                                    tr("file Name(*.xml)"));
+
+    if (!filename.isEmpty()) {
         QFile file(filename);
-        if (!file.open(QIODevice::WriteOnly))
-        {
+
+        if (!file.open(QIODevice::WriteOnly)) {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
-        }
-        else
-        {
+        } else {
             QXmlStreamWriter xmlWriter(&file);
             xmlWriter.setAutoFormatting(true);
             xmlWriter.writeStartDocument();
@@ -344,23 +321,20 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-void MainWindow::on_actionZoom_In_triggered()
-{
+void MainWindow::on_actionZoom_In_triggered() {
     // Zoom in
     //graphicsView->scale(scaleFactor, scaleFactor);
 }
 
-void MainWindow::on_actionZoom_Out_triggered()
-{
+void MainWindow::on_actionZoom_Out_triggered() {
     // Zoom out
     //graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
-void MainWindow::on_actionInsert_Image_triggered()
-{
+void MainWindow::on_actionInsert_Image_triggered() {
     // insert image dialog
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("open File"),"",
-                                                    tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("open File"), "",
+                                                     tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
     imageObject = new QImage();
     imageObject->load(imagePath);
     image = QPixmap::fromImage(*imageObject);
@@ -370,13 +344,12 @@ void MainWindow::on_actionInsert_Image_triggered()
     //graphicsView->setScene(scene);
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
+void MainWindow::closeEvent(QCloseEvent* event) {
     event->ignore();
+
     if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
-                                                 "Are you sure you want to exit?",
-                                                 QMessageBox::Yes|QMessageBox::No))
-    {
+                                                  "Are you sure you want to exit?",
+                                                  QMessageBox::Yes | QMessageBox::No)) {
         event->accept();
     }
 }

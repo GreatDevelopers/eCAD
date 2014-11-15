@@ -5,43 +5,43 @@
 
 #include "getEntity.h"
 
-class clipboardStack
-{
-public:
-    static clipboardStack *instance()
-    {
-        if (!inst)
-            inst = new clipboardStack;
-        return inst;
-    }
+class clipboardStack {
+    public:
+        static clipboardStack* instance() {
+            if (!inst) {
+                inst = new clipboardStack;
+            }
 
-    void push(getEntity *entity)
-    {
-        clips.push(entity);
-    }
+            return inst;
+        }
 
-    getEntity *pasteEntity()
-    {
-        if (clips.count() == 0)
-            return 0;
-        return clips.last();
-    }
+        void push(getEntity* entity) {
+            clips.push(entity);
+        }
 
-    getEntity *pop()
-    {
-        if (clips.count() == 0)
-            return 0;
-        return clips.pop();
-    }
+        getEntity* pasteEntity() {
+            if (clips.count() == 0) {
+                return 0;
+            }
 
-    bool isEmpty() const
-    {
-        return clips.empty();
-    }
+            return clips.last();
+        }
 
-private:
-    QStack<getEntity *> clips;
-    static clipboardStack *inst;
+        getEntity* pop() {
+            if (clips.count() == 0) {
+                return 0;
+            }
+
+            return clips.pop();
+        }
+
+        bool isEmpty() const {
+            return clips.empty();
+        }
+
+    private:
+        QStack<getEntity*> clips;
+        static clipboardStack* inst;
 };
 
 #endif // CLIPBOARDSTACK_H

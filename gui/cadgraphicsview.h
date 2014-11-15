@@ -8,31 +8,30 @@
 
 #include "cadgraphicsscene.h"
 
-class CadGraphicsView : public QGraphicsView
-{
-    Q_OBJECT
+class CadGraphicsView : public QGraphicsView {
+        Q_OBJECT
 
-public:
-    CadGraphicsView();
-    void newFile();
-    void drawPoint();
-    void drawLine();
-    void drawCircle();
-    void drawEllipse();
-    void drawText();
-    void setNoMode();
-    void showUndoStack();
-    CadGraphicsScene *scene;
-    QUndoStack *undoStack;
-    QUndoView *undoView;
+    public:
+        CadGraphicsView();
+        void newFile();
+        void drawPoint();
+        void drawLine();
+        void drawCircle();
+        void drawEllipse();
+        void drawText();
+        void setNoMode();
+        void showUndoStack();
+        CadGraphicsScene* scene;
+        QUndoStack* undoStack;
+        QUndoView* undoView;
 
-protected:
-    void wheelEvent(QWheelEvent *event);
+    protected:
+        void wheelEvent(QWheelEvent* event);
 
-private:
-    QString curFileName;
-    bool isUntitled;
-    double scaleFactor;
+    private:
+        QString curFileName;
+        bool isUntitled;
+        double scaleFactor;
 };
 
 #endif // CADGRAPHICSVIEW_H

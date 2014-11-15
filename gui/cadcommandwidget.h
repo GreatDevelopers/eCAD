@@ -8,10 +8,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-class CadCommandWidget : public QDockWidget
-{
-public:
-    CadCommandWidget();
+class CadCommandWidget : public QDockWidget {
+    public:
+        CadCommandWidget();
 };
 
 #endif // CADCOMMANDWIDGET_H

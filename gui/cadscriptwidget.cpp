@@ -1,7 +1,6 @@
 #include "cadscriptwidget.h"
 
-CadScriptWidget::CadScriptWidget()
-{
+CadScriptWidget::CadScriptWidget() {
     setWindowTitle("Scripting Console");
 
     // widgets and buttons
@@ -35,19 +34,16 @@ CadScriptWidget::CadScriptWidget()
     setupJSEngine();
 }
 
-void CadScriptWidget::setupJSEngine()
-{
+void CadScriptWidget::setupJSEngine() {
     QJSValue cadContext = jsEngine->newQObject(this);
     jsEngine->globalObject().setProperty("cad", cadContext);
 }
 
-void CadScriptWidget::execute()
-{
+void CadScriptWidget::execute() {
     QString text = tEdit->toPlainText();
     QJSValue result = jsEngine->evaluate(text);
 }
 
-void CadScriptWidget::drawPoint(int x, int y)
-{
+void CadScriptWidget::drawPoint(int x, int y) {
     qDebug() << x << "," << y;
 }

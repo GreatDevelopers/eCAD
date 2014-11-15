@@ -11,32 +11,31 @@
 
 #include "cadgraphicsview.h"
 
-class CadScriptWidget : public QDockWidget
-{
-    Q_OBJECT
+class CadScriptWidget : public QDockWidget {
+        Q_OBJECT
 
-public:
-    CadScriptWidget();
+    public:
+        CadScriptWidget();
 
-private:
-    QJSEngine *jsEngine;
-    QTextEdit *tEdit;
-    QWidget *w;
-    QPushButton *newSript;
-    QPushButton *loadScript;
-    QPushButton *saveScript;
-    QPushButton *clearScript;
-    QPushButton *executeScript;
-    QHBoxLayout *hBox;
-    QVBoxLayout *vBox;
-    CadGraphicsView view;
-    void setupJSEngine();
+    private:
+        QJSEngine* jsEngine;
+        QTextEdit* tEdit;
+        QWidget* w;
+        QPushButton* newSript;
+        QPushButton* loadScript;
+        QPushButton* saveScript;
+        QPushButton* clearScript;
+        QPushButton* executeScript;
+        QHBoxLayout* hBox;
+        QVBoxLayout* vBox;
+        CadGraphicsView view;
+        void setupJSEngine();
 
-private slots:
-    void execute();
+    private slots:
+        void execute();
 
-public slots:
-    void drawPoint(int, int);
+    public slots:
+        void drawPoint(int, int);
 };
 
 #endif // CADSCRIPTWIDGET_H

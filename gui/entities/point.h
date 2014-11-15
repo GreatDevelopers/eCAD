@@ -7,23 +7,22 @@
 #include "getEntity.h"
 #include "clipboardstack.h"
 
-class Point : public getEntity
-{
-    Q_OBJECT
-public:
-    Point(QObject *parent = 0) : getEntity(parent) {}
-    Point(int);
-    enum { Type = UserType + 1 };
-    int type() const;
-    int id;
+class Point : public getEntity {
+        Q_OBJECT
+    public:
+        Point(QObject* parent = 0) : getEntity(parent) {}
+        Point(int);
+        enum { Type = UserType + 1 };
+        int type() const;
+        int id;
 
-    getEntity *clone();
+        getEntity* clone();
 
-protected:
-    QRectF boundingRect() const;
-    virtual void paint(QPainter *painter,
-                       const QStyleOptionGraphicsItem *option,
-                       QWidget *widget);
+    protected:
+        QRectF boundingRect() const;
+        virtual void paint(QPainter* painter,
+                           const QStyleOptionGraphicsItem* option,
+                           QWidget* widget);
 };
 
 #endif // POINT_H
