@@ -85,6 +85,12 @@ void CadGraphicsView::drawText()
     scene->setMode(CadGraphicsScene::TextMode);
 }
 
+void CadGraphicsView::drawArc()
+{
+    // sets the mode to ArcMode for scene
+    scene->setMode(CadGraphicsScene::ArcMode);
+}
+
 void CadGraphicsView::showUndoStack()
 {
     // shows the undoStack window

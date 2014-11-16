@@ -260,6 +260,37 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                     this, SIGNAL(itemSelected(QGraphicsItem *)));
             setFlags();
 
+        case ArcMode:
+            if (mFirstClick)
+            {
+                startP = mouseEvent->scenePos();
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                midP = mouseEvent->scenePos();
+                mSecondClick = false;
+                mThirdClick = true;
+            }
+
+            else if (!mSecondClick && mThirdClick)
+            {
+                endP = mouseEvent->scenePos();
+                mPaintFlag = true;
+                mThirdClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                arcItem = new Arc(++id, startP, midP, endP);
+                itemList.append(arcItem);
+                mUndoStack->push(new CadCommandAdd(this, arcItem));
+                setFlags();
+            }
+            break;
+
         default:
             ;
         }
