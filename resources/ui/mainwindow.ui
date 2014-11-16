@@ -193,6 +193,7 @@
    <addaction name="actionCircle"/>
    <addaction name="actionEllipse"/>
    <addaction name="actionMText"/>
+   <addaction name="actionArc"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -507,10 +508,17 @@
   </action>
   <action name="actionArc">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/images/arc3p.png</normaloff>:/icons/images/arc3p.png</iconset>
    </property>
    <property name="text">
     <string>Arc</string>
+   </property>
+   <property name="shortcut">
+    <string>A</string>
    </property>
   </action>
   <action name="actionCircle">

@@ -5,5 +5,6 @@
         <file>images/line.png</file>
         <file>images/points.png</file>
         <file>images/menutext.png</file>
+        <file>images/arc3p.png</file>
     </qresource>
 </RCC>
