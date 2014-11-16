@@ -27,7 +27,8 @@ SOURCES += \
     gui/cadgraphicsview.cpp \
     gui/entities/mtext.cpp \
     gui/cadscriptwidget.cpp \
-    gui/cadcommandwidget.cpp
+    gui/cadcommandwidget.cpp \
+    gui/entities/arc.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
     gui/cadscriptwidget.h \
     gui/cadcommandwidget.h \
     gui/getEntity.h \
-    gui/clipboardstack.h
+    gui/clipboardstack.h \
+    gui/entities/arc.h
 
 FORMS += \
     resources/ui/mainwindow.ui
