@@ -7,7 +7,10 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QJSEngine>
+#include <QFileDialog>
 #include <QDebug>
+#include <QMessageBox>
+#include <QTimer>
 
 #include "cadgraphicsview.h"
 
@@ -22,7 +25,7 @@ private:
     QJSEngine *jsEngine;
     QTextEdit *tEdit;
     QWidget *w;
-    QPushButton *newSript;
+    QPushButton *newScript;
     QPushButton *loadScript;
     QPushButton *saveScript;
     QPushButton *clearScript;
@@ -30,10 +33,21 @@ private:
     QHBoxLayout *hBox;
     QVBoxLayout *vBox;
     CadGraphicsView view;
+    QSpacerItem *verticalSpacer;
     void setupJSEngine();
+    void setCurrentFile(const QString &fileName);
+
+    bool isNew;
+    QString currentFile;
 
 private slots:
-    void execute();
+    void newScriptFxn();
+    void loadScriptFxn();
+    void autoSave();
+    bool saveScriptFxn(const QString &fileName);
+    bool saveAsScriptFxn();
+    void clearScriptFxn();
+    void executeScriptFxn();
 
 public slots:
     void drawPoint(int, int);
