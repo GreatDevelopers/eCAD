@@ -47,7 +47,8 @@ HEADERS += \
     gui/clipboardstack.h
 
 FORMS += \
-    resources/ui/mainwindow.ui
+    resources/ui/mainwindow.ui \
+    resources/ui/aboutdialog.ui
 
 RESOURCES += \
     resources/images.qrc

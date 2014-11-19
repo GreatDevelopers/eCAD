@@ -480,7 +480,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../images.qrc">
      <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
    </property>
    <property name="text">
@@ -495,7 +495,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../images.qrc">
      <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
    </property>
    <property name="text">
@@ -518,7 +518,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../images.qrc">
      <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
    </property>
    <property name="text">
@@ -533,7 +533,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../images.qrc">
      <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
    </property>
    <property name="text">
@@ -564,7 +564,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../images.qrc">
      <normaloff>:/icons/images/menutext.png</normaloff>:/icons/images/menutext.png</iconset>
    </property>
    <property name="text">
@@ -832,7 +832,7 @@
   </action>
   <action name="actionAbout">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>About</string>
@@ -850,26 +850,26 @@
    </property>
   </action>
   <action name="actionCommand_Console">
-  <property name="checkable">
-  <bool>true</bool>
-  </property>
-  <property name="enabled">
-  <bool>false</bool>
-  </property>
-  <property name="text">
-  <string>Command Console</string>
-  </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Command Console</string>
+   </property>
   </action>
   <action name="actionScripting">
-  <property name="checkable">
-  <bool>true</bool>
-  </property>
-  <property name="enabled">
-  <bool>false</bool>
-  </property>
-  <property name="text">
-  <string>Scripting</string>
-  </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Scripting</string>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

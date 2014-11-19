@@ -11,6 +11,7 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 
 #include "ui_mainwindow.h"
+#include "ui_aboutdialog.h"
 #include "cadgraphicsview.h"
 #include "cadcommandwidget.h"
 #include "cadscriptwidget.h"
@@ -35,6 +36,7 @@ private:
     CadGraphicsView *view;
     CadCommandWidget *commandWidget;
     CadScriptWidget *scriptWidget;
+    QDialog *aboutDialog;
 
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -64,6 +66,7 @@ private slots:
     void closeEvent(QCloseEvent *event);
     void filePrint();
     void print(QPrinter *);
+    void showAboutDialog();
 
     CadGraphicsView *createMdiView();
 };
