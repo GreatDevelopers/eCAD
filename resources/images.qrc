@@ -5,5 +5,10 @@
         <file>images/line.png</file>
         <file>images/points.png</file>
         <file>images/menutext.png</file>
+        <file>images/document.svg</file>
+        <file>images/loop-circular.svg</file>
+        <file>images/browser.svg</file>
+        <file>images/play-circle.svg</file>
+        <file>images/task.svg</file>
     </qresource>
 </RCC>
