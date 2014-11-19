@@ -52,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(on_actionZoom_Out_triggered()));
     connect(actionInsert_Image,SIGNAL(triggered()),
             this, SLOT(on_actionInsert_Image_triggered()));
+    connect(actionAbout, SIGNAL(triggered()),
+            this, SLOT(showAboutDialog()));
 
     connect(actionCommand_Console, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
@@ -379,5 +381,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         event->accept();
     }
+    if (aboutDialog)
+    {
+        aboutDialog->close();
+    }
 }
 
+void MainWindow::showAboutDialog()
+{
+    aboutDialog = new QDialog;
+    Ui::About aboutUi;
+    aboutUi.setupUi(aboutDialog);
+    connect(aboutUi.Close, SIGNAL(pressed()), aboutDialog, SLOT(close()));
+    aboutDialog->show();
+}

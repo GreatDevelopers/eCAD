@@ -10,5 +10,6 @@
         <file>images/browser.svg</file>
         <file>images/play-circle.svg</file>
         <file>images/task.svg</file>
+        <file>images/logo.png</file>
     </qresource>
 </RCC>
