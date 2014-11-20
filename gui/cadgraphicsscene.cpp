@@ -122,6 +122,15 @@ void CadGraphicsScene::selectItems()
     }
 }
 
+void CadGraphicsScene::selectDeselectAllItems(bool b)
+{
+    // sets selection for all items
+    foreach (QGraphicsItem *item, items())
+    {
+        item->setSelected(b);
+    }
+}
+
 void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     const int gridSize = 50;

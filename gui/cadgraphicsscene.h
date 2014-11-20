@@ -28,6 +28,7 @@ public:
 public slots:
     void setMode(Mode mode);
     void selectItems();
+    void selectDeselectAllItems(bool b);
     void editorLostFocus(mText *item);
     void cut(getEntity *);
     void copy(getEntity *);
