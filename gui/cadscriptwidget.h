@@ -36,6 +36,7 @@ private:
     QSpacerItem *verticalSpacer;
     void setupJSEngine();
     void setCurrentFile(const QString &fileName);
+    void toggleButtons(bool b);
 
     bool isNew;
     QString currentFile;
