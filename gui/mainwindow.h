@@ -39,6 +39,7 @@ private:
     QDialog *aboutDialog;
 
     bool eventFilter(QObject *obj, QEvent *event);
+    bool isEntitySelected;
 
 private slots:
     void drawPoint();
@@ -58,6 +59,10 @@ private slots:
     void on_actionZoom_In_triggered();
     void on_actionZoom_Out_triggered();
     void on_actionInsert_Image_triggered();
+
+    void selectAll();
+    void deselectAll();
+    void toggleSelectDeselect();
 
     void toggleActions(bool b);
     void setActions();

@@ -60,6 +60,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(actionScripting, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
 
+    connect(actionSelect_All, SIGNAL(triggered()),
+            this, SLOT(selectAll()));
+    connect(actionDeselect_All, SIGNAL(triggered()),
+            this, SLOT(deselectAll()));
+
     // toggle actions to false
     toggleActions(0);
 }
@@ -124,6 +129,9 @@ void MainWindow::newFile()
     view->scene->installEventFilter(this);
     view->show();
     setActions();
+    isEntitySelected = false;
+    connect(view->scene, SIGNAL(changed(QList<QRectF>)),
+            this, SLOT(toggleSelectDeselect()));
 
     // creates a new command widget
     commandWidget = new CadCommandWidget;
@@ -154,6 +162,34 @@ void MainWindow::toggleWidgets()
         scriptWidget->show();
     else
         scriptWidget->hide();
+}
+
+void MainWindow::toggleSelectDeselect()
+{
+    // enables/disables Select All and Deselect All actions
+    if (view->scene->items().isEmpty())
+    {
+        actionSelect_All->setEnabled(false);
+        actionDeselect_All->setEnabled(false);
+    }
+
+    else
+    {
+        actionSelect_All->setEnabled(true);
+        foreach (QGraphicsItem *item, view->scene->items())
+        {
+            if (item->isSelected())
+            {
+                isEntitySelected = true;
+            }
+
+            if (isEntitySelected == true)
+                actionDeselect_All->setEnabled(true);
+            else
+                actionDeselect_All->setEnabled(false);
+        }
+        isEntitySelected = false;
+    }
 }
 
 void MainWindow::filePrintPreview()
@@ -370,6 +406,18 @@ void MainWindow::on_actionInsert_Image_triggered()
     //scene->addPixmap(image);
     //scene->setSceneRect(image.rect());
     //graphicsView->setScene(scene);
+}
+
+void MainWindow::selectAll()
+{
+    // selects all items in the scene
+    view->scene->selectDeselectAllItems(1);
+}
+
+void MainWindow::deselectAll()
+{
+    // deselects all items in the scene
+    view->scene->selectDeselectAllItems(0);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
