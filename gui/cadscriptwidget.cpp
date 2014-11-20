@@ -48,7 +48,16 @@ CadScriptWidget::CadScriptWidget()
     connect(executeScript, SIGNAL(pressed()),
             this, SLOT(executeScriptFxn()));
 
+    toggleButtons(0);
+
     setupJSEngine();
+}
+
+void CadScriptWidget::toggleButtons(bool b)
+{
+    saveScript->setEnabled(b);
+    clearScript->setEnabled(b);
+    executeScript->setEnabled(b);
 }
 
 void CadScriptWidget::setupJSEngine()
@@ -79,6 +88,7 @@ void CadScriptWidget::newScriptFxn()
 
     w->setLayout(vBox);
     setWidget(w);
+    toggleButtons(1);
 
     // sets timer for 60 seconds to auto save
     QTimer *timer = new QTimer(this);
