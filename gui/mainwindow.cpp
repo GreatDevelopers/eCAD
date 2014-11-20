@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawEllipse()));
     connect(actionMText, SIGNAL(triggered()),
             this,SLOT(drawText()));
+    connect(actionArc, SIGNAL(triggered()),
+            this,SLOT(drawArc()));
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
@@ -88,6 +90,7 @@ void MainWindow::toggleActions(bool b)
     actionInsert_Image->setEnabled(b);
     actionCommand_Console->setEnabled(b);
     actionScripting->setEnabled(b);
+    actionArc->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -278,6 +281,12 @@ void MainWindow::drawText()
 {
     // calls the drawEllipse function of graphicsView
     view->drawText();
+}
+
+void MainWindow::drawArc()
+{
+    // calls the drawArc function of graphicsView
+    view->drawArc();
 }
 
 void MainWindow::deleteItems()
