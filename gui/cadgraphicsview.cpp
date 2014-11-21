@@ -53,36 +53,42 @@ void CadGraphicsView::setNoMode()
 {
     // sets the mode to NoMode for scene
     scene->setMode(CadGraphicsScene::NoMode);
+    viewport()->setCursor(Qt::ArrowCursor);
 }
 
 void CadGraphicsView::drawPoint()
 {
     // sets the mode to PointMode for scene
     scene->setMode(CadGraphicsScene::PointMode);
+    viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawLine()
 {
     // sets the mode to LineMode for scene
     scene->setMode(CadGraphicsScene::LineMode);
+    viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawCircle()
 {
     // sets the mode to CircleMode for scene
     scene->setMode(CadGraphicsScene::CircleMode);
+    viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawEllipse()
 {
     // sets the mode to EllipseMode for scene
     scene->setMode(CadGraphicsScene::EllipseMode);
+    viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawText()
 {
     // sets the mode to TextMode for scene
     scene->setMode(CadGraphicsScene::TextMode);
+    viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::showUndoStack()

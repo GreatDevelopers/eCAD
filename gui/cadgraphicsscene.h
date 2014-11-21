@@ -25,6 +25,9 @@ public:
     void readStream(QXmlStreamReader *stream);
     void drawBackground(QPainter *painter, const QRectF &rect);
 
+    typedef QPair<QGraphicsItem *, QPointF> entityPos;
+    QList<entityPos> selectedEntities;
+
 public slots:
     void setMode(Mode mode);
     void selectItems();
@@ -73,9 +76,6 @@ private:
     QAction *pasteAction;
     QGraphicsItem *contextItem;
     QPointF contextPosition;
-
-    typedef QPair<QGraphicsItem *, QPointF> entityPos;
-    QList<entityPos> selectedEntities;
 };
 
 #endif // CADGRAPHICSSCENE_H
