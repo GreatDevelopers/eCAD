@@ -64,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(selectAll()));
     connect(actionDeselect_All, SIGNAL(triggered()),
             this, SLOT(deselectAll()));
+    connect(actionSelect_Entity, SIGNAL(triggered()),
+            this, SLOT(selectOneEntity()));
 
     // toggle actions to false
     toggleActions(0);
@@ -166,16 +168,18 @@ void MainWindow::toggleWidgets()
 
 void MainWindow::toggleSelectDeselect()
 {
-    // enables/disables Select All and Deselect All actions
+    // enables/disables Select Entity, Select All and Deselect All actions
     if (view->scene->items().isEmpty())
     {
         actionSelect_All->setEnabled(false);
         actionDeselect_All->setEnabled(false);
+        actionSelect_Entity->setEnabled(false);
     }
 
     else
     {
         actionSelect_All->setEnabled(true);
+        actionSelect_Entity->setEnabled(true);
         foreach (QGraphicsItem *item, view->scene->items())
         {
             if (item->isSelected())
@@ -184,11 +188,25 @@ void MainWindow::toggleSelectDeselect()
             }
 
             if (isEntitySelected == true)
+            {
                 actionDeselect_All->setEnabled(true);
+                actionSelect_Entity->setEnabled(false);
+            }
+
             else
+            {
                 actionDeselect_All->setEnabled(false);
+                actionSelect_Entity->setEnabled(true);
+            }
         }
+
         isEntitySelected = false;
+
+        // if any one item is selected, Deselect All is enabled
+        if (!view->scene->selectedEntities.isEmpty())
+        {
+            actionDeselect_All->setEnabled(true);
+        }
     }
 }
 
@@ -411,6 +429,7 @@ void MainWindow::on_actionInsert_Image_triggered()
 void MainWindow::selectAll()
 {
     // selects all items in the scene
+    view->scene->setMode(CadGraphicsScene::NoMode);
     view->scene->selectDeselectAllItems(1);
 }
 
@@ -418,6 +437,12 @@ void MainWindow::deselectAll()
 {
     // deselects all items in the scene
     view->scene->selectDeselectAllItems(0);
+}
+
+void MainWindow::selectOneEntity()
+{
+    // sets no mode of scene to enable selection without using escape key
+    view->scene->setMode(CadGraphicsScene::NoMode);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
