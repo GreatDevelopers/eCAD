@@ -10,6 +10,7 @@
 #include "circle.h"
 #include "ellipse.h"
 #include "mtext.h"
+#include "arc.h"
 
 class CadCommandAdd : public QUndoCommand
 {
