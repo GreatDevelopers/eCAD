@@ -18,10 +18,10 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     pasteAction = contextMenu->addAction("paste");
     contextItem = 0;
 
-    //connect context menu items to action slots
+    // connects context menu items to action slots
     connect(contextMenu, SIGNAL(triggered(QAction *)),
             this, SLOT(menuAction(QAction *)));
-    // connect selectionChanged signal to selectItems slot
+    // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
 }
 
@@ -80,6 +80,7 @@ void CadGraphicsScene::selectItems()
 {
     // refresh record of selected items and their starting positions
     selectedEntities.clear();
+
     foreach (QGraphicsItem *item, itemList)
     {
         if (item->isSelected())
@@ -273,6 +274,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             ;
         }
     }
+
     else
     {
         if (mouseEvent->button() == Qt::RightButton)
@@ -289,11 +291,13 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 {
                     pasteAction->setEnabled(false);
                 }
+
                 else
                 {
                     pasteAction->setEnabled(true);
                 }
             }
+
             else
             {
                 cutAction->setEnabled(true);
@@ -444,6 +448,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
     while (!stream->atEnd())
     {
         stream->readNext();
+
         if (stream->isStartElement() && stream->name() == "Point")
         {
             foreach (QXmlStreamAttribute attribute, stream->attributes())
@@ -455,6 +460,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "y")
                     y = attribute.value().toString().toDouble();
             }
+
             pointItem = new Point(id);
             pointItem->setPos(x, y);
             itemList.append(pointItem);
@@ -476,6 +482,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "y2")
                     endP.setY(attribute.value().toString().toDouble());
             }
+
             lineItem = new Line(id, startP, endP);
             lineItem->setLine(startP.x(), startP.y(), endP.x(), endP.y());
             itemList.append(lineItem);
@@ -495,6 +502,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "radius")
                     rad = attribute.value().toString().toDouble();
             }
+
             circleItem = new Circle(id, startP, rad);
             itemList.append(circleItem);
             mUndoStack->push(new CadCommandAdd(this, circleItem));
@@ -515,6 +523,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "minR")
                     rad = attribute.value().toString().toDouble();
             }
+
             ellipseItem = new Ellipse(id, startP, rad, radM);
             itemList.append(ellipseItem);
             mUndoStack->push(new CadCommandAdd(this, ellipseItem));
@@ -533,6 +542,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "text")
                     str = attribute.value().toString();
             }
+
             textItem = new mText(id);
             textItem->setPos(startP.x(), startP.y());
             textItem->setPlainText(str);
@@ -557,6 +567,7 @@ void CadGraphicsScene::copy(getEntity *obj)
 void CadGraphicsScene::paste(const QPointF &pos)
 {
     getEntity *pasteEntity = clipboardStack::instance()->pop();
+
     if (pasteEntity)
     {
         addItem(static_cast<QGraphicsItem *>(pasteEntity));
@@ -573,10 +584,12 @@ void CadGraphicsScene::menuAction(QAction *action)
     {
         cut(static_cast<getEntity *>(contextItem));
     }
+
     else if (action == copyAction)
     {
         copy(static_cast<getEntity *>(contextItem));
     }
+
     else if (action == pasteAction)
     {
         paste(contextPosition);

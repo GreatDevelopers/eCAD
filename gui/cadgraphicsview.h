@@ -22,6 +22,7 @@ public:
     void drawText();
     void setNoMode();
     void showUndoStack();
+
     CadGraphicsScene *scene;
     QUndoStack *undoStack;
     QUndoView *undoView;

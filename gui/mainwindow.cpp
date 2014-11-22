@@ -18,15 +18,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(mdiArea);
     Ui_MainWindow::statusBar->showMessage("Welcome to eCAD");
 
-//    connect(pointButton, SIGNAL(clicked()),
-//            this, SLOT(drawPoint()));
-//    connect(lineButton, SIGNAL(clicked()),
-//            this, SLOT(drawLine()));
-//    connect(circleButton, SIGNAL(clicked()),
-//            this, SLOT(drawCircle()));
-//    connect(ellipseButton, SIGNAL(clicked()),
-//            this, SLOT(drawEllipse()));
-
     connect(actionPoints, SIGNAL(triggered()),
             this, SLOT(drawPoint()));
     connect(actionLine, SIGNAL(triggered()),
@@ -172,9 +163,11 @@ void MainWindow::toggleWidgets()
 
 void MainWindow::toggleMenuActions()
 {
-    /* enables/disables the following menu actions
+    /**
+     * enables/disables the following menu actions
      * Select_Entity, Select_All and Deselect_All
-     * Delete_Selected */
+     * Delete_Selected
+    */
     if (view->scene->items().isEmpty())
     {
         actionSelect_All->setEnabled(false);
@@ -187,6 +180,7 @@ void MainWindow::toggleMenuActions()
     {
         actionSelect_All->setEnabled(true);
         actionSelect_Entity->setEnabled(true);
+
         foreach (QGraphicsItem *item, view->scene->items())
         {
             if (item->isSelected())
@@ -218,7 +212,8 @@ void MainWindow::filePrintPreview()
     // display print preview dialog
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(print(QPrinter *)));
+    connect(&preview, SIGNAL(paintRequested(QPrinter *)),
+            this, SLOT(print(QPrinter *)));
     preview.exec();
 }
 
@@ -227,6 +222,7 @@ void MainWindow::filePrint()
     // display print dialog and if accepted print
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog dialog(&printer, this);
+
     if (dialog.exec() == QDialog::Accepted)
         print(&printer);
 }
@@ -316,14 +312,17 @@ void MainWindow::on_actionOpen_triggered()
                                                   tr("file Name(*.xml)"));
     newFile();
     QMainWindow::statusBar()->showMessage("File opened successfully");
+
     if (!filename.isEmpty())
     {
         QFile file(filename);
+
         if (!file.open(QIODevice::ReadOnly))
         {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
         }
+
         else
         {
             QXmlStreamReader  stream(&file);
@@ -332,6 +331,7 @@ void MainWindow::on_actionOpen_triggered()
             while (!stream.atEnd())
             {
                 stream.readNext();
+
                 if (stream.isStartElement())
                 {
                     if (stream.name() == "SceneData")
@@ -353,8 +353,10 @@ void MainWindow::on_actionOpen_triggered()
                 return;
             }
 
-            /* close file, display new scene, delete old scene
-            and display useful message */
+            /**
+             * close file, display new scene, delete old scene
+             * and display useful message
+            */
             file.close();
 
             view->setScene( newScene );
@@ -377,11 +379,13 @@ void MainWindow::on_actionSave_triggered()
     if(!filename.isEmpty())
     {
         QFile file(filename);
+
         if (!file.open(QIODevice::WriteOnly))
         {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
         }
+
         else
         {
             QXmlStreamWriter xmlWriter(&file);
@@ -418,8 +422,10 @@ void MainWindow::on_actionZoom_Out_triggered()
 void MainWindow::on_actionInsert_Image_triggered()
 {
     // insert image dialog
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("open File"),"",
-                                                    tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
+    QString imagePath;
+    imagePath = QFileDialog::getOpenFileName(this,
+                                             tr("open File"), "",
+                                             tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
     imageObject = new QImage();
     imageObject->load(imagePath);
     image = QPixmap::fromImage(*imageObject);
@@ -451,12 +457,14 @@ void MainWindow::selectOneEntity()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->ignore();
+
     if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
                                                  "Are you sure you want to exit?",
                                                  QMessageBox::Yes|QMessageBox::No))
     {
         event->accept();
     }
+
     if (aboutDialog)
     {
         aboutDialog->close();

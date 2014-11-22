@@ -12,6 +12,7 @@ public:
     {
         if (!inst)
             inst = new clipboardStack;
+
         return inst;
     }
 
@@ -24,6 +25,7 @@ public:
     {
         if (clips.count() == 0)
             return 0;
+
         return clips.last();
     }
 
@@ -31,6 +33,7 @@ public:
     {
         if (clips.count() == 0)
             return 0;
+
         return clips.pop();
     }
 

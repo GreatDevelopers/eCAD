@@ -11,6 +11,7 @@
 class Ellipse : public getEntity
 {
     Q_OBJECT
+
 public:
     Ellipse(QObject *parent = 0) : getEntity(parent) {}
     Ellipse(int, QPointF, QPointF, QPointF);
@@ -21,16 +22,12 @@ public:
                        QWidget *widget);
     enum { Type = UserType + 4 };
     int type() const;
-    int id;
+    getEntity *clone();
 
+    int id;
     QPointF p1, p2, p3;
     float d12, d13, majRadius, minRadius;
     float theta;
-
-    getEntity *clone();
-
-private:
-    QVector<QPointF> stuff;
 };
 
 #endif // ELLIPSE_H

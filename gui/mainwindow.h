@@ -48,32 +48,26 @@ private slots:
     void drawEllipse();
     void drawText();
     void newFile();
-    void deleteItems();
-
     void setNoMode();
     void showUndoStack();
     void toggleWidgets();
-
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
     void on_actionZoom_In_triggered();
     void on_actionZoom_Out_triggered();
     void on_actionInsert_Image_triggered();
-
     void selectAll();
     void deselectAll();
     void toggleMenuActions();
     void selectOneEntity();
-
+    void deleteItems();
     void toggleActions(bool b);
     void setActions();
-
     void filePrintPreview();
     void closeEvent(QCloseEvent *event);
     void filePrint();
     void print(QPrinter *);
     void showAboutDialog();
-
     CadGraphicsView *createMdiView();
 };
 

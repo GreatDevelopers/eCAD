@@ -10,14 +10,15 @@
 class Point : public getEntity
 {
     Q_OBJECT
+
 public:
     Point(QObject *parent = 0) : getEntity(parent) {}
     Point(int);
     enum { Type = UserType + 1 };
     int type() const;
-    int id;
-
     getEntity *clone();
+
+    int id;
 
 protected:
     QRectF boundingRect() const;

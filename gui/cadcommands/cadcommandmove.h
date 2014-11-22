@@ -26,6 +26,7 @@ public:
             setText(QString("Point moved to (%1,%2)")
                     .arg(nPos.x()).arg(nPos.y()));
         }
+
         if (cadItem->type() == Line::Type)
         {
             Line *lineItem = dynamic_cast<Line *>(cadItem);
@@ -35,6 +36,7 @@ public:
                     .arg(lineItem->line().p2().x() + nPos.x())
                     .arg(lineItem->line().p2().y() + nPos.y()));
         }
+
         if (cadItem->type() == Circle::Type)
         {
             Circle *circleItem = dynamic_cast<Circle *>(cadItem);
@@ -42,6 +44,7 @@ public:
                     .arg(nPos.x() + circleItem->centerP.x())
                     .arg(nPos.y() + circleItem->centerP.y()));
         }
+
         if (cadItem->type() == Ellipse::Type)
         {
             Ellipse *ellipseItem = dynamic_cast<Ellipse *>(cadItem);
@@ -49,6 +52,7 @@ public:
                     .arg(nPos.x() + ellipseItem->p1.x())
                     .arg(nPos.y() + ellipseItem->p1.y()));
         }
+
         if (cadItem->type() == mText::Type)
         {
             mText *textItem = dynamic_cast<mText *>(cadItem);
