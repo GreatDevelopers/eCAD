@@ -10,6 +10,8 @@
 #include <QTextEdit>
 #include <QXmlStreamWriter>
 #include <QShortcut>
+#include <DWG/dwgimpl.h>
+#include <DXF/dxfimpl.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -308,61 +310,41 @@ void MainWindow::on_actionOpen_triggered()
 {
     // open file dialog box
     QString filename = QFileDialog::getOpenFileName(this,
-                                                  tr("Open File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
+                                                    tr("Open File"),
+                                                    QString(),
+                                                    tr("dwg(*.dwg);;dxf(*.dxf)"));
     newFile();
     QMainWindow::statusBar()->showMessage("File opened successfully");
     if (!filename.isEmpty())
     {
-        QFile file(filename);
-        if (!file.open(QIODevice::ReadOnly))
-        {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-            return;
-        }
-        else
-        {
-            QXmlStreamReader  stream(&file);
-            CadGraphicsScene *newScene = new CadGraphicsScene(this,
-                                                              view->undoStack);
-            while (!stream.atEnd())
-            {
-                stream.readNext();
-                if (stream.isStartElement())
-                {
-                    if (stream.name() == "SceneData")
-                        newScene->readStream(&stream);
-                    else
-                        stream.raiseError(QString("Unrecognised element '%1'").
-                                          arg(stream.name().toString()));
-                }
-            }
+        CadGraphicsScene *newScene = new CadGraphicsScene(this,
+                                                          view->undoStack);
 
-            // check if error occured
-            if (stream.hasError())
-            {
-                file.close();
-                QMessageBox::warning(this, "Error",
-                                     QString("Failed to load '%1' (%2)").
-                                     arg(filename).arg(stream.errorString()));
-                delete newScene;
-                return;
-            }
-
-            /* close file, display new scene, delete old scene
-            and display useful message */
-            file.close();
-
-            view->setScene( newScene );
+        string ext = filename.toStdString().substr(filename.toStdString().length()-3, 3);
+        if(ext == "dxf" || ext == "DXF") {
+            DXFimpl *F = new DXFimpl(newScene);
+            dxfRW R(filename.toStdString().c_str());
+            R.read(F, true);
+            view->setScene( F->getScene() );
             delete view->scene;
-            view->scene = newScene;
+            view->scene = F->getScene();
+        } else if (ext == "dwg" || ext == "DWG") {
+            DWGimpl* F = new DWGimpl(newScene);
+            F->readFile((char*)filename.toStdString().c_str());
+            view->setScene( F->getScene() );
+            delete view->scene;
+            view->scene = F->getScene();
+        } else {
             QMessageBox::warning(this, "Done",
-                                 QString("Loaded '%1'").arg(filename));
+                                 QString("Non Recognised File extension").arg(filename));
             return;
         }
+        QMessageBox::warning(this, "Done",
+                             QString("Loaded '%1'").arg(filename));
+        return;
     }
 }
+
 
 void MainWindow::on_actionSave_triggered()
 {

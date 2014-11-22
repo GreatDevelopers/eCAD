@@ -8,10 +8,10 @@ QMAKE_CXXFLAGS_WARN_OFF -= -Wunused-parameter
 QT += core gui printsupport qml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+CONFIG +=c++11
 TARGET = eCAD
 TEMPLATE = app
-
+LIBS += -ldxfrw -lredwg
 INCLUDEPATH += \
     $$PWD/gui \
     $$PWD/gui/entities
@@ -52,3 +52,16 @@ FORMS += \
 
 RESOURCES += \
     resources/images.qrc
+
+HEADERS += \
+    gui/DXF/dxfimpl.h \
+    gui/DXF/dxfrw_intf.h
+
+SOURCES += \
+    gui/DXF/dxfimpl.cpp
+
+HEADERS += \
+    gui/DWG/dwgimpl.h \
+
+SOURCES += \
+    gui/DWG/dwgimpl.cpp

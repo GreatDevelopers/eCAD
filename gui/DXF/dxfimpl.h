@@ -1,5 +1,4 @@
-#ifndef IMPLEMENTATION_H
-#define IMPLEMENTATION_H
+#pragma once
 
 #include "dxfrw_intf.h"
 #include <QPaintEvent>
@@ -9,17 +8,15 @@
 #include <QtCore>
 #include "mainwindow.h"
 
-//class MainWindow;
-class implementation : public MainWindow, public DRW_InterfaceImpl {
+class DXFimpl : public MainWindow, public DRW_InterfaceImpl {
 
     virtual void addLine(const DRW_Line &data);
     virtual void addCircle(const DRW_Circle& data);
 public:
-    implementation(CadGraphicsScene *scene);
+    DXFimpl(CadGraphicsScene *scene);
 
-    CadGraphicsScene* scene();
+    CadGraphicsScene* getScene();
 private:
     CadGraphicsScene *newScene;
     CadGraphicsView *view;
 };
-#endif // IMPLEMENTATION_H
