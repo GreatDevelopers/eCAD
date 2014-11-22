@@ -132,8 +132,12 @@ void MainWindow::newFile()
     view->show();
     setActions();
     isEntitySelected = false;
+
+    // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
-            this, SLOT(toggleSelectDeselect()));
+            this, SLOT(toggleMenuActions()));
+    connect(actionDelete_Selected, SIGNAL(triggered()),
+            view->scene, SLOT(deleteItems()));
 
     // creates a new command widget
     commandWidget = new CadCommandWidget;
@@ -166,14 +170,17 @@ void MainWindow::toggleWidgets()
         scriptWidget->hide();
 }
 
-void MainWindow::toggleSelectDeselect()
+void MainWindow::toggleMenuActions()
 {
-    // enables/disables Select Entity, Select All and Deselect All actions
+    /* enables/disables the following menu actions
+     * Select_Entity, Select_All and Deselect_All
+     * Delete_Selected */
     if (view->scene->items().isEmpty())
     {
         actionSelect_All->setEnabled(false);
         actionDeselect_All->setEnabled(false);
         actionSelect_Entity->setEnabled(false);
+        actionDelete_Selected->setEnabled(false);
     }
 
     else
@@ -191,22 +198,18 @@ void MainWindow::toggleSelectDeselect()
             {
                 actionDeselect_All->setEnabled(true);
                 actionSelect_Entity->setEnabled(false);
+                actionDelete_Selected->setEnabled(true);
             }
 
             else
             {
                 actionDeselect_All->setEnabled(false);
                 actionSelect_Entity->setEnabled(true);
+                actionDelete_Selected->setEnabled(false);
             }
         }
 
         isEntitySelected = false;
-
-        // if any one item is selected, Deselect All is enabled
-        if (!view->scene->selectedEntities.isEmpty())
-        {
-            actionDeselect_All->setEnabled(true);
-        }
     }
 }
 

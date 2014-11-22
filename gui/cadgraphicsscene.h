@@ -20,7 +20,6 @@ public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode };
 
-    void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
     void drawBackground(QPainter *painter, const QRectF &rect);
@@ -32,6 +31,7 @@ public slots:
     void setMode(Mode mode);
     void selectItems();
     void selectDeselectAllItems(bool b);
+    void deleteItems();
     void editorLostFocus(mText *item);
     void cut(getEntity *);
     void copy(getEntity *);

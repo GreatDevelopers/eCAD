@@ -62,7 +62,7 @@ private slots:
 
     void selectAll();
     void deselectAll();
-    void toggleSelectDeselect();
+    void toggleMenuActions();
     void selectOneEntity();
 
     void toggleActions(bool b);
