@@ -12,6 +12,7 @@
 #include <QShortcut>
 #include <DWG/dwgimpl.h>
 #include <DXF/dxfimpl.h>
+#include <string>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -320,7 +321,7 @@ void MainWindow::on_actionOpen_triggered()
         CadGraphicsScene *newScene = new CadGraphicsScene(this,
                                                           view->undoStack);
 
-        string ext = filename.toStdString().substr(filename.toStdString().length()-3, 3);
+        std::string ext = filename.toStdString().substr(filename.toStdString().length()-3, 3);
         if(ext == "dxf" || ext == "DXF") {
             DXFimpl *F = new DXFimpl(newScene);
             dxfRW R(filename.toStdString().c_str());
