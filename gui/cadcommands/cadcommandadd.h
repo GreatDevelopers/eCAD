@@ -10,6 +10,7 @@
 #include "circle.h"
 #include "ellipse.h"
 #include "mtext.h"
+#include "arc.h"
 
 class CadCommandAdd : public QUndoCommand
 {
@@ -59,6 +60,18 @@ public:
             setText(QString("Text add p(%1,%2)")
                     .arg(mTextItem->scenePos().x())
                     .arg(mTextItem->scenePos().y()));
+        }
+
+        if (cadItem->type() == Arc::Type)
+        {
+            Arc *arcItem = dynamic_cast<Arc *>(cadItem);
+            setText(QString("Arc add a1(%1,%2, a2(%3,%4), a3(%4,%5)")
+                    .arg(arcItem->p1.x())
+                    .arg(arcItem->p1.y())
+                    .arg(arcItem->p2.x())
+                    .arg(arcItem->p2.y())
+                    .arg(arcItem->p3.x())
+                    .arg(arcItem->p3.y()));
         }
     }
 

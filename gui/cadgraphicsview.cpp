@@ -97,6 +97,13 @@ void CadGraphicsView::drawText()
     viewport()->setCursor(Qt::CrossCursor);
 }
 
+void CadGraphicsView::drawArc()
+{
+    // sets the mode to ArcMode for scene
+    scene->setMode(CadGraphicsScene::ArcMode);
+    viewport()->setCursor(Qt::CrossCursor);
+}
+
 void CadGraphicsView::showUndoStack()
 {
     // shows the undoStack window
