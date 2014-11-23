@@ -65,7 +65,7 @@ public:
         if (cadItem->type() == Arc::Type)
         {
             Arc *arcItem = dynamic_cast<Arc *>(cadItem);
-            setText(QString("Arc add a1(%1,%2, a2(%3,%4), a3(%4,%5)")
+            setText(QString("Arc add p1(%1,%2), p2(%3,%4), p3(%5,%6)")
                     .arg(arcItem->p1.x())
                     .arg(arcItem->p1.y())
                     .arg(arcItem->p2.x())

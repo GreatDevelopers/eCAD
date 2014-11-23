@@ -11,5 +11,6 @@
         <file>images/play-circle.svg</file>
         <file>images/task.svg</file>
         <file>images/logo.png</file>
+        <file>images/arcs3p.png</file>
     </qresource>
 </RCC>

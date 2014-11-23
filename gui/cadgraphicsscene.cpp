@@ -490,24 +490,24 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 Arc *myItem = dynamic_cast<Arc *>(item);
                 stream->writeStartElement("Arc");
                 stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("c1x", QString::number(myItem->p1.x() +
-                                                              myItem->scenePos()
-                                                              .x()));
-                stream->writeAttribute("c1y", QString::number(myItem->p1.y() +
-                                                              myItem->scenePos()
-                                                              .y()));
-                stream->writeAttribute("c2x", QString::number(myItem->p2.x() +
-                                                              myItem->scenePos()
-                                                              .x()));
-                stream->writeAttribute("c2y", QString::number(myItem->p2.y() +
-                                                              myItem->scenePos()
-                                                              .y()));
-                stream->writeAttribute("c3x", QString::number(myItem->p3.x() +
-                                                              myItem->scenePos()
-                                                              .x()));
-                stream->writeAttribute("c3y", QString::number(myItem->p3.y() +
-                                                              myItem->scenePos()
-                                                              .y()));
+                stream->writeAttribute("x1", QString::number(myItem->p1.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y1", QString::number(myItem->p1.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x2", QString::number(myItem->p2.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y2", QString::number(myItem->p2.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x3", QString::number(myItem->p3.x()
+                                                             + myItem->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y3", QString::number(myItem->p3.y()
+                                                             + myItem->scenePos()
+                                                             .y()));
                 stream->writeEndElement();  //end of Arc Item
             }
         }
@@ -628,17 +628,17 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             {
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
-                if (attribute.name() == "c1x")
+                if (attribute.name() == "x1")
                     startP.setX(attribute.value().toString().toDouble());
-                if (attribute.name() == "c1y")
+                if (attribute.name() == "y1")
                     startP.setY(attribute.value().toString().toDouble());
-                if (attribute.name() == "c2x")
+                if (attribute.name() == "x2")
                     midP.setX(attribute.value().toString().toDouble());
-                if (attribute.name() == "c2y")
+                if (attribute.name() == "y2")
                     midP.setY(attribute.value().toString().toDouble());
-                if (attribute.name() == "c3x")
+                if (attribute.name() == "x3")
                     endP.setX(attribute.value().toString().toDouble());
-                if (attribute.name() == "c3y")
+                if (attribute.name() == "y3")
                     endP.setY(attribute.value().toString().toDouble());
             }
 
