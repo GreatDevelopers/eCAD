@@ -19,7 +19,8 @@ class CadGraphicsScene : public QGraphicsScene
 
 public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
-    enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode };
+    enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode,
+                ArcMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -68,6 +69,7 @@ private:
     Circle *circleItem;
     Ellipse *ellipseItem;
     mText *textItem;
+    Arc *arcItem;
     QUndoStack *mUndoStack;
     QMenu *contextMenu;
     QAction *cutAction;

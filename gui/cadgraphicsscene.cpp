@@ -119,6 +119,13 @@ void CadGraphicsScene::selectItems()
                 selectedEntities.append(qMakePair(myItem,
                                                   myItem->scenePos()));
             }
+
+            else if (item->type() == Arc::Type)
+            {
+                Arc *myItem = dynamic_cast<Arc *>(item);
+                selectedEntities.append(qMakePair(myItem,
+                                                  myItem->scenePos()));
+            }
         }
     }
 }
@@ -269,7 +276,38 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             connect(textItem, SIGNAL(selectedChange(QGraphicsItem *)),
                     this, SIGNAL(itemSelected(QGraphicsItem *)));
             setFlags();
+            break;
 
+        case ArcMode:
+            if (mFirstClick)
+            {
+                startP = mouseEvent->scenePos();
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                midP = mouseEvent->scenePos();
+                mSecondClick = false;
+                mThirdClick = true;
+            }
+
+            else if (!mSecondClick && mThirdClick)
+            {
+                endP = mouseEvent->scenePos();
+                mPaintFlag = true;
+                mThirdClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                arcItem = new Arc(++id, startP, midP, endP);
+                itemList.append(arcItem);
+                mUndoStack->push(new CadCommandAdd(this, arcItem));
+                setFlags();
+            }
+            break;
         default:
             ;
         }
@@ -351,6 +389,13 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         else if (item.first->type() == mText::Type)
         {
             mText *myItem = dynamic_cast<mText *>(item.first);
+            mUndoStack->push(new CadCommandMove(myItem, item.second,
+                                                myItem->scenePos()));
+        }
+
+        else if (item.first->type() == Arc::Type)
+        {
+            Arc *myItem = dynamic_cast<Arc *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
@@ -438,6 +483,32 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeAttribute("y", QString::number(myItem->y()));
                 stream->writeAttribute("text", myItem->toPlainText());
                 stream->writeEndElement();  //end of Text Item
+            }
+
+            else if (item->type() == Arc::Type)
+            {
+                Arc *myItem = dynamic_cast<Arc *>(item);
+                stream->writeStartElement("Arc");
+                stream->writeAttribute("id", QString::number(myItem->id));
+                stream->writeAttribute("c1x", QString::number(myItem->p1.x() +
+                                                              myItem->scenePos()
+                                                              .x()));
+                stream->writeAttribute("c1y", QString::number(myItem->p1.y() +
+                                                              myItem->scenePos()
+                                                              .y()));
+                stream->writeAttribute("c2x", QString::number(myItem->p2.x() +
+                                                              myItem->scenePos()
+                                                              .x()));
+                stream->writeAttribute("c2y", QString::number(myItem->p2.y() +
+                                                              myItem->scenePos()
+                                                              .y()));
+                stream->writeAttribute("c3x", QString::number(myItem->p3.x() +
+                                                              myItem->scenePos()
+                                                              .x()));
+                stream->writeAttribute("c3y", QString::number(myItem->p3.y() +
+                                                              myItem->scenePos()
+                                                              .y()));
+                stream->writeEndElement();  //end of Arc Item
             }
         }
     }
@@ -549,6 +620,31 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
             itemList.append(textItem);
             mUndoStack->push(new CadCommandAdd(this, textItem));
+        }
+
+        if (stream->isStartElement() && stream->name() == "Arc")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    id = attribute.value().toString().toDouble();
+                if (attribute.name() == "c1x")
+                    startP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "c1y")
+                    startP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "c2x")
+                    midP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "c2y")
+                    midP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "c3x")
+                    endP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "c3y")
+                    endP.setY(attribute.value().toString().toDouble());
+            }
+
+            arcItem = new Arc(id, startP, midP, endP);
+            itemList.append(arcItem);
+            mUndoStack->push(new CadCommandAdd(this, arcItem));
         }
     }
 }

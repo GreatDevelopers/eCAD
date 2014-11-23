@@ -10,6 +10,7 @@
 #include "circle.h"
 #include "ellipse.h"
 #include "mtext.h"
+#include "arc.h"
 
 class CadCommandMove : public QUndoCommand
 {
@@ -58,6 +59,18 @@ public:
             mText *textItem = dynamic_cast<mText *>(cadItem);
             setText(QString("Text moved to (%1,%2)")
                     .arg(nPos.x()).arg(nPos.y()));
+        }
+
+        if (cadItem->type() == Arc::Type)
+        {
+            Arc *arcItem = dynamic_cast<Arc *>(cadItem);
+            setText(QString("Arc moved to p1(%1,%2), p2(%3,%4), p3(%4,%5)")
+                    .arg(nPos.x() + arcItem->p1.x())
+                    .arg(nPos.y() + arcItem->p1.y())
+                    .arg(nPos.x() + arcItem->p2.x())
+                    .arg(nPos.x() + arcItem->p2.y())
+                    .arg(nPos.x() + arcItem->p3.x())
+                    .arg(nPos.x() + arcItem->p3.y()));
         }
     }
 

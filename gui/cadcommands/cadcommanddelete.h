@@ -10,6 +10,7 @@
 #include "circle.h"
 #include "ellipse.h"
 #include "mtext.h"
+#include "arc.h"
 
 class CadCommandDelete : public QUndoCommand
 {
@@ -57,6 +58,18 @@ public:
         {
             mText *mTextItem = dynamic_cast<mText *>(cadItem);
             setText(QString("Text delete"));
+        }
+
+        if (cadItem->type() == Arc::Type)
+        {
+            Arc *arcItem = dynamic_cast<Arc *>(cadItem);
+            setText(QString("Arc delete a1(%1,%2, a2(%3,%4), a3(%4,%5)")
+                    .arg(arcItem->p1.x())
+                    .arg(arcItem->p1.y())
+                    .arg(arcItem->p2.x())
+                    .arg(arcItem->p2.y())
+                    .arg(arcItem->p3.x())
+                    .arg(arcItem->p3.y()));
         }
     }
 

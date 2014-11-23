@@ -20,6 +20,7 @@ public:
     void drawCircle();
     void drawEllipse();
     void drawText();
+    void drawArc();
     void setNoMode();
     void showUndoStack();
 
