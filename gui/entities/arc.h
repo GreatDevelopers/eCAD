@@ -8,11 +8,14 @@
 #include <QStyleOptionGraphicsItem>
 #include <QWidget>
 
-class Arc : public QGraphicsItem
+#include "getEntity.h"
+
+class Arc : public getEntity
 {
 public:
-    Arc();
+    Arc(QObject *parent = 0) : getEntity(parent) {}
     Arc(int i, QPointF point0, QPointF point1, QPointF point2);
+    Arc(QPointF point1, QPointF point2, QPointF point3);
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
@@ -25,6 +28,8 @@ public:
     QLineF bisectorBC, bisectorBA;
     qreal startAngle, spanAngle, rad;
     QRectF circle, boundingRectTemp;
+
+    getEntity *clone();
 
 private:
     void init();
