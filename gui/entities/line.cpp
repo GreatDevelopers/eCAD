@@ -50,6 +50,7 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setPen(paintpen);
         painter->drawLine(startP, endP);
     }
+
     else
     {
         painter->setBrush(Qt::SolidPattern);

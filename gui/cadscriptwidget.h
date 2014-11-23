@@ -22,6 +22,10 @@ public:
     CadScriptWidget();
 
 private:
+    void setupJSEngine();
+    void setCurrentFile(const QString &fileName);
+    void toggleButtons(bool b);
+
     QJSEngine *jsEngine;
     QTextEdit *tEdit;
     QWidget *w;
@@ -34,9 +38,6 @@ private:
     QVBoxLayout *vBox;
     CadGraphicsView view;
     QSpacerItem *verticalSpacer;
-    void setupJSEngine();
-    void setCurrentFile(const QString &fileName);
-    void toggleButtons(bool b);
 
     bool isNew;
     QString currentFile;

@@ -16,11 +16,11 @@
 class CadGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
+
 public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode };
 
-    void deleteItems();
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
     void drawBackground(QPainter *painter, const QRectF &rect);
@@ -32,6 +32,7 @@ public slots:
     void setMode(Mode mode);
     void selectItems();
     void selectDeselectAllItems(bool b);
+    void deleteItems();
     void editorLostFocus(mText *item);
     void cut(getEntity *);
     void copy(getEntity *);
@@ -50,18 +51,16 @@ signals:
 
 private:
     Mode entityMode;
-    QUndoStack *mUndoStack;
-
     bool mFirstClick;
     bool mSecondClick;
     bool mThirdClick;
     bool mPaintFlag;
-    QVector<QPointF> stuff;
-    QPointF startP, midP, endP, moveP, checkP;
+    QPointF startP, midP, endP;
     qreal x, y, rad, radM;
     int id;
     QString str;
     QPen paintpen, linePen;
+    QPointF contextPosition;
 
     QList<QGraphicsItem *> itemList;
     Point *pointItem;
@@ -69,13 +68,12 @@ private:
     Circle *circleItem;
     Ellipse *ellipseItem;
     mText *textItem;
-
+    QUndoStack *mUndoStack;
     QMenu *contextMenu;
     QAction *cutAction;
     QAction *copyAction;
     QAction *pasteAction;
     QGraphicsItem *contextItem;
-    QPointF contextPosition;
 };
 
 #endif // CADGRAPHICSSCENE_H

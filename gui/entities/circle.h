@@ -11,6 +11,7 @@
 class Circle : public getEntity
 {
     Q_OBJECT
+
 public:
     Circle(QObject *parent = 0) : getEntity(parent) {}
     Circle(int, QPointF, QPointF);
@@ -21,15 +22,11 @@ public:
                        QWidget *widget);
     enum { Type = UserType + 3 };
     int type() const;
-    int id;
-
-    QPointF centerP, endP;
-    qreal radius;
-
     getEntity *clone();
 
-private:
-    QVector<QPointF> stuff;
+    int id;
+    QPointF centerP, endP;
+    qreal radius;
 };
 
 #endif // CIRCLE_H

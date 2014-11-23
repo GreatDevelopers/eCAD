@@ -49,7 +49,6 @@ CadScriptWidget::CadScriptWidget()
             this, SLOT(executeScriptFxn()));
 
     toggleButtons(0);
-
     setupJSEngine();
 }
 
@@ -72,11 +71,13 @@ void CadScriptWidget::newScriptFxn()
     if (!tEdit)
     {
         tEdit = new QTextEdit;
+
         if (isNew)
         {
             saveAsScriptFxn();
             isNew = false;
         }
+
         vBox->removeItem(verticalSpacer);
         vBox->addWidget(tEdit);
     }
@@ -134,6 +135,7 @@ bool CadScriptWidget::saveScriptFxn(const QString &fileName)
 {
     // writes text stream to file
     QFile file(fileName);
+
     if (!file.open(QFile::WriteOnly | QFile::Text))
     {
         QMessageBox::warning(this, tr("Write Error"),
@@ -174,6 +176,7 @@ void CadScriptWidget::setCurrentFile(const QString &fileName)
 
     if (currentFile.isEmpty())
         shownName = "Untitled.js";
+
     setWindowFilePath(shownName);
 }
 

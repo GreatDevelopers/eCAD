@@ -25,6 +25,7 @@ public:
                     .arg(cadItem->scenePos().x())
                     .arg(cadItem->scenePos().y()));
         }
+
         if (cadItem->type() == Line::Type)
         {
             Line *lineItem = dynamic_cast<Line *>(cadItem);
@@ -32,6 +33,7 @@ public:
                     .arg(lineItem->startP.x()).arg(lineItem->startP.y())
                     .arg(lineItem->endP.x()).arg(lineItem->endP.y()));
         }
+
         if (cadItem->type() == Circle::Type)
         {
             Circle *circleItem = dynamic_cast<Circle *>(cadItem);
@@ -40,6 +42,7 @@ public:
                     .arg(circleItem->centerP.y())
                     .arg(circleItem->radius));
         }
+
         if (cadItem->type() == Ellipse::Type)
         {
             Ellipse *ellipseItem = dynamic_cast<Ellipse *>(cadItem);
@@ -49,6 +52,7 @@ public:
                     .arg(ellipseItem->majRadius)
                     .arg(ellipseItem->minRadius));
         }
+
         if (cadItem->type() == mText::Type)
         {
             mText *mTextItem = dynamic_cast<mText *>(cadItem);
@@ -72,6 +76,5 @@ private:
     QGraphicsItem *cadItem;
     QGraphicsScene *cadScene;
 };
-
 
 #endif // CADCOMMANDADD_H

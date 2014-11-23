@@ -131,26 +131,8 @@
     <property name="title">
      <string>Modify</string>
     </property>
-    <addaction name="actionMove_Copy"/>
-    <addaction name="actionRotate"/>
-    <addaction name="actionScale"/>
-    <addaction name="actionMirror"/>
-    <addaction name="actionMove_and_Rotate"/>
-    <addaction name="actionRotate_Two"/>
-    <addaction name="actionRevert_Direction"/>
-    <addaction name="actionTrim"/>
-    <addaction name="actionTrim_Two"/>
-    <addaction name="actionLengthen"/>
-    <addaction name="actionBevel"/>
-    <addaction name="actionRound"/>
-    <addaction name="actionDivid"/>
-    <addaction name="actionStretch"/>
-    <addaction name="actionProperties"/>
-    <addaction name="actionAttributes"/>
     <addaction name="actionDelete"/>
     <addaction name="actionDelete_Selected"/>
-    <addaction name="actionExplode"/>
-    <addaction name="actionAlign"/>
    </widget>
    <widget class="QMenu" name="menuDimension">
     <property name="title">

@@ -5,26 +5,27 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
     // assigns id
     id = i;
 
-    /* set values of three points
-    and calculate radii of ellipse */
+    /** set values of three points
+     * and calculate radii of ellipse
+    */
     p1 = point1;
     p2 = point2;
     p3 = point3;
 
-    d12 = qSqrt(qPow((p2.x()-p1.x()), 2) + qPow((p2.y()-p1.y()), 2));
-    d13 = qSqrt(qPow((p3.x()-p1.x()), 2) + qPow((p3.y()-p1.y()), 2));
+    d12 = qSqrt(qPow((p2.x() - p1.x()), 2) + qPow((p2.y() - p1.y()), 2));
+    d13 = qSqrt(qPow((p3.x() - p1.x()), 2) + qPow((p3.y() - p1.y()), 2));
 
-    if(d12>d13)
+    if (d12 > d13)
     {
         majRadius = d12;
         minRadius = d13;
-        theta = atan2((p2.y()-p1.y()),(p2.x()-p1.x())) * (180/M_PI);
+        theta = atan2((p2.y() - p1.y()), (p2.x() - p1.x())) * (180 / M_PI);
     }
     else
     {
         majRadius = d13;
         minRadius = d12;
-        theta = atan2((p3.y()-p1.y()),(p3.x()-p1.x())) * (180/M_PI);
+        theta = atan2((p3.y() - p1.y()), (p3.x() - p1.x())) * (180 / M_PI);
     }
 }
 
@@ -33,8 +34,10 @@ Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM)
     // assigns id
     id = i;
 
-    /* set values of center point
-    and radii of ellipse */
+    /**
+     * set values of center point
+     * and radii of ellipse
+    */
     p1 = point1;
     minRadius = rad;
     majRadius = radM;
@@ -51,8 +54,8 @@ QRectF Ellipse::boundingRect() const
     // bounding rectangle for ellipse
     float topLeftX = majRadius * cos(theta);
     float topLeftY = majRadius * sin(theta);
-    float bottomRightX = minRadius * cos(theta + M_PI/2);
-    float bottomRightY = minRadius * sin(theta + M_PI/2);
+    float bottomRightX = minRadius * cos(theta + M_PI / 2);
+    float bottomRightY = minRadius * sin(theta + M_PI / 2);
 
     float halfWidth = sqrt((topLeftX * topLeftX) + (bottomRightX * bottomRightX));
     float halfHeight = sqrt((topLeftY * topLeftY) + (bottomRightY * bottomRightY));
@@ -89,6 +92,7 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawEllipse(p1, majRadius, minRadius);
         painter->restore();
     }
+
     else
     {
         painter->setBrush(Qt::SolidPattern);

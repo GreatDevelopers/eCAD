@@ -5,8 +5,10 @@ Circle::Circle(int i, QPointF p1, QPointF p2)
     // assigns id
     id = i;
 
-    /* set values of center point, end point
-    and calculate radius of circle */
+    /**
+     * set values of center point, end point
+     * and calculate radius of circle
+    */
     centerP = p1;
     endP = p2;
     radius = qSqrt(qPow((endP.x()-centerP.x()), 2)
@@ -18,8 +20,10 @@ Circle::Circle(int i, QPointF p1, qreal rad)
     // assigns id
     id = i;
 
-    /* set values of center point
-       and radius of circle */
+    /**
+     * set values of center point
+     * and radius of circle
+    */
     centerP = p1;
     radius = rad;
 }
@@ -33,8 +37,8 @@ int Circle::type() const
 QRectF Circle::boundingRect() const
 {
     // bounding rectangle for circle
-    return QRectF((centerP.x()-radius), (centerP.y()-radius),
-                  (2*radius), (2*radius));
+    return QRectF((centerP.x() - radius), (centerP.y() - radius),
+                  (2 * radius), (2 * radius));
 }
 
 void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -60,6 +64,7 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setPen(paintpen);
         painter->drawEllipse(centerP, radius, radius);
     }
+
     else
     {
         painter->setBrush(Qt::SolidPattern);
@@ -78,4 +83,3 @@ getEntity *Circle::clone()
     c->radius = radius;
     return c;
 }
-

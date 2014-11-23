@@ -37,12 +37,18 @@ void CadGraphicsView::wheelEvent(QWheelEvent *event)
     if (event->delta() > 0)
     {
         // Zooming in
-        if (currentScale < scaleMax) {
+        if (currentScale < scaleMax)
+        {
             scale(scaleFactor, scaleFactor);
             currentScale *= scaleFactor;
         }
-    } else {
-        if (currentScale > scaleMin) {
+
+    }
+
+    else
+    {
+        if (currentScale > scaleMin)
+        {
             scale(1 / scaleFactor, 1 / scaleFactor);
             currentScale /= scaleFactor;
         }
@@ -100,5 +106,6 @@ void CadGraphicsView::showUndoStack()
         undoView->setWindowTitle("Undo Stack");
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
     }
+
     undoView->show();
 }

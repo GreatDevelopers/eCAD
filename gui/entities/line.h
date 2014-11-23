@@ -7,6 +7,7 @@
 class Line : public QObject, public QGraphicsLineItem
 {
     Q_OBJECT
+
 public:
     Line(int, QPointF, QPointF);
     QRectF boundingRect() const;
@@ -15,12 +16,9 @@ public:
                        QWidget *widget);
     enum { Type = UserType + 2 };
     int type() const;
+
     int id;
-
     QPointF startP, endP;
-
-private:
-    QVector<QPointF> stuff;
 };
 
 #endif // LINE_H
