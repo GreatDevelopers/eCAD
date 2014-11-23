@@ -18,8 +18,11 @@ int Arc::type() const
     return Type;
 }
 
-Arc::Arc()
+Arc::Arc(QPointF point1, QPointF point2, QPointF point3)
 {
+    p1=point1;
+    p2=point2;
+    p3=point3;
     p1 = QPointF(0,0);
     p2 = QPointF(0,1);
     p3 = QPointF(1,1);
@@ -113,4 +116,25 @@ void Arc::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     path.arcTo(circle, startAngle, spanAngle);
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path);
+}
+
+getEntity *Arc::clone()
+{
+    Arc *a = new Arc;
+    a->p1 = p1;
+    a->p2 = p2;
+    a->p3 = p3;
+    a->lineAC = lineAC;
+    a->lineBA = lineBA;
+    a->lineBC = lineBC;
+    a->lineOA = lineOA;
+    a->lineOB = lineOB;
+    a->lineOC = lineOC;
+    a->bisectorBA = bisectorBA;
+    a->bisectorBC = bisectorBC;
+    a->center = center;
+    a->circle = circle;
+    a->startAngle = startAngle;
+    a->spanAngle = spanAngle;
+    return a;
 }
