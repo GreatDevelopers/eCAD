@@ -1,7 +1,7 @@
 #include "mtext.h"
 
-mText::mText( int i, QGraphicsItem *parent)
-    : QGraphicsTextItem(parent )
+mText::mText(int i, QGraphicsItem *parent)
+    : QGraphicsTextItem(parent)
 {
     //assigns id
     id = i;
@@ -14,7 +14,7 @@ int mText::type() const
 }
 
 QVariant mText::itemChange(GraphicsItemChange change,
-                                 const QVariant &value)
+                           const QVariant &value)
 {
     if (change == QGraphicsItem::ItemSelectedHasChanged)
         emit selectedChange(this);

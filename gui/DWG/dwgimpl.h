@@ -10,7 +10,8 @@ extern "C" {
 #include <dwg_api.h>
 #include <dwg.h>
 }
-class DWGimpl : public MainWindow {
+class DWGimpl : public MainWindow
+{
     Dwg_Data data;
 public:
     void addLine(dwg_object* obj);

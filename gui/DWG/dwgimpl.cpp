@@ -8,15 +8,18 @@ extern "C" {
 }
 
 DWGimpl::DWGimpl(CadGraphicsScene *scene)
-    : newScene(scene) {
+    : newScene(scene)
+{
 }
 
-CadGraphicsScene* DWGimpl::getScene() {
+CadGraphicsScene* DWGimpl::getScene()
+{
     return newScene;
 }
 
 int
-DWGimpl::readFile(char *filename) {
+DWGimpl::readFile(char *filename)
+{
     int error;
     error = dwg_read_file(filename, &data);
 
@@ -30,7 +33,8 @@ DWGimpl::readFile(char *filename) {
     return error ? 1 : 0;
 }
 
-void DWGimpl::addLine(dwg_object* obj) {
+void DWGimpl::addLine(dwg_object* obj)
+{
     int error, index;
     Dwg_Entity_LINE* line;
     dwg_point_3d start, end;
@@ -38,11 +42,12 @@ void DWGimpl::addLine(dwg_object* obj) {
     line = obj->tio.entity->tio.LINE;
     dwg_ent_line_get_start_point(line, &start, &error);
     dwg_ent_line_get_end_point(line, &end, &error);
-    newScene->addLine(start.x,start.y,
+    newScene->addLine(start.x, start.y,
                       end.x, end.y);
 }
 
-void DWGimpl::addCircle(dwg_object* obj) {
+void DWGimpl::addCircle(dwg_object* obj)
+{
     Dwg_Entity_CIRCLE* circle;
     int error, index;
     float radius;
@@ -53,7 +58,8 @@ void DWGimpl::addCircle(dwg_object* obj) {
 }
 
 void
-DWGimpl::addArc(dwg_object* obj) {
+DWGimpl::addArc(dwg_object* obj)
+{
     Dwg_Entity_ARC* arc;
     int error, index;
     float radius, start_angle, end_angle;
@@ -72,7 +78,8 @@ DWGimpl::addArc(dwg_object* obj) {
     int large_arc = (end_angle - start_angle < 3.1415) ? 0 : 1;
 }
 void
-DWGimpl::addText(dwg_object* obj) {
+DWGimpl::addText(dwg_object* obj)
+{
     int error, index;
     dwg_point_2d ins_pt;
     Dwg_Entity_TEXT* text;
@@ -90,7 +97,8 @@ DWGimpl::addText(dwg_object* obj) {
 }
 
 void
-DWGimpl::OutputObject(dwg_object* obj) {
+DWGimpl::OutputObject(dwg_object* obj)
+{
     if (!obj) {
         fprintf(stderr, "object is NULL\n");
         return;
@@ -113,7 +121,8 @@ DWGimpl::OutputObject(dwg_object* obj) {
     //    }
 }
 
-void DWGimpl::output_BLOCK_HEADER(dwg_object_ref* ref) {
+void DWGimpl::output_BLOCK_HEADER(dwg_object_ref* ref)
+{
     dwg_object* obj, *variable_obj;
     dwg_obj_block_header* hdr;
     int error;
@@ -149,7 +158,8 @@ void DWGimpl::output_BLOCK_HEADER(dwg_object_ref* ref) {
 }
 
 void
-DWGimpl::ReadDWG(dwg_data* dwg) {
+DWGimpl::ReadDWG(dwg_data* dwg)
+{
     unsigned int i, num_hdr_objs;
     int error;
     dwg_object* obj;

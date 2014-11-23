@@ -1,7 +1,8 @@
 #include <libdxfrw0/libdxfrw.h>
 #include <libdxfrw0/drw_interface.h>
 #include <iostream>
-class DRW_InterfaceImpl : public DRW_Interface {
+class DRW_InterfaceImpl : public DRW_Interface
+{
 public:
     DRW_InterfaceImpl() {}
     virtual ~DRW_InterfaceImpl() {}

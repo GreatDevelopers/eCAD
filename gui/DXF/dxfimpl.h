@@ -8,7 +8,8 @@
 #include <QtCore>
 #include "mainwindow.h"
 
-class DXFimpl : public MainWindow, public DRW_InterfaceImpl {
+class DXFimpl : public MainWindow, public DRW_InterfaceImpl
+{
 
     virtual void addLine(const DRW_Line &data);
     virtual void addCircle(const DRW_Circle& data);

@@ -1,0 +1,9 @@
+--indent=spaces=4 
+--style=linux
+--indent-labels 
+--pad-oper 
+--unpad-paren 
+--pad-header
+--keep-one-line-statements 
+--convert-tabs
+--indent-preprocessor 

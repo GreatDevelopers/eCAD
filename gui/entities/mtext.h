@@ -15,7 +15,7 @@ class mText : public QGraphicsTextItem
 {
     Q_OBJECT
 public:
-    mText( int, QGraphicsItem *parent=0 );
+    mText(int, QGraphicsItem *parent = 0);
     enum { Type = UserType + 5 };
     int type() const;
     int id;

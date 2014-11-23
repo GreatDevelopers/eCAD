@@ -6,10 +6,13 @@
 class getEntity : public QObject, public QGraphicsItem
 {
 public:
-   getEntity(QObject *parent = 0) : QObject(parent) {}
-   virtual ~getEntity() {}
+    getEntity(QObject *parent = 0) : QObject(parent) {}
+    virtual ~getEntity() {}
 
-   virtual getEntity *clone() { return 0; }
+    virtual getEntity *clone()
+    {
+        return 0;
+    }
 };
 
 #endif // GENTITY_H

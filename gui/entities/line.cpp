@@ -23,20 +23,19 @@ QRectF Line::boundingRect() const
     // bounding rectangle for line
     return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
                                       line().p2().y() - line().p1().y()))
-            .normalized()
-            .adjusted(-extra, -extra, extra, extra);
+           .normalized()
+           .adjusted(-extra, -extra, extra, extra);
 }
 
 void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                  QWidget *widget)
+                 QWidget *widget)
 {
     // draws/paints the path of line
     QPen paintpen;
     painter->setRenderHint(QPainter::Antialiasing);
     paintpen.setWidth(1);
 
-    if (isSelected())
-    {
+    if (isSelected()) {
         // sets brush for end points
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::red);
@@ -49,9 +48,7 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);
         painter->drawLine(startP, endP);
-    }
-    else
-    {
+    } else {
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);

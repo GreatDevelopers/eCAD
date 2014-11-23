@@ -20,7 +20,7 @@ void CadGraphicsView::newFile()
     undoView = 0;
 
     scene = new CadGraphicsScene(this, undoStack);
-    scene->setSceneRect(0,0,2000,2000);
+    scene->setSceneRect(0, 0, 2000, 2000);
     setScene(scene);
     setDragMode(QGraphicsView::RubberBandDrag);
 }
@@ -34,8 +34,7 @@ void CadGraphicsView::wheelEvent(QWheelEvent *event)
     static const double scaleMax = 5;
 
     // Scale the view / do the zoom
-    if (event->delta() > 0)
-    {
+    if (event->delta() > 0) {
         // Zooming in
         if (currentScale < scaleMax) {
             scale(scaleFactor, scaleFactor);
@@ -94,8 +93,7 @@ void CadGraphicsView::drawText()
 void CadGraphicsView::showUndoStack()
 {
     // shows the undoStack window
-    if (undoView == 0)
-    {
+    if (undoView == 0) {
         undoView = new QUndoView(undoStack);
         undoView->setWindowTitle("Undo Stack");
         undoView->setAttribute(Qt::WA_QuitOnClose, false);
