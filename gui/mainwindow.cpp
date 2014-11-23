@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(deselectAll()));
     connect(actionSelect_Entity, SIGNAL(triggered()),
             this, SLOT(selectOneEntity()));
+    connect(actionInvert_Selection, SIGNAL(triggered()),
+            this, SLOT(invertSelection()));
 
     // toggle actions to false
     toggleActions(0);
@@ -183,6 +185,7 @@ void MainWindow::toggleMenuActions()
     {
         actionSelect_All->setEnabled(true);
         actionSelect_Entity->setEnabled(true);
+        actionInvert_Selection->setEnabled(true);
 
         foreach (QGraphicsItem *item, view->scene->items())
         {
@@ -461,6 +464,12 @@ void MainWindow::selectOneEntity()
 {
     // sets no mode of scene to enable selection without using escape key
     view->scene->setMode(CadGraphicsScene::NoMode);
+}
+
+void MainWindow::invertSelection()
+{
+    // calls the invertSelection of graphicsScene
+    view->scene->invertSelection();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
