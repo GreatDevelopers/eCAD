@@ -33,6 +33,7 @@ public slots:
     void setMode(Mode mode);
     void selectItems();
     void selectDeselectAllItems(bool b);
+    void invertSelection();
     void deleteItems();
     void editorLostFocus(mText *item);
     void cut(getEntity *);

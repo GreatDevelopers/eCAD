@@ -59,6 +59,7 @@ private slots:
     void on_actionInsert_Image_triggered();
     void selectAll();
     void deselectAll();
+    void invertSelection();
     void toggleMenuActions();
     void selectOneEntity();
     void deleteItems();
