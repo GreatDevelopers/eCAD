@@ -21,15 +21,14 @@ public:
                QWidget *widget);
     enum { Type = UserType + 6 };
     int type() const;
-    int id;
+    getEntity *clone();
 
+    int id;
     QPointF p1, p2, p3, center;
     QLineF lineBC, lineAC, lineBA, lineOA, lineOB, lineOC;
     QLineF bisectorBC, bisectorBA;
     qreal startAngle, spanAngle, rad;
     QRectF circle, boundingRectTemp;
-
-    getEntity *clone();
 
 private:
     void init();
