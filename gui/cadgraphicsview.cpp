@@ -29,29 +29,15 @@ void CadGraphicsView::wheelEvent(QWheelEvent *event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-    static double currentScale = 1.0;  // stores the current scale value.
-    static const double scaleMin = .5; // defines the min scale limit.
-    static const double scaleMax = 5;
-
     // Scale the view / do the zoom
     if (event->delta() > 0)
     {
-        // Zooming in
-        if (currentScale < scaleMax)
-        {
-            scale(scaleFactor, scaleFactor);
-            currentScale *= scaleFactor;
-        }
-
+        scale(scaleFactor, scaleFactor);
     }
 
     else
     {
-        if (currentScale > scaleMin)
-        {
-            scale(1 / scaleFactor, 1 / scaleFactor);
-            currentScale /= scaleFactor;
-        }
+        scale(1.0/scaleFactor, 1.0/scaleFactor);
     }
 }
 
