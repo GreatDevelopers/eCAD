@@ -106,7 +106,7 @@
     <addaction name="action_De_elect_Contour"/>
     <addaction name="actionSelect_Window"/>
     <addaction name="actionDeselect_Window"/>
-    <addaction name="actionInverted_Selection"/>
+    <addaction name="actionInvert_Selection"/>
     <addaction name="actionSelect_Intersected_Entities"/>
     <addaction name="actionDeselect_Intersected_Entities"/>
     <addaction name="action_De_Select_Layer"/>
@@ -426,12 +426,12 @@
     <string>Deselect Window</string>
    </property>
   </action>
-  <action name="actionInverted_Selection">
+  <action name="actionInvert_Selection">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Inverted Selection</string>
+    <string>Invert Selection</string>
    </property>
   </action>
   <action name="actionSelect_Intersected_Entities">

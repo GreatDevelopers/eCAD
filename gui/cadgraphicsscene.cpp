@@ -139,6 +139,20 @@ void CadGraphicsScene::selectDeselectAllItems(bool b)
     }
 }
 
+void CadGraphicsScene::invertSelection()
+{
+    // inverts selection of all items in the scene
+    setMode(NoMode);
+
+    foreach (QGraphicsItem *item, itemList)
+    {
+        if (item->isSelected())
+            item->setSelected(false);
+        else
+            item->setSelected(true);
+    }
+}
+
 void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     const int gridSize = 50;

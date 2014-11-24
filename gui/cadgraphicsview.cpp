@@ -37,7 +37,7 @@ void CadGraphicsView::wheelEvent(QWheelEvent *event)
 
     else
     {
-        scale(1.0/scaleFactor, 1.0/scaleFactor);
+        scale(1.0 / scaleFactor, 1.0 / scaleFactor);
     }
 }
 
