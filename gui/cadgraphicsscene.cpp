@@ -2,7 +2,6 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QTextCursor>
-#include <QDebug>
 
 clipboardStack *clipboardStack::inst = 0;
 
@@ -188,7 +187,8 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         switch (entityMode)
         {
         case NoMode:
-            qDebug() << "No Mode";
+            if (mFirstClick)
+                startP = mouseEvent->scenePos();
             break;
 
         case PointMode:
@@ -322,6 +322,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 setFlags();
             }
             break;
+
         default:
             ;
         }
@@ -418,6 +419,22 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     // refresh record of selected items and call base mouseReleaseEvent
     selectItems();
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
+}
+
+void CadGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    if (entityMode == NoMode)
+    {
+        endP = mouseEvent->scenePos();
+
+        // sets isInvertedSelection according to direction of mouse drag
+        if (startP.x() - endP.x() < 0)
+            isInvertedSelection = false;
+        else
+            isInvertedSelection = true;
+    }
+
+    emit(setSelectionSignal());
 }
 
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)

@@ -28,6 +28,9 @@ public:
     QUndoStack *undoStack;
     QUndoView *undoView;
 
+public slots:
+    void selectWindow();
+
 protected:
     void wheelEvent(QWheelEvent *event);
 

@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(deselectAll()));
     connect(actionSelect_Entity, SIGNAL(triggered()),
             this, SLOT(selectOneEntity()));
+    connect(actionSelect_Window, SIGNAL(triggered()),
+            this, SLOT(selectWindow()));
     connect(actionInvert_Selection, SIGNAL(triggered()),
             this, SLOT(invertSelection()));
 
@@ -179,6 +181,7 @@ void MainWindow::toggleMenuActions()
         actionDeselect_All->setEnabled(false);
         actionSelect_Entity->setEnabled(false);
         actionDelete_Selected->setEnabled(false);
+        actionSelect_Window->setEnabled(false);
     }
 
     else
@@ -186,6 +189,7 @@ void MainWindow::toggleMenuActions()
         actionSelect_All->setEnabled(true);
         actionSelect_Entity->setEnabled(true);
         actionInvert_Selection->setEnabled(true);
+        actionSelect_Window->setEnabled(true);
 
         foreach (QGraphicsItem *item, view->scene->items())
         {
@@ -464,6 +468,16 @@ void MainWindow::selectOneEntity()
 {
     // sets no mode of scene to enable selection without using escape key
     view->scene->setMode(CadGraphicsScene::NoMode);
+}
+
+void MainWindow::selectWindow()
+{
+    QMessageBox messageBox;
+    QString message = "This selection works by default.\nYou can drag the mouse"
+            "in the drawing area to make selection using window.";
+    messageBox.setText(message);
+    messageBox.exec();
+    view->viewport()->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::invertSelection()

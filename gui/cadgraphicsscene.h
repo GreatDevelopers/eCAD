@@ -28,6 +28,8 @@ public:
 
     typedef QPair<QGraphicsItem *, QPointF> entityPos;
     QList<entityPos> selectedEntities;
+    QPointF startP, midP, endP;
+    bool isInvertedSelection;
 
 public slots:
     void setMode(Mode mode);
@@ -45,11 +47,13 @@ protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void setFlags();
     void areItemsSelectable(bool);
 
 signals:
     void itemSelected(QGraphicsItem *item);
+    void setSelectionSignal();
 
 private:
     Mode entityMode;
@@ -57,7 +61,6 @@ private:
     bool mSecondClick;
     bool mThirdClick;
     bool mPaintFlag;
-    QPointF startP, midP, endP;
     qreal x, y, rad, radM;
     int id;
     QString str;
