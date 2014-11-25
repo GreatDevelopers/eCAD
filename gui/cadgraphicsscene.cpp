@@ -435,6 +435,7 @@ void CadGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 
     emit(setSelectionSignal());
+    QGraphicsScene::mouseMoveEvent(mouseEvent);
 }
 
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)

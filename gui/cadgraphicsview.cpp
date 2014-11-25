@@ -97,7 +97,6 @@ void CadGraphicsView::showUndoStack()
     {
         undoView = new QUndoView(undoStack);
         undoView->setWindowTitle("Undo Stack");
-        undoView->setAttribute(Qt::WA_QuitOnClose, false);
     }
 
     undoView->show();
