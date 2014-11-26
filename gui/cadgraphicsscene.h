@@ -25,6 +25,7 @@ public:
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
     void drawBackground(QPainter *painter, const QRectF &rect);
+    void setFlags();
 
     typedef QPair<QGraphicsItem *, QPointF> entityPos;
     QList<entityPos> selectedEntities;
@@ -48,7 +49,6 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
-    void setFlags();
     void areItemsSelectable(bool);
 
 signals:
