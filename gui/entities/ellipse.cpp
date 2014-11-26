@@ -112,7 +112,12 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 getEntity *Ellipse::clone()
 {
     Ellipse *e = new Ellipse;
-    e->p1 = p1;
+    e->p1.x();
+    e->p1.y();
+    e->p2.x();
+    e->p2.y();
+    e->p3.x();
+    e->p3.y();
     e->minRadius = minRadius;
     e->majRadius = majRadius;
     return e;
