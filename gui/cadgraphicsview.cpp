@@ -50,43 +50,49 @@ void CadGraphicsView::setNoMode()
 
 void CadGraphicsView::drawPoint()
 {
-    // sets the mode to PointMode for scene
+    // sets the mode to PointMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::PointMode);
+    scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawLine()
 {
-    // sets the mode to LineMode for scene
+    // sets the mode to LineMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::LineMode);
+    scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawCircle()
 {
-    // sets the mode to CircleMode for scene
+    // sets the mode to CircleMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::CircleMode);
+    scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawEllipse()
 {
-    // sets the mode to EllipseMode for scene
+    // sets the mode to EllipseMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::EllipseMode);
+    scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawText()
 {
-    // sets the mode to TextMode for scene
+    // sets the mode to TextMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::TextMode);
+    scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
 }
 
 void CadGraphicsView::drawArc()
 {
-    // sets the mode to ArcMode for scene
+    // sets the mode to ArcMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::ArcMode);
+    scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
 }
 
