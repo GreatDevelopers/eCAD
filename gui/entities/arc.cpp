@@ -6,9 +6,9 @@
 Arc::Arc(int i, QPointF point1, QPointF point2, QPointF point3)
 {
     id = i;
-    p1=point1;
-    p2=point2;
-    p3=point3;
+    p1 = point1;
+    p2 = point2;
+    p3 = point3;
     init();
 }
 
@@ -20,9 +20,9 @@ int Arc::type() const
 
 Arc::Arc(QPointF point1, QPointF point2, QPointF point3)
 {
-    p1=point1;
-    p2=point2;
-    p3=point3;
+    p1 = point1;
+    p2 = point2;
+    p3 = point3;
     p1 = QPointF(0,0);
     p2 = QPointF(0,1);
     p3 = QPointF(1,1);

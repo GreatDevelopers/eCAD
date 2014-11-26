@@ -684,7 +684,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
 void CadGraphicsScene::cut(getEntity *obj)
 {
     removeItem(obj);
-    clipboardStack::instance()->push(obj);
+    clipboardStack::instance()->push(obj->clone());
 }
 
 void CadGraphicsScene::copy(getEntity *obj)
@@ -698,7 +698,6 @@ void CadGraphicsScene::paste(const QPointF &pos)
 
     if (pasteEntity)
     {
-        addItem(static_cast<QGraphicsItem *>(pasteEntity));
         pasteEntity->setPos(pos);
         pasteEntity->setFlag(QGraphicsItem::ItemIsSelectable);
         pasteEntity->setFlag(QGraphicsItem::ItemIsMovable);
