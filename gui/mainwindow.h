@@ -52,6 +52,7 @@ private slots:
     void setNoMode();
     void showUndoStack();
     void toggleWidgets();
+    void hideStatusBar(bool ok);
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
     void on_actionZoom_In_triggered();

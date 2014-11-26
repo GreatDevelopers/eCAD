@@ -63,6 +63,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(selectWindow()));
     connect(actionInvert_Selection, SIGNAL(triggered()),
             this, SLOT(invertSelection()));
+    connect(actionStatus_Bar, SIGNAL(toggled(bool)),
+            this, SLOT(hideStatusBar(bool)));
+
+    actionStatus_Bar->setCheckable(true);
+    actionStatus_Bar->setChecked(true);
 
     // toggle actions to false
     toggleActions(0);
@@ -263,6 +268,12 @@ CadGraphicsView *MainWindow::createMdiView()
     view = new CadGraphicsView;
     mdiArea->addSubWindow(view);
     return view;
+}
+
+void MainWindow::hideStatusBar(bool ok)
+{
+    // hides/show the status bar on toggling of button
+    Ui_MainWindow::statusBar->setVisible(ok);
 }
 
 void MainWindow::showUndoStack()
