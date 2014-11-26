@@ -103,13 +103,11 @@
     <addaction name="actionSelect_All"/>
     <addaction name="actionDeselect_All"/>
     <addaction name="actionSelect_Entity"/>
-    <addaction name="action_De_elect_Contour"/>
     <addaction name="actionSelect_Window"/>
     <addaction name="actionDeselect_Window"/>
     <addaction name="actionInvert_Selection"/>
     <addaction name="actionSelect_Intersected_Entities"/>
     <addaction name="actionDeselect_Intersected_Entities"/>
-    <addaction name="action_De_Select_Layer"/>
    </widget>
    <widget class="QMenu" name="menuDraw">
     <property name="title">

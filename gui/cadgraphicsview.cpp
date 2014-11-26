@@ -22,7 +22,6 @@ void CadGraphicsView::newFile()
     scene = new CadGraphicsScene(this, undoStack);
     scene->setSceneRect(0,0,2000,2000);
     setScene(scene);
-    setDragMode(QGraphicsView::RubberBandDrag);
 }
 
 void CadGraphicsView::wheelEvent(QWheelEvent *event)
@@ -46,6 +45,7 @@ void CadGraphicsView::setNoMode()
     // sets the mode to NoMode for scene
     scene->setMode(CadGraphicsScene::NoMode);
     viewport()->setCursor(Qt::ArrowCursor);
+    connect(scene, SIGNAL(setSelectionSignal()), this, SLOT(selectWindow()));
 }
 
 void CadGraphicsView::drawPoint()
@@ -97,8 +97,24 @@ void CadGraphicsView::showUndoStack()
     {
         undoView = new QUndoView(undoStack);
         undoView->setWindowTitle("Undo Stack");
-        undoView->setAttribute(Qt::WA_QuitOnClose, false);
     }
 
     undoView->show();
+}
+
+void CadGraphicsView::selectWindow()
+{
+    // entity is selected if it's completely inside the selection area
+    if (!scene->isInvertedSelection)
+    {
+        setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
+        setDragMode(QGraphicsView::RubberBandDrag);
+    }
+
+    // entity is selected even if a part of it lies inside the selection area
+    else
+    {
+        setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
+        setDragMode(QGraphicsView::RubberBandDrag);
+    }
 }
