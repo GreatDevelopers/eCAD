@@ -86,44 +86,44 @@ void CadGraphicsScene::selectItems()
         {
             if (item->type() == Point::Type)
             {
-                Point *myItem = dynamic_cast<Point *>(item);
-                selectedEntities.append(qMakePair(myItem,
-                                                  myItem->scenePos()));
+                Point *itemPtr = dynamic_cast<Point *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
             }
 
-            else if(item->type() == Line::Type)
+            else if (item->type() == Line::Type)
             {
-                Line *myItem = dynamic_cast<Line *>(item);
-                selectedEntities.append(qMakePair(myItem,
-                                                  myItem->scenePos()));
+                Line *itemPtr = dynamic_cast<Line *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
             }
 
             else if (item->type() == Circle::Type)
             {
-                Circle *myItem = dynamic_cast<Circle *>(item);
-                selectedEntities.append(qMakePair(myItem,
-                                                  myItem->scenePos()));
+                Circle *itemPtr = dynamic_cast<Circle *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
             }
 
             else if (item->type() == Ellipse::Type)
             {
-                Ellipse *myItem = dynamic_cast<Ellipse *>(item);
-                selectedEntities.append(qMakePair(myItem,
-                                                  myItem->scenePos()));
+                Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
             }
 
             else if (item->type() == mText::Type)
             {
-                mText *myItem = dynamic_cast<mText *>(item);
-                selectedEntities.append(qMakePair(myItem,
-                                                  myItem->scenePos()));
+                mText *itemPtr = dynamic_cast<mText *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
             }
 
             else if (item->type() == Arc::Type)
             {
-                Arc *myItem = dynamic_cast<Arc *>(item);
-                selectedEntities.append(qMakePair(myItem,
-                                                  myItem->scenePos()));
+                Arc *itemPtr = dynamic_cast<Arc *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
             }
         }
     }
@@ -179,6 +179,62 @@ void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
     painter->drawLine(realLeft, 0, realRight, 0);
 }
 
+void CadGraphicsScene::drawEntity(QGraphicsItem *item)
+{
+    if (item->type() == Point::Type)
+    {
+        Point *itemPtr = dynamic_cast<Point *>(item);
+        itemPtr->setPos(startP);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    else if (item->type() == Line::Type)
+    {
+        Line *itemPtr = dynamic_cast<Line *>(item);
+        itemPtr->setLine(startP.x(), startP.y(), endP.x(), endP.y());
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    else if (item->type() == Circle::Type)
+    {
+        Circle *itemPtr = dynamic_cast<Circle *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    else if (item->type() == Ellipse::Type)
+    {
+        Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    else if (item->type() == mText::Type)
+    {
+        mText *itemPtr = dynamic_cast<mText *>(item);
+        itemPtr->setPos(startP);
+        itemPtr->setPlainText(str);
+        itemList.append(itemPtr);
+        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+        connect(itemPtr, SIGNAL(lostFocus(mText *)),
+                this, SLOT(editorLostFocus(mText *)));
+        connect(itemPtr, SIGNAL(selectedChange(QGraphicsItem *)),
+                this, SIGNAL(itemSelected(QGraphicsItem *)));
+    }
+
+    else if (item->type() == Arc::Type)
+    {
+        Arc *itemPtr = dynamic_cast<Arc *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    setFlags();
+}
+
 void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // mousePressEvent in the graphicsScene
@@ -192,10 +248,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             break;
 
         case PointMode:
-            pointItem = new Point(++id);
-            pointItem->setPos(mouseEvent->scenePos());
-            itemList.append(pointItem);
-            mUndoStack->push(new CadCommandAdd(this, pointItem));
+            startP = mouseEvent->scenePos();
+            pointItem = new Point(++id, startP);
+            drawEntity(pointItem);
             break;
 
         case LineMode:
@@ -216,10 +271,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if (mPaintFlag)
             {
                 lineItem = new Line(++id, startP, endP);
-                lineItem->setLine(startP.x(), startP.y(), endP.x(), endP.y());
-                itemList.append(lineItem);
-                mUndoStack->push(new CadCommandAdd(this, lineItem));
-                setFlags();
+                drawEntity(lineItem);
             }
             break;
 
@@ -241,9 +293,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if (mPaintFlag)
             {
                 circleItem = new Circle(++id, startP, endP);
-                itemList.append(circleItem);
-                mUndoStack->push(new CadCommandAdd(this, circleItem));
-                setFlags();
+                drawEntity(circleItem);
             }
             break;
 
@@ -273,23 +323,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if (mPaintFlag)
             {
                 ellipseItem = new Ellipse(++id, startP, midP, endP);
-                itemList.append(ellipseItem);
-                mUndoStack->push(new CadCommandAdd(this, ellipseItem));
-                setFlags();
+                drawEntity(ellipseItem);
             }
             break;
 
         case TextMode:
+            startP = mouseEvent->scenePos();
             textItem = new mText(++id);
-            textItem->setPos(mouseEvent->scenePos());
-            itemList.append(textItem);
-            textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-            mUndoStack->push(new CadCommandAdd(this, textItem));
-            connect(textItem, SIGNAL(lostFocus(mText *)),
-                    this, SLOT(editorLostFocus(mText *)));
-            connect(textItem, SIGNAL(selectedChange(QGraphicsItem *)),
-                    this, SIGNAL(itemSelected(QGraphicsItem *)));
-            setFlags();
+            drawEntity(textItem);
             break;
 
         case ArcMode:
@@ -317,9 +358,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if (mPaintFlag)
             {
                 arcItem = new Arc(++id, startP, midP, endP);
-                itemList.append(arcItem);
-                mUndoStack->push(new CadCommandAdd(this, arcItem));
-                setFlags();
+                drawEntity(arcItem);
             }
             break;
 
@@ -375,44 +414,44 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     {
         if (item.first->type() == Point::Type)
         {
-            Point *myItem = dynamic_cast<Point *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->scenePos()));
+            Point *itemPtr = dynamic_cast<Point *>(item.first);
+            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                itemPtr->scenePos()));
         }
 
         else if (item.first->type() == Line::Type)
         {
-            Line *myItem = dynamic_cast<Line *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->scenePos()));
+            Line *itemPtr = dynamic_cast<Line *>(item.first);
+            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                itemPtr->scenePos()));
         }
 
         else if (item.first->type() == Circle::Type)
         {
-            Circle *myItem = dynamic_cast<Circle *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->scenePos()));
+            Circle *itemPtr = dynamic_cast<Circle *>(item.first);
+            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                itemPtr->scenePos()));
         }
 
         else if (item.first->type() == Ellipse::Type)
         {
-            Ellipse *myItem = dynamic_cast<Ellipse *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->scenePos()));
+            Ellipse *itemPtr = dynamic_cast<Ellipse *>(item.first);
+            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                itemPtr->scenePos()));
         }
 
         else if (item.first->type() == mText::Type)
         {
-            mText *myItem = dynamic_cast<mText *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->scenePos()));
+            mText *itemPtr = dynamic_cast<mText *>(item.first);
+            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                itemPtr->scenePos()));
         }
 
         else if (item.first->type() == Arc::Type)
         {
-            Arc *myItem = dynamic_cast<Arc *>(item.first);
-            mUndoStack->push(new CadCommandMove(myItem, item.second,
-                                                myItem->scenePos()));
+            Arc *itemPtr = dynamic_cast<Arc *>(item.first);
+            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                itemPtr->scenePos()));
         }
     }
 
@@ -447,98 +486,98 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
         {
             if (item->type() == Point::Type)
             {
-                Point *myItem = dynamic_cast<Point *>(item);
+                Point *itemPtr = dynamic_cast<Point *>(item);
                 stream->writeStartElement("Point");
-                stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("x", QString::number(myItem->x()));
-                stream->writeAttribute("y", QString::number(myItem->y()));
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x", QString::number(itemPtr->x()));
+                stream->writeAttribute("y", QString::number(itemPtr->y()));
                 stream->writeEndElement();  //end of Point Item
             }
 
             else if (item->type() == Line::Type)
             {
-                Line *myItem = dynamic_cast<Line *>(item);
+                Line *itemPtr = dynamic_cast<Line *>(item);
                 stream->writeStartElement("Line");
-                stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("x1", QString::number(myItem->startP.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x1", QString::number(itemPtr->startP.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("y1", QString::number(myItem->startP.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("y1", QString::number(itemPtr->startP.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
-                stream->writeAttribute("x2", QString::number(myItem->endP.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("x2", QString::number(itemPtr->endP.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("y2", QString::number(myItem->endP.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("y2", QString::number(itemPtr->endP.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
                 stream->writeEndElement();  //end of Line Item
             }
 
             else if (item->type() == Circle::Type)
             {
-                Circle *myItem = dynamic_cast<Circle *>(item);
+                Circle *itemPtr = dynamic_cast<Circle *>(item);
                 stream->writeStartElement("Circle");
-                stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("cx", QString::number(myItem->centerP.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("cx", QString::number(itemPtr->centerP.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("cy", QString::number(myItem->centerP.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("cy", QString::number(itemPtr->centerP.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
-                stream->writeAttribute("radius", QString::number(myItem->radius));
+                stream->writeAttribute("radius", QString::number(itemPtr->radius));
                 stream->writeEndElement();  //end of Circle Item
             }
 
             else if (item->type() == Ellipse::Type)
             {
-                Ellipse *myItem = dynamic_cast<Ellipse *>(item);
+                Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
                 stream->writeStartElement("Ellipse");
-                stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("cx", QString::number(myItem->p1.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("cx", QString::number(itemPtr->p1.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("cy", QString::number(myItem->p1.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("cy", QString::number(itemPtr->p1.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
-                stream->writeAttribute("majR", QString::number(myItem->majRadius));
-                stream->writeAttribute("minR", QString::number(myItem->minRadius));
+                stream->writeAttribute("majR", QString::number(itemPtr->majRadius));
+                stream->writeAttribute("minR", QString::number(itemPtr->minRadius));
                 stream->writeEndElement();  //end of Ellipse Item
             }
 
             else if (item->type() == mText::Type)
             {
-                mText *myItem = dynamic_cast<mText *>(item);
+                mText *itemPtr = dynamic_cast<mText *>(item);
                 stream->writeStartElement("Text");
-                stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("x", QString::number(myItem->x()));
-                stream->writeAttribute("y", QString::number(myItem->y()));
-                stream->writeAttribute("text", myItem->toPlainText());
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x", QString::number(itemPtr->x()));
+                stream->writeAttribute("y", QString::number(itemPtr->y()));
+                stream->writeAttribute("text", itemPtr->toPlainText());
                 stream->writeEndElement();  //end of Text Item
             }
 
             else if (item->type() == Arc::Type)
             {
-                Arc *myItem = dynamic_cast<Arc *>(item);
+                Arc *itemPtr = dynamic_cast<Arc *>(item);
                 stream->writeStartElement("Arc");
-                stream->writeAttribute("id", QString::number(myItem->id));
-                stream->writeAttribute("x1", QString::number(myItem->p1.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x1", QString::number(itemPtr->p1.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("y1", QString::number(myItem->p1.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("y1", QString::number(itemPtr->p1.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
-                stream->writeAttribute("x2", QString::number(myItem->p2.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("x2", QString::number(itemPtr->p2.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("y2", QString::number(myItem->p2.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("y2", QString::number(itemPtr->p2.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
-                stream->writeAttribute("x3", QString::number(myItem->p3.x()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("x3", QString::number(itemPtr->p3.x()
+                                                             + itemPtr->scenePos()
                                                              .x()));
-                stream->writeAttribute("y3", QString::number(myItem->p3.y()
-                                                             + myItem->scenePos()
+                stream->writeAttribute("y3", QString::number(itemPtr->p3.y()
+                                                             + itemPtr->scenePos()
                                                              .y()));
                 stream->writeEndElement();  //end of Arc Item
             }
@@ -559,15 +598,13 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x")
-                    x = attribute.value().toString().toDouble();
+                    startP.setX(attribute.value().toString().toDouble());
                 if (attribute.name() == "y")
-                    y = attribute.value().toString().toDouble();
+                    startP.setY(attribute.value().toString().toDouble());
             }
 
-            pointItem = new Point(id);
-            pointItem->setPos(x, y);
-            itemList.append(pointItem);
-            mUndoStack->push(new CadCommandAdd(this, pointItem));
+            pointItem = new Point(id, startP);
+            drawEntity(pointItem);
         }
 
         if (stream->isStartElement() && stream->name() == "Line")
@@ -587,9 +624,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             }
 
             lineItem = new Line(id, startP, endP);
-            lineItem->setLine(startP.x(), startP.y(), endP.x(), endP.y());
-            itemList.append(lineItem);
-            mUndoStack->push(new CadCommandAdd(this, lineItem));
+            drawEntity(lineItem);
         }
 
         if (stream->isStartElement() && stream->name() == "Circle")
@@ -607,8 +642,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             }
 
             circleItem = new Circle(id, startP, rad);
-            itemList.append(circleItem);
-            mUndoStack->push(new CadCommandAdd(this, circleItem));
+            drawEntity(circleItem);
         }
 
         if (stream->isStartElement() && stream->name() == "Ellipse")
@@ -628,8 +662,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             }
 
             ellipseItem = new Ellipse(id, startP, rad, radM);
-            itemList.append(ellipseItem);
-            mUndoStack->push(new CadCommandAdd(this, ellipseItem));
+            drawEntity(ellipseItem);
         }
 
         if (stream->isStartElement() && stream->name() == "Text")
@@ -647,11 +680,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             }
 
             textItem = new mText(id);
-            textItem->setPos(startP.x(), startP.y());
-            textItem->setPlainText(str);
-            textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-            itemList.append(textItem);
-            mUndoStack->push(new CadCommandAdd(this, textItem));
+            drawEntity(textItem);
         }
 
         if (stream->isStartElement() && stream->name() == "Arc")
@@ -675,8 +704,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             }
 
             arcItem = new Arc(id, startP, midP, endP);
-            itemList.append(arcItem);
-            mUndoStack->push(new CadCommandAdd(this, arcItem));
+            drawEntity(arcItem);
         }
     }
 }
