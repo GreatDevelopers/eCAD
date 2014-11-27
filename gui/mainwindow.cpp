@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
+    connect(actionClose, SIGNAL(triggered()),
+            this, SLOT(closeActiveWindow()));
     connect(actionQuit, SIGNAL(triggered()),
             this, SLOT(close()));
     connect(actionPrint, SIGNAL(triggered()),
@@ -124,6 +126,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 arg(mouseEvent->scenePos().y());
         Ui_MainWindow::statusBar->showMessage(showMessage);
     }
+}
+
+void MainWindow::closeActiveWindow()
+{
+    // closes the active subwindow
+    mdiArea->closeActiveSubWindow();
 }
 
 void MainWindow::newFile()
