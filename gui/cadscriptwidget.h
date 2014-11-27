@@ -12,7 +12,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
-#include "cadgraphicsview.h"
+#include "cadgraphicsscene.h"
 
 class CadScriptWidget : public QDockWidget
 {
@@ -20,6 +20,7 @@ class CadScriptWidget : public QDockWidget
 
 public:
     CadScriptWidget();
+    void *getCurrentScene(CadGraphicsScene *);
 
 private:
     void setupJSEngine();
@@ -36,10 +37,16 @@ private:
     QPushButton *executeScript;
     QHBoxLayout *hBox;
     QVBoxLayout *vBox;
-    CadGraphicsView view;
+    CadGraphicsScene *currentScene;
     QSpacerItem *verticalSpacer;
+    Point *pointItem;
+    Line *lineItem;
+    Circle *circleItem;
+    Ellipse *ellipseItem;
 
+    int id;
     bool isNew;
+    bool firstRun;
     QString currentFile;
 
 private slots:
@@ -52,7 +59,10 @@ private slots:
     void executeScriptFxn();
 
 public slots:
-    void drawPoint(int, int);
+    void point(qreal, qreal);
+    void line(qreal, qreal, qreal, qreal);
+    void circle(qreal, qreal, qreal);
+    void ellipse(qreal, qreal, qreal, qreal);
 };
 
 #endif // CADSCRIPTWIDGET_H

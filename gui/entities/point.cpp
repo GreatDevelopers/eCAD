@@ -6,7 +6,7 @@ Point::Point(int i, QPointF p)
     id = i;
 
     // sets position of point
-    pos = p;
+    position = p;
 }
 
 int Point::type() const

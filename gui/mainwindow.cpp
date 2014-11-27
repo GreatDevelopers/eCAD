@@ -159,6 +159,7 @@ void MainWindow::newFile()
 
     // creates a new script widget
     scriptWidget = new CadScriptWidget;
+    scriptWidget->getCurrentScene(view->scene);
     actionScripting->setChecked(true);
     addDockWidget(Qt::RightDockWidgetArea, scriptWidget);
 

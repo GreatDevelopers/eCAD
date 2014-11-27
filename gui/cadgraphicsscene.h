@@ -32,6 +32,7 @@ public:
     QList<entityPos> selectedEntities;
     QPointF startP, midP, endP;
     bool isInvertedSelection;
+    int id;
 
 public slots:
     void setMode(Mode mode);
@@ -63,7 +64,6 @@ private:
     bool mThirdClick;
     bool mPaintFlag;
     qreal x, y, rad, radM;
-    int id;
     QString str;
     QPen paintpen, linePen;
     QPointF contextPosition;

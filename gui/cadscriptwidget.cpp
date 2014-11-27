@@ -4,6 +4,7 @@ CadScriptWidget::CadScriptWidget()
 {
     setWindowTitle("Scripting Console");
     isNew = true;
+    firstRun = true;
 
     // widgets and buttons
     w = new QWidget;
@@ -65,10 +66,16 @@ void CadScriptWidget::setupJSEngine()
     jsEngine->globalObject().setProperty("cad", cadContext);
 }
 
+void *CadScriptWidget::getCurrentScene(CadGraphicsScene *scene)
+{
+    // gets the current scene
+    currentScene = scene;
+}
+
 void CadScriptWidget::newScriptFxn()
 {
     // creates a new script file
-    if (!tEdit)
+    if (firstRun)
     {
         tEdit = new QTextEdit;
 
@@ -78,6 +85,7 @@ void CadScriptWidget::newScriptFxn()
             isNew = false;
         }
 
+        firstRun = false;
         vBox->removeItem(verticalSpacer);
         vBox->addWidget(tEdit);
     }
@@ -189,11 +197,35 @@ void CadScriptWidget::clearScriptFxn()
 void CadScriptWidget::executeScriptFxn()
 {
     // executes the script
+    id = currentScene->id;
     QString text = tEdit->toPlainText();
     QJSValue result = jsEngine->evaluate(text);
 }
 
-void CadScriptWidget::drawPoint(int x, int y)
+void CadScriptWidget::point(qreal x, qreal y)
 {
-    qDebug() << x << "," << y;
+    // creates a point entity in the scene
+    pointItem = new Point(++id, QPointF(x,y));
+    currentScene->drawEntity(pointItem);
+}
+
+void CadScriptWidget::line(qreal x1, qreal y1, qreal x2, qreal y2)
+{
+    // creates a line entity in the scene
+    lineItem = new Line(++id, QPointF(x1,y1), QPointF(x2,y2));
+    currentScene->drawEntity(lineItem);
+}
+
+void CadScriptWidget::circle(qreal x, qreal y, qreal r)
+{
+    // creates a circle entity in the scene
+    circleItem = new Circle(++id, QPointF(x,y), r);;
+    currentScene->drawEntity(circleItem);
+}
+
+void CadScriptWidget::ellipse(qreal x, qreal y, qreal minR, qreal majR)
+{
+    // creates an ellipse entity in the scene
+    ellipseItem = new Ellipse(++id, QPointF(x,y), minR, majR);;
+    currentScene->drawEntity(ellipseItem);
 }

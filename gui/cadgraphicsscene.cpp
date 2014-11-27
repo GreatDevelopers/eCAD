@@ -184,7 +184,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     if (item->type() == Point::Type)
     {
         Point *itemPtr = dynamic_cast<Point *>(item);
-        itemPtr->setPos(startP);
+        itemPtr->setPos(itemPtr->position.x(), itemPtr->position.y());
         itemList.append(itemPtr);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
@@ -192,7 +192,8 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     else if (item->type() == Line::Type)
     {
         Line *itemPtr = dynamic_cast<Line *>(item);
-        itemPtr->setLine(startP.x(), startP.y(), endP.x(), endP.y());
+        itemPtr->setLine(itemPtr->startP.x(), itemPtr->startP.y(),
+                         itemPtr->endP.x(), itemPtr->endP.y());
         itemList.append(itemPtr);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
