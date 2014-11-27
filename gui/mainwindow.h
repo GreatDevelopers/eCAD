@@ -49,6 +49,7 @@ private slots:
     void drawText();
     void drawArc();
     void newFile();
+    void closeActiveWindow();
     void setNoMode();
     void showUndoStack();
     void toggleWidgets();
