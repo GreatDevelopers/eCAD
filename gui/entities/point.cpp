@@ -1,9 +1,12 @@
 #include "point.h"
 
-Point::Point(int i)
+Point::Point(int i, QPointF p)
 {
     // assigns id
     id = i;
+
+    // sets position of point
+    pos = p;
 }
 
 int Point::type() const

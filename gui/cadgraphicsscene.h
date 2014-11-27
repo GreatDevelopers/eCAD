@@ -26,6 +26,7 @@ public:
     void readStream(QXmlStreamReader *stream);
     void drawBackground(QPainter *painter, const QRectF &rect);
     void setFlags();
+    void drawEntity(QGraphicsItem *item);
 
     typedef QPair<QGraphicsItem *, QPointF> entityPos;
     QList<entityPos> selectedEntities;
