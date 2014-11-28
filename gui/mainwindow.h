@@ -32,7 +32,6 @@ private:
     QPrinter *printer;
     QPixmap image;
     QImage *imageObject;
-    QGraphicsView *graphicsView;
     CadGraphicsView *view;
     CadCommandWidget *commandWidget;
     CadScriptWidget *scriptWidget;
@@ -56,6 +55,7 @@ private slots:
     void hideStatusBar(bool ok);
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
+    void showGrid(bool);
     void on_actionZoom_In_triggered();
     void on_actionZoom_Out_triggered();
     void on_actionInsert_Image_triggered();

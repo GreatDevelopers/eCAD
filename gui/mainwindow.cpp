@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(selectWindow()));
     connect(actionInvert_Selection, SIGNAL(triggered()),
             this, SLOT(invertSelection()));
+    connect(actionGrid, SIGNAL(toggled(bool)),
+            this, SLOT(showGrid(bool)));
     connect(actionStatus_Bar, SIGNAL(toggled(bool)),
             this, SLOT(hideStatusBar(bool)));
 
@@ -84,6 +86,7 @@ void MainWindow::toggleActions(bool b)
     actionSave->setEnabled(b);
     actionPrint->setEnabled(b);
     actionPrintPreview->setEnabled(b);
+    actionGrid->setEnabled(b);
     actionZoom_In->setEnabled(b);
     actionZoom_Out->setEnabled(b);
     actionPoints->setEnabled(b);
@@ -443,16 +446,27 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
+void MainWindow::showGrid(bool b)
+{
+    // enables/disables grid
+    if (!actionGrid->isChecked())
+        view->scene->isGridVisible = false;
+    else
+        view->scene->isGridVisible = true;
+
+    view->scene->update(view->scene->sceneRect());
+}
+
 void MainWindow::on_actionZoom_In_triggered()
 {
     // Zoom in
-    //graphicsView->scale(scaleFactor, scaleFactor);
+    view->scale(view->scaleFactor, view->scaleFactor);
 }
 
 void MainWindow::on_actionZoom_Out_triggered()
 {
     // Zoom out
-    //graphicsView->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+    view->scale(1.0 / view->scaleFactor, 1.0 / view->scaleFactor);
 }
 
 void MainWindow::on_actionInsert_Image_triggered()

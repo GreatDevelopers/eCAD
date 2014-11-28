@@ -28,6 +28,8 @@ public:
     QUndoStack *undoStack;
     QUndoView *undoView;
 
+    double scaleFactor;
+
 public slots:
     void selectWindow();
 
@@ -37,7 +39,6 @@ protected:
 private:
     QString curFileName;
     bool isUntitled;
-    double scaleFactor;
 };
 
 #endif // CADGRAPHICSVIEW_H
