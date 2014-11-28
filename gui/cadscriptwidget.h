@@ -44,6 +44,7 @@ private:
     Circle *circleItem;
     Ellipse *ellipseItem;
     Text *textItem;
+    Arc *arcItem;
 
     int id;
     bool isNew;
@@ -65,6 +66,7 @@ public slots:
     void circle(qreal, qreal, qreal);
     void ellipse(qreal, qreal, qreal, qreal);
     void text(qreal, qreal, QString);
+    void arc(qreal, qreal, qreal, qreal, qreal, qreal);
 };
 
 #endif // CADSCRIPTWIDGET_H

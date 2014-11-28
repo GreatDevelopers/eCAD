@@ -236,3 +236,11 @@ void CadScriptWidget::text(qreal x, qreal y, QString s)
     textItem = new Text(++id, QPointF(x,y), s);
     currentScene->drawEntity(textItem);
 }
+
+void CadScriptWidget::arc(qreal x1, qreal y1, qreal x2, qreal y2,
+                          qreal x3, qreal y3)
+{
+    // creates an arc entity in the scene
+    arcItem = new Arc(++id, QPointF(x1,y1), QPointF(x2,y2), QPointF(x3,y3));
+    currentScene->drawEntity(arcItem);
+}
