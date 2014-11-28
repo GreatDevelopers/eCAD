@@ -1,18 +1,22 @@
-#include "mtext.h"
+#include "text.h"
 
-mText::mText(int i, QGraphicsItem *parent) : QGraphicsTextItem(parent)
+Text::Text(int i, QPointF p, QString s)
 {
     //assigns id
     id = i;
+
+    // sets the position and string value
+    position = p;
+    str = s;
 }
 
-int mText::type() const
+int Text::type() const
 {
     // Enable the use of qgraphicsitem_cast with text item.
     return Type;
 }
 
-QVariant mText::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant Text::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemSelectedHasChanged)
         emit selectedChange(this);
@@ -20,14 +24,14 @@ QVariant mText::itemChange(GraphicsItemChange change, const QVariant &value)
     return value;
 }
 
-void mText::focusOutEvent(QFocusEvent *event)
+void Text::focusOutEvent(QFocusEvent *event)
 {
     setTextInteractionFlags(Qt::NoTextInteraction);
     emit lostFocus(this);
     QGraphicsTextItem::focusOutEvent(event);
 }
 
-void mText::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (textInteractionFlags() == Qt::NoTextInteraction)
         setTextInteractionFlags(Qt::TextEditorInteraction);

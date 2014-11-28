@@ -9,7 +9,7 @@
 #include "line.h"
 #include "circle.h"
 #include "ellipse.h"
-#include "mtext.h"
+#include "text.h"
 #include "arc.h"
 
 class CadCommandMove : public QUndoCommand
@@ -54,9 +54,9 @@ public:
                     .arg(nPos.y() + ellipseItem->p1.y()));
         }
 
-        if (cadItem->type() == mText::Type)
+        if (cadItem->type() == Text::Type)
         {
-            mText *textItem = dynamic_cast<mText *>(cadItem);
+            Text *textItem = dynamic_cast<Text *>(cadItem);
             setText(QString("Text moved to (%1,%2)")
                     .arg(nPos.x()).arg(nPos.y()));
         }

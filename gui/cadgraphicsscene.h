@@ -32,6 +32,7 @@ public:
     QList<entityPos> selectedEntities;
     QPointF startP, midP, endP;
     bool isInvertedSelection;
+    int id;
 
 public slots:
     void setMode(Mode mode);
@@ -39,7 +40,7 @@ public slots:
     void selectDeselectAllItems(bool b);
     void invertSelection();
     void deleteItems();
-    void editorLostFocus(mText *item);
+    void editorLostFocus(Text *item);
     void cut(getEntity *);
     void copy(getEntity *);
     void paste(const QPointF &pos);
@@ -63,7 +64,6 @@ private:
     bool mThirdClick;
     bool mPaintFlag;
     qreal x, y, rad, radM;
-    int id;
     QString str;
     QPen paintpen, linePen;
     QPointF contextPosition;
@@ -73,7 +73,7 @@ private:
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
-    mText *textItem;
+    Text *textItem;
     Arc *arcItem;
     QUndoStack *mUndoStack;
     QMenu *contextMenu;

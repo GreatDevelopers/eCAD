@@ -19,7 +19,7 @@ public:
     getEntity *clone();
 
     int id;
-    QPointF pos;
+    QPointF position;
 
 protected:
     QRectF boundingRect() const;

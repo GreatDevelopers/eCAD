@@ -9,7 +9,7 @@
 #include "line.h"
 #include "circle.h"
 #include "ellipse.h"
-#include "mtext.h"
+#include "text.h"
 #include "arc.h"
 
 class CadCommandDelete : public QUndoCommand
@@ -54,9 +54,9 @@ public:
                     .arg(ellipseItem->minRadius));
         }
 
-        if (cadItem->type() == mText::Type)
+        if (cadItem->type() == Text::Type)
         {
-            mText *mTextItem = dynamic_cast<mText *>(cadItem);
+            Text *TextItem = dynamic_cast<Text *>(cadItem);
             setText(QString("Text delete"));
         }
 

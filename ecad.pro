@@ -25,7 +25,7 @@ SOURCES += \
     gui/entities/point.cpp \
     gui/entities/line.cpp \
     gui/cadgraphicsview.cpp \
-    gui/entities/mtext.cpp \
+    gui/entities/text.cpp \
     gui/cadscriptwidget.cpp \
     gui/cadcommandwidget.cpp \
     gui/entities/arc.cpp
@@ -41,7 +41,7 @@ HEADERS += \
     gui/cadcommands/cadcommandadd.h \
     gui/cadcommands/cadcommanddelete.h \
     gui/cadcommands/cadcommandmove.h \
-    gui/entities/mtext.h \
+    gui/entities/text.h \
     gui/cadscriptwidget.h \
     gui/cadcommandwidget.h \
     gui/getEntity.h \
