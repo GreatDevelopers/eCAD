@@ -32,6 +32,7 @@ public:
     QList<entityPos> selectedEntities;
     QPointF startP, midP, endP;
     bool isInvertedSelection;
+    bool isGridVisible;
     int id;
 
 public slots:

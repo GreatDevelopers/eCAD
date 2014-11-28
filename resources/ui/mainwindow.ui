@@ -50,7 +50,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_As"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="actionImport"/>
     <addaction name="actionExport"/>
     <addaction name="actionClose"/>
@@ -68,7 +68,7 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
-    <addaction name="actionEdit_Preferences"/>
+    <addaction name="actionEditPreferences"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="enabled">
@@ -83,31 +83,28 @@
      </property>
      <addaction name="actionLayers"/>
      <addaction name="actionBlocks"/>
-     <addaction name="actionCommand_Console"/>
+     <addaction name="actionCommandConsole"/>
      <addaction name="actionScripting"/>
     </widget>
     <addaction name="actionGrid"/>
-    <addaction name="actionZoom_In"/>
-    <addaction name="actionZoom_Out"/>
-    <addaction name="actionPrevious_View"/>
-    <addaction name="actionWindows_Zoon"/>
-    <addaction name="actionZoom_Panning"/>
-    <addaction name="separator"/>
-    <addaction name="actionStatus_Bar"/>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+    <addaction name="actionPanning"/>
+    <addaction name="actionStatusBar"/>
     <addaction name="menuToolbars"/>
    </widget>
    <widget class="QMenu" name="menuSelect">
     <property name="title">
      <string>Select</string>
     </property>
-    <addaction name="actionSelect_All"/>
-    <addaction name="actionDeselect_All"/>
-    <addaction name="actionSelect_Entity"/>
-    <addaction name="actionSelect_Window"/>
-    <addaction name="actionDeselect_Window"/>
-    <addaction name="actionInvert_Selection"/>
-    <addaction name="actionSelect_Intersected_Entities"/>
-    <addaction name="actionDeselect_Intersected_Entities"/>
+    <addaction name="actionSelectAll"/>
+    <addaction name="actionDeselectAll"/>
+    <addaction name="actionSelectEntity"/>
+    <addaction name="actionSelectWindow"/>
+    <addaction name="actionDeselectWindow"/>
+    <addaction name="actionInvertSelection"/>
+    <addaction name="actionSelectIntersectedEntities"/>
+    <addaction name="actionDeselectIntersectedEntities"/>
    </widget>
    <widget class="QMenu" name="menuDraw">
     <property name="title">
@@ -119,14 +116,14 @@
     <addaction name="actionCircle"/>
     <addaction name="actionEllipse"/>
     <addaction name="actionText"/>
-    <addaction name="actionInsert_Image"/>
+    <addaction name="actionInsertImage"/>
    </widget>
    <widget class="QMenu" name="menuModify">
     <property name="title">
      <string>Modify</string>
     </property>
     <addaction name="actionDelete"/>
-    <addaction name="actionDelete_Selected"/>
+    <addaction name="actionDeleteSelected"/>
    </widget>
    <widget class="QMenu" name="menuDimension">
     <property name="title">
@@ -205,7 +202,7 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSave_As">
+  <action name="actionSaveAs">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -292,7 +289,7 @@
     <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="actionEdit_Preferences">
+  <action name="actionEditPreferences">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -301,6 +298,12 @@
    </property>
   </action>
   <action name="actionGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -308,7 +311,7 @@
     <string>Grid</string>
    </property>
   </action>
-  <action name="actionZoom_In">
+  <action name="actionZoomIn">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -316,7 +319,7 @@
     <string>Zoom In</string>
    </property>
   </action>
-  <action name="actionZoom_Out">
+  <action name="actionZoomOut">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -340,15 +343,15 @@
     <string>Windows Zoom</string>
    </property>
   </action>
-  <action name="actionZoom_Panning">
+  <action name="actionPanning">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Zoom Panning</string>
+    <string>Panning</string>
    </property>
   </action>
-  <action name="actionStatus_Bar">
+  <action name="actionStatusBar">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -372,7 +375,7 @@
     <string>Blocks</string>
    </property>
   </action>
-  <action name="actionSelect_All">
+  <action name="actionSelectAll">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -380,7 +383,7 @@
     <string>Select All</string>
    </property>
   </action>
-  <action name="actionDeselect_All">
+  <action name="actionDeselectAll">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -388,7 +391,7 @@
     <string>Deselect All</string>
    </property>
   </action>
-  <action name="actionSelect_Entity">
+  <action name="actionSelectEntity">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -404,7 +407,7 @@
     <string>(De)-elect Contour</string>
    </property>
   </action>
-  <action name="actionSelect_Window">
+  <action name="actionSelectWindow">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -412,7 +415,7 @@
     <string>Select Window</string>
    </property>
   </action>
-  <action name="actionDeselect_Window">
+  <action name="actionDeselectWindow">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -420,7 +423,7 @@
     <string>Deselect Window</string>
    </property>
   </action>
-  <action name="actionInvert_Selection">
+  <action name="actionInvertSelection">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -428,7 +431,7 @@
     <string>Invert Selection</string>
    </property>
   </action>
-  <action name="actionSelect_Intersected_Entities">
+  <action name="actionSelectIntersectedEntities">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -436,7 +439,7 @@
     <string>Select Intersected Entities</string>
    </property>
   </action>
-  <action name="actionDeselect_Intersected_Entities">
+  <action name="actionDeselectIntersectedEntities">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -569,7 +572,7 @@
     <string>Hatch</string>
    </property>
   </action>
-  <action name="actionInsert_Image">
+  <action name="actionInsertImage">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -713,7 +716,7 @@
     <string>Delete</string>
    </property>
   </action>
-  <action name="actionDelete_Selected">
+  <action name="actionDeleteSelected">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -828,7 +831,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionCommand_Console">
+  <action name="actionCommandConsole">
    <property name="checkable">
     <bool>true</bool>
    </property>

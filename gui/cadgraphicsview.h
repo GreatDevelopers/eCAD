@@ -22,11 +22,15 @@ public:
     void drawText();
     void drawArc();
     void setNoMode();
+    void cursorMode();
     void showUndoStack();
 
     CadGraphicsScene *scene;
     QUndoStack *undoStack;
     QUndoView *undoView;
+
+    double scaleFactor;
+    bool isPanning;
 
 public slots:
     void selectWindow();
@@ -37,7 +41,6 @@ protected:
 private:
     QString curFileName;
     bool isUntitled;
-    double scaleFactor;
 };
 
 #endif // CADGRAPHICSVIEW_H
