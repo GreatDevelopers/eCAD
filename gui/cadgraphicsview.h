@@ -22,6 +22,7 @@ public:
     void drawText();
     void drawArc();
     void setNoMode();
+    void cursorMode();
     void showUndoStack();
 
     CadGraphicsScene *scene;
@@ -29,6 +30,7 @@ public:
     QUndoView *undoView;
 
     double scaleFactor;
+    bool isPanning;
 
 public slots:
     void selectWindow();

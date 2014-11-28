@@ -53,12 +53,13 @@ private slots:
     void showUndoStack();
     void toggleWidgets();
     void hideStatusBar(bool ok);
-    void on_actionSave_triggered();
-    void on_actionOpen_triggered();
+    void saveFile();
+    void openFile();
     void showGrid(bool);
-    void on_actionZoom_In_triggered();
-    void on_actionZoom_Out_triggered();
-    void on_actionInsert_Image_triggered();
+    void zoomIn();
+    void zoomOut();
+    void panning();
+    void insertImage();
     void selectAll();
     void deselectAll();
     void toggleMenuActions();

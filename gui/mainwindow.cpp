@@ -41,37 +41,39 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(filePrint()));
     connect(actionPrintPreview, SIGNAL(triggered()),
             this, SLOT(filePrintPreview()));
-    connect(actionZoom_In, SIGNAL(triggered()),
-            this, SLOT(on_actionZoom_In_triggered()));
-    connect(actionZoom_Out, SIGNAL(triggered()),
-            this, SLOT(on_actionZoom_Out_triggered()));
-    connect(actionInsert_Image,SIGNAL(triggered()),
-            this, SLOT(on_actionInsert_Image_triggered()));
+    connect(actionZoomIn, SIGNAL(triggered()),
+            this, SLOT(zoomIn()));
+    connect(actionZoomOut, SIGNAL(triggered()),
+            this, SLOT(zoomOut()));
+    connect(actionPanning, SIGNAL(triggered()),
+            this, SLOT(panning()));
+    connect(actionInsertImage,SIGNAL(triggered()),
+            this, SLOT(insertImage()));
     connect(actionAbout, SIGNAL(triggered()),
             this, SLOT(showAboutDialog()));
 
-    connect(actionCommand_Console, SIGNAL(triggered()),
+    connect(actionCommandConsole, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
     connect(actionScripting, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
 
-    connect(actionSelect_All, SIGNAL(triggered()),
+    connect(actionSelectAll, SIGNAL(triggered()),
             this, SLOT(selectAll()));
-    connect(actionDeselect_All, SIGNAL(triggered()),
+    connect(actionDeselectAll, SIGNAL(triggered()),
             this, SLOT(deselectAll()));
-    connect(actionSelect_Entity, SIGNAL(triggered()),
+    connect(actionSelectEntity, SIGNAL(triggered()),
             this, SLOT(selectOneEntity()));
-    connect(actionSelect_Window, SIGNAL(triggered()),
+    connect(actionSelectWindow, SIGNAL(triggered()),
             this, SLOT(selectWindow()));
-    connect(actionInvert_Selection, SIGNAL(triggered()),
+    connect(actionInvertSelection, SIGNAL(triggered()),
             this, SLOT(invertSelection()));
     connect(actionGrid, SIGNAL(toggled(bool)),
             this, SLOT(showGrid(bool)));
-    connect(actionStatus_Bar, SIGNAL(toggled(bool)),
+    connect(actionStatusBar, SIGNAL(toggled(bool)),
             this, SLOT(hideStatusBar(bool)));
 
-    actionStatus_Bar->setCheckable(true);
-    actionStatus_Bar->setChecked(true);
+    actionStatusBar->setCheckable(true);
+    actionStatusBar->setChecked(true);
 
     // toggle actions to false
     toggleActions(0);
@@ -87,17 +89,18 @@ void MainWindow::toggleActions(bool b)
     actionPrint->setEnabled(b);
     actionPrintPreview->setEnabled(b);
     actionGrid->setEnabled(b);
-    actionZoom_In->setEnabled(b);
-    actionZoom_Out->setEnabled(b);
+    actionZoomIn->setEnabled(b);
+    actionZoomOut->setEnabled(b);
     actionPoints->setEnabled(b);
     actionLine->setEnabled(b);
     actionCircle->setEnabled(b);
     actionEllipse->setEnabled(b);
     actionText->setEnabled(b);
-    actionInsert_Image->setEnabled(b);
-    actionCommand_Console->setEnabled(b);
+    actionInsertImage->setEnabled(b);
+    actionCommandConsole->setEnabled(b);
     actionScripting->setEnabled(b);
     actionArc->setEnabled(b);
+    actionPanning->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -146,11 +149,12 @@ void MainWindow::newFile()
     view->show();
     setActions();
     isEntitySelected = false;
+    showGrid(true);
 
     // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
             this, SLOT(toggleMenuActions()));
-    connect(actionDelete_Selected, SIGNAL(triggered()),
+    connect(actionDeleteSelected, SIGNAL(triggered()),
             view->scene, SLOT(deleteItems()));
 
     // creates a new command widget
@@ -173,7 +177,7 @@ void MainWindow::newFile()
 void MainWindow::toggleWidgets()
 {
     // toggles Command Widget
-    if (actionCommand_Console->isChecked())
+    if (actionCommandConsole->isChecked())
         commandWidget->show();
     else
         commandWidget->hide();
@@ -194,19 +198,19 @@ void MainWindow::toggleMenuActions()
     */
     if (view->scene->items().isEmpty())
     {
-        actionSelect_All->setEnabled(false);
-        actionDeselect_All->setEnabled(false);
-        actionSelect_Entity->setEnabled(false);
-        actionDelete_Selected->setEnabled(false);
-        actionSelect_Window->setEnabled(false);
+        actionSelectAll->setEnabled(false);
+        actionDeselectAll->setEnabled(false);
+        actionSelectEntity->setEnabled(false);
+        actionDeleteSelected->setEnabled(false);
+        actionSelectWindow->setEnabled(false);
     }
 
     else
     {
-        actionSelect_All->setEnabled(true);
-        actionSelect_Entity->setEnabled(true);
-        actionInvert_Selection->setEnabled(true);
-        actionSelect_Window->setEnabled(true);
+        actionSelectAll->setEnabled(true);
+        actionSelectEntity->setEnabled(true);
+        actionInvertSelection->setEnabled(true);
+        actionSelectWindow->setEnabled(true);
 
         foreach (QGraphicsItem *item, view->scene->items())
         {
@@ -217,16 +221,16 @@ void MainWindow::toggleMenuActions()
 
             if (isEntitySelected == true)
             {
-                actionDeselect_All->setEnabled(true);
-                actionSelect_Entity->setEnabled(false);
-                actionDelete_Selected->setEnabled(true);
+                actionDeselectAll->setEnabled(true);
+                actionSelectEntity->setEnabled(false);
+                actionDeleteSelected->setEnabled(true);
             }
 
             else
             {
-                actionDeselect_All->setEnabled(false);
-                actionSelect_Entity->setEnabled(true);
-                actionDelete_Selected->setEnabled(false);
+                actionDeselectAll->setEnabled(false);
+                actionSelectEntity->setEnabled(true);
+                actionDeleteSelected->setEnabled(false);
             }
         }
 
@@ -342,7 +346,7 @@ void MainWindow::deleteItems()
     view->scene->deleteItems();
 }
 
-void MainWindow::on_actionOpen_triggered()
+void MainWindow::openFile()
 {
     // open file dialog box
     QString filename = QFileDialog::getOpenFileName(this,
@@ -408,7 +412,7 @@ void MainWindow::on_actionOpen_triggered()
     }
 }
 
-void MainWindow::on_actionSave_triggered()
+void MainWindow::saveFile()
 {
     // save file dialog box
     QString filename = QFileDialog::getSaveFileName(this,
@@ -457,19 +461,25 @@ void MainWindow::showGrid(bool b)
     view->scene->update(view->scene->sceneRect());
 }
 
-void MainWindow::on_actionZoom_In_triggered()
+void MainWindow::zoomIn()
 {
     // Zoom in
     view->scale(view->scaleFactor, view->scaleFactor);
 }
 
-void MainWindow::on_actionZoom_Out_triggered()
+void MainWindow::zoomOut()
 {
     // Zoom out
     view->scale(1.0 / view->scaleFactor, 1.0 / view->scaleFactor);
 }
 
-void MainWindow::on_actionInsert_Image_triggered()
+void MainWindow::panning()
+{
+    view->setNoMode();
+    view->isPanning = true;
+}
+
+void MainWindow::insertImage()
 {
     // insert image dialog
     QString imagePath;

@@ -5,6 +5,7 @@ CadGraphicsView::CadGraphicsView()
     scaleFactor = 1.15;
     setAttribute(Qt::WA_DeleteOnClose);
     isUntitled = true;
+    isPanning = false;
     setMouseTracking(true);
 }
 
@@ -46,6 +47,7 @@ void CadGraphicsView::setNoMode()
     scene->setMode(CadGraphicsScene::NoMode);
     viewport()->setCursor(Qt::ArrowCursor);
     connect(scene, SIGNAL(setSelectionSignal()), this, SLOT(selectWindow()));
+    isPanning = false;
 }
 
 void CadGraphicsView::drawPoint()
@@ -54,6 +56,7 @@ void CadGraphicsView::drawPoint()
     scene->setMode(CadGraphicsScene::PointMode);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
 }
 
 void CadGraphicsView::drawLine()
@@ -62,6 +65,7 @@ void CadGraphicsView::drawLine()
     scene->setMode(CadGraphicsScene::LineMode);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
 }
 
 void CadGraphicsView::drawCircle()
@@ -70,6 +74,7 @@ void CadGraphicsView::drawCircle()
     scene->setMode(CadGraphicsScene::CircleMode);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
 }
 
 void CadGraphicsView::drawEllipse()
@@ -86,6 +91,7 @@ void CadGraphicsView::drawText()
     scene->setMode(CadGraphicsScene::TextMode);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
 }
 
 void CadGraphicsView::drawArc()
@@ -94,6 +100,7 @@ void CadGraphicsView::drawArc()
     scene->setMode(CadGraphicsScene::ArcMode);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
 }
 
 void CadGraphicsView::showUndoStack()
@@ -110,17 +117,24 @@ void CadGraphicsView::showUndoStack()
 
 void CadGraphicsView::selectWindow()
 {
-    // entity is selected if it's completely inside the selection area
+    /**
+     * while dragging from left to right entities will be selected if they lie
+     * completely inside the selection area whereas while dragging from right
+     * to left all those entities will be selected whose bounding rect
+     * intersects with the selection area.
+     */
     if (!scene->isInvertedSelection)
-    {
         setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
-        setDragMode(QGraphicsView::RubberBandDrag);
-    }
-
-    // entity is selected even if a part of it lies inside the selection area
     else
-    {
         setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
+
+    cursorMode();
+}
+
+void CadGraphicsView::cursorMode()
+{
+    if (!isPanning)
         setDragMode(QGraphicsView::RubberBandDrag);
-    }
+    else
+        setDragMode(QGraphicsView::ScrollHandDrag);
 }
