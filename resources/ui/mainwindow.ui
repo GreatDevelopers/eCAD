@@ -118,11 +118,7 @@
     <addaction name="actionArc"/>
     <addaction name="actionCircle"/>
     <addaction name="actionEllipse"/>
-    <addaction name="actionSpline"/>
-    <addaction name="actionPolyline"/>
-    <addaction name="actionMText"/>
     <addaction name="actionText"/>
-    <addaction name="actionHatch"/>
     <addaction name="actionInsert_Image"/>
    </widget>
    <widget class="QMenu" name="menuModify">
@@ -173,7 +169,7 @@
    <addaction name="actionCircle"/>
    <addaction name="actionEllipse"/>
    <addaction name="actionArc"/>
-   <addaction name="actionMText"/>
+   <addaction name="actionText"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -547,7 +543,7 @@
     <string>Polyline</string>
    </property>
   </action>
-  <action name="actionMText">
+  <action name="actionText">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -556,18 +552,13 @@
      <normaloff>:/icons/images/menutext.png</normaloff>:/icons/images/menutext.png</iconset>
    </property>
    <property name="text">
-    <string>MText</string>
+    <string>Text</string>
+   </property>
+   <property name="toolTip">
+    <string>Text</string>
    </property>
    <property name="shortcut">
     <string>T</string>
-   </property>
-  </action>
-  <action name="actionText">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Text</string>
    </property>
   </action>
   <action name="actionHatch">

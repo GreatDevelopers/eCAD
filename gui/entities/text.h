@@ -1,5 +1,5 @@
-#ifndef MTEXT_H
-#define MTEXT_H
+#ifndef TEXT_H
+#define TEXT_H
 
 #include <QGraphicsTextItem>
 #include <QPen>
@@ -11,19 +11,21 @@ class QGraphicsScene;
 class QGraphicsSceneMouseEvent;
 QT_END_NAMESPACE
 
-class mText : public QGraphicsTextItem
+class Text : public QGraphicsTextItem
 {
     Q_OBJECT
 
 public:
-    mText( int, QGraphicsItem *parent=0 );
+    Text(int, QPointF, QString);
     enum { Type = UserType + 5 };
     int type() const;
 
     int id;
+    QPointF position;
+    QString str;
 
 signals:
-    void lostFocus(mText *item);
+    void lostFocus(Text *item);
     void selectedChange(QGraphicsItem *item);
 
 protected:
@@ -32,4 +34,4 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 };
 
-#endif // MTEXT_H
+#endif // TEXT_H

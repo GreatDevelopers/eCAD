@@ -43,6 +43,7 @@ private:
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
+    Text *textItem;
 
     int id;
     bool isNew;
@@ -63,6 +64,7 @@ public slots:
     void line(qreal, qreal, qreal, qreal);
     void circle(qreal, qreal, qreal);
     void ellipse(qreal, qreal, qreal, qreal);
+    void text(qreal, qreal, QString);
 };
 
 #endif // CADSCRIPTWIDGET_H

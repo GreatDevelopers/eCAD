@@ -44,7 +44,7 @@ void CadGraphicsScene::setMode(Mode mode)
         areItemsSelectable(false);
 }
 
-void CadGraphicsScene::editorLostFocus(mText *item)
+void CadGraphicsScene::editorLostFocus(Text *item)
 {
     //sets the text cursor
     QTextCursor cursor = item->textCursor();
@@ -112,9 +112,9 @@ void CadGraphicsScene::selectItems()
                                                   itemPtr->scenePos()));
             }
 
-            else if (item->type() == mText::Type)
+            else if (item->type() == Text::Type)
             {
-                mText *itemPtr = dynamic_cast<mText *>(item);
+                Text *itemPtr = dynamic_cast<Text *>(item);
                 selectedEntities.append(qMakePair(itemPtr,
                                                   itemPtr->scenePos()));
             }
@@ -212,16 +212,16 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
-    else if (item->type() == mText::Type)
+    else if (item->type() == Text::Type)
     {
-        mText *itemPtr = dynamic_cast<mText *>(item);
-        itemPtr->setPos(startP);
-        itemPtr->setPlainText(str);
+        Text *itemPtr = dynamic_cast<Text *>(item);
+        itemPtr->setPos(itemPtr->position);
+        itemPtr->setPlainText(itemPtr->str);
         itemList.append(itemPtr);
-        textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+        itemPtr->setTextInteractionFlags(Qt::TextEditorInteraction);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
-        connect(itemPtr, SIGNAL(lostFocus(mText *)),
-                this, SLOT(editorLostFocus(mText *)));
+        connect(itemPtr, SIGNAL(lostFocus(Text *)),
+                this, SLOT(editorLostFocus(Text *)));
         connect(itemPtr, SIGNAL(selectedChange(QGraphicsItem *)),
                 this, SIGNAL(itemSelected(QGraphicsItem *)));
     }
@@ -330,7 +330,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
         case TextMode:
             startP = mouseEvent->scenePos();
-            textItem = new mText(++id);
+            textItem = new Text(++id, startP, str);
             drawEntity(textItem);
             break;
 
@@ -441,9 +441,9 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                                                 itemPtr->scenePos()));
         }
 
-        else if (item.first->type() == mText::Type)
+        else if (item.first->type() == Text::Type)
         {
-            mText *itemPtr = dynamic_cast<mText *>(item.first);
+            Text *itemPtr = dynamic_cast<Text *>(item.first);
             mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                 itemPtr->scenePos()));
         }
@@ -546,9 +546,9 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeEndElement();  //end of Ellipse Item
             }
 
-            else if (item->type() == mText::Type)
+            else if (item->type() == Text::Type)
             {
-                mText *itemPtr = dynamic_cast<mText *>(item);
+                Text *itemPtr = dynamic_cast<Text *>(item);
                 stream->writeStartElement("Text");
                 stream->writeAttribute("id", QString::number(itemPtr->id));
                 stream->writeAttribute("x", QString::number(itemPtr->x()));
@@ -680,7 +680,7 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                     str = attribute.value().toString();
             }
 
-            textItem = new mText(id);
+            textItem = new Text(id, startP, str);
             drawEntity(textItem);
         }
 

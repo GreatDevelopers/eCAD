@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawCircle()));
     connect(actionEllipse, SIGNAL(triggered()),
             this, SLOT(drawEllipse()));
-    connect(actionMText, SIGNAL(triggered()),
+    connect(actionText, SIGNAL(triggered()),
             this, SLOT(drawText()));
     connect(actionArc, SIGNAL(triggered()),
             this, SLOT(drawArc()));
@@ -90,7 +90,7 @@ void MainWindow::toggleActions(bool b)
     actionLine->setEnabled(b);
     actionCircle->setEnabled(b);
     actionEllipse->setEnabled(b);
-    actionMText->setEnabled(b);
+    actionText->setEnabled(b);
     actionInsert_Image->setEnabled(b);
     actionCommand_Console->setEnabled(b);
     actionScripting->setEnabled(b);

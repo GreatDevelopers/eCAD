@@ -219,13 +219,20 @@ void CadScriptWidget::line(qreal x1, qreal y1, qreal x2, qreal y2)
 void CadScriptWidget::circle(qreal x, qreal y, qreal r)
 {
     // creates a circle entity in the scene
-    circleItem = new Circle(++id, QPointF(x,y), r);;
+    circleItem = new Circle(++id, QPointF(x,y), r);
     currentScene->drawEntity(circleItem);
 }
 
 void CadScriptWidget::ellipse(qreal x, qreal y, qreal minR, qreal majR)
 {
     // creates an ellipse entity in the scene
-    ellipseItem = new Ellipse(++id, QPointF(x,y), minR, majR);;
+    ellipseItem = new Ellipse(++id, QPointF(x,y), minR, majR);
     currentScene->drawEntity(ellipseItem);
+}
+
+void CadScriptWidget::text(qreal x, qreal y, QString s)
+{
+    // creates a text entity in the scene
+    textItem = new Text(++id, QPointF(x,y), s);
+    currentScene->drawEntity(textItem);
 }

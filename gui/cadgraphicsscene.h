@@ -40,7 +40,7 @@ public slots:
     void selectDeselectAllItems(bool b);
     void invertSelection();
     void deleteItems();
-    void editorLostFocus(mText *item);
+    void editorLostFocus(Text *item);
     void cut(getEntity *);
     void copy(getEntity *);
     void paste(const QPointF &pos);
@@ -73,7 +73,7 @@ private:
     Line *lineItem;
     Circle *circleItem;
     Ellipse *ellipseItem;
-    mText *textItem;
+    Text *textItem;
     Arc *arcItem;
     QUndoStack *mUndoStack;
     QMenu *contextMenu;
