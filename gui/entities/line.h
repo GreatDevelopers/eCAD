@@ -2,13 +2,16 @@
 #define LINE_H
 
 #include <QPainter>
-#include <QGraphicsLineItem>
+#include <QGraphicsItem>
 
-class Line : public QObject, public QGraphicsLineItem
+#include "getEntity.h"
+
+class Line : public getEntity
 {
     Q_OBJECT
 
 public:
+    Line(QObject *parent = 0) : getEntity(parent) {}
     Line(int, QPointF, QPointF);
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
@@ -16,6 +19,7 @@ public:
                        QWidget *widget);
     enum { Type = UserType + 2 };
     int type() const;
+    getEntity *clone(int);
 
     int id;
     QPointF startP, endP;
