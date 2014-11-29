@@ -68,6 +68,7 @@ private:
     QString str;
     QPen paintpen, linePen;
     QPointF contextPosition;
+    int contextItemId;
 
     QList<QGraphicsItem *> itemList;
     Point *pointItem;

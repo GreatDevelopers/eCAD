@@ -109,9 +109,10 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
 }
 
-getEntity *Ellipse::clone()
+getEntity *Ellipse::clone(int i)
 {
     Ellipse *e = new Ellipse;
+    e->id = i;
     e->p1.x();
     e->p1.y();
     e->p2.x();

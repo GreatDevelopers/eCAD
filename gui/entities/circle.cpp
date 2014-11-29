@@ -76,9 +76,10 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
 }
 
-getEntity *Circle::clone()
+getEntity *Circle::clone(int i)
 {
     Circle *c = new Circle;
+    c->id = i;
     c->centerP.x();
     c->centerP.y();
     c->radius = radius;

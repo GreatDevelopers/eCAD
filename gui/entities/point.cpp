@@ -41,9 +41,10 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawEllipse(boundingRect());
 }
 
-getEntity *Point::clone()
+getEntity *Point::clone(int i)
 {
     Point *p = new Point;
+    p->id = i;
     p->scenePos();
     return p;
 }

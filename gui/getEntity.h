@@ -9,10 +9,12 @@ public:
    getEntity(QObject *parent = 0) : QObject(parent) {}
    virtual ~getEntity() {}
 
-   virtual getEntity *clone()
+   virtual getEntity *clone(int i)
    {
        return 0;
    }
+
+   int id;
 };
 
 #endif // GENTITY_H

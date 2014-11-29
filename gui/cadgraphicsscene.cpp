@@ -399,6 +399,42 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 cutAction->setEnabled(true);
                 copyAction->setEnabled(true);
                 pasteAction->setEnabled(false);
+
+                if (contextItem->type() == Point::Type)
+                {
+                    Point *itemPtr = dynamic_cast<Point *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Line::Type)
+                {
+                    Line *itemPtr = dynamic_cast<Line *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Circle::Type)
+                {
+                    Circle *itemPtr = dynamic_cast<Circle *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Ellipse::Type)
+                {
+                    Ellipse *itemPtr = dynamic_cast<Ellipse *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Text::Type)
+                {
+                    Text *itemPtr = dynamic_cast<Text *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Arc::Type)
+                {
+                    Arc *itemPtr = dynamic_cast<Arc *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
             }
         }
     }
@@ -716,12 +752,12 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
 void CadGraphicsScene::cut(getEntity *obj)
 {
     removeItem(obj);
-    clipboardStack::instance()->push(obj->clone());
+    clipboardStack::instance()->push(obj->clone(contextItemId));
 }
 
 void CadGraphicsScene::copy(getEntity *obj)
 {
-    clipboardStack::instance()->push(obj->clone());
+    clipboardStack::instance()->push(obj->clone(++id));
 }
 
 void CadGraphicsScene::paste(const QPointF &pos)
@@ -734,6 +770,7 @@ void CadGraphicsScene::paste(const QPointF &pos)
         pasteEntity->setFlag(QGraphicsItem::ItemIsSelectable);
         pasteEntity->setFlag(QGraphicsItem::ItemIsMovable);
         mUndoStack->push(new CadCommandAdd(this, pasteEntity));
+        itemList.append(pasteEntity);
     }
 }
 

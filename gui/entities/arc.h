@@ -21,7 +21,7 @@ public:
                QWidget *widget);
     enum { Type = UserType + 6 };
     int type() const;
-    getEntity *clone();
+    getEntity *clone(int);
 
     int id;
     QPointF p1, p2, p3, center;

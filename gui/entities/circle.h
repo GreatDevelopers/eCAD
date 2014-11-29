@@ -22,7 +22,7 @@ public:
                        QWidget *widget);
     enum { Type = UserType + 3 };
     int type() const;
-    getEntity *clone();
+    getEntity *clone(int);
 
     int id;
     QPointF centerP, endP;
