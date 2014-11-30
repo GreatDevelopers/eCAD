@@ -377,7 +377,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             contextItem = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
             contextPosition = mouseEvent->scenePos();
 
-            if (!contextItem)
+            if (!contextItem || !contextItem->isSelected())
             {
                 cutAction->setEnabled(false);
                 copyAction->setEnabled(false);
@@ -451,49 +451,54 @@ void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEve
 
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    // if any items moved, then create undo commands
+    /* if any item's moved and its position changes, only then create undo
+     * commands
+     */
     foreach (entityPos item, selectedEntities)
     {
-        if (item.first->type() == Point::Type)
+        if (item.first->scenePos() != item.second)
         {
-            Point *itemPtr = dynamic_cast<Point *>(item.first);
-            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
-                                                itemPtr->scenePos()));
-        }
+            if (item.first->type() == Point::Type)
+            {
+                Point *itemPtr = dynamic_cast<Point *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
 
-        else if (item.first->type() == Line::Type)
-        {
-            Line *itemPtr = dynamic_cast<Line *>(item.first);
-            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
-                                                itemPtr->scenePos()));
-        }
+            else if (item.first->type() == Line::Type)
+            {
+                Line *itemPtr = dynamic_cast<Line *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
 
-        else if (item.first->type() == Circle::Type)
-        {
-            Circle *itemPtr = dynamic_cast<Circle *>(item.first);
-            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
-                                                itemPtr->scenePos()));
-        }
+            else if (item.first->type() == Circle::Type)
+            {
+                Circle *itemPtr = dynamic_cast<Circle *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
 
-        else if (item.first->type() == Ellipse::Type)
-        {
-            Ellipse *itemPtr = dynamic_cast<Ellipse *>(item.first);
-            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
-                                                itemPtr->scenePos()));
-        }
+            else if (item.first->type() == Ellipse::Type)
+            {
+                Ellipse *itemPtr = dynamic_cast<Ellipse *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
 
-        else if (item.first->type() == Text::Type)
-        {
-            Text *itemPtr = dynamic_cast<Text *>(item.first);
-            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
-                                                itemPtr->scenePos()));
-        }
+            else if (item.first->type() == Text::Type)
+            {
+                Text *itemPtr = dynamic_cast<Text *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
 
-        else if (item.first->type() == Arc::Type)
-        {
-            Arc *itemPtr = dynamic_cast<Arc *>(item.first);
-            mUndoStack->push(new CadCommandMove(itemPtr, item.second,
-                                                itemPtr->scenePos()));
+            else if (item.first->type() == Arc::Type)
+            {
+                Arc *itemPtr = dynamic_cast<Arc *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
         }
     }
 
