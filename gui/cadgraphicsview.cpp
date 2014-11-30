@@ -138,3 +138,20 @@ void CadGraphicsView::cursorMode()
     else
         setDragMode(QGraphicsView::ScrollHandDrag);
 }
+
+void CadGraphicsView::editCut()
+{
+    scene->editCut();
+}
+
+void CadGraphicsView::editCopy()
+{
+    scene->editCopy();
+}
+
+void CadGraphicsView::editPaste()
+{
+    scene->editPaste();
+}
+
+
