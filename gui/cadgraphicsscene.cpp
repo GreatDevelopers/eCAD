@@ -19,7 +19,7 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
 
     // connects context menu items to action slots
     connect(contextMenu, SIGNAL(triggered(QAction *)),
-            this, SLOT(menuAction(QAction *)));
+            this, SLOT(contextMenuAction(QAction*)));
     // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
 }
@@ -820,7 +820,7 @@ void CadGraphicsScene::paste(const QPointF &pos)
     setMode(NoMode);
 }
 
-void CadGraphicsScene::menuAction(QAction *action)
+void CadGraphicsScene::contextMenuAction(QAction *action)
 {
     if (action == cutAction)
     {
@@ -837,3 +837,37 @@ void CadGraphicsScene::menuAction(QAction *action)
         paste(contextPosition);
     }
 }
+
+void CadGraphicsScene::editCut()
+{
+    //cuts the selected items
+    foreach (QGraphicsItem *item, itemList)
+    {
+        if (item->isSelected())
+        {
+           cut(static_cast<getEntity *>(item));
+        }
+    }
+}
+
+void CadGraphicsScene::editCopy()
+{
+    //copies the selected items
+    foreach (QGraphicsItem *item, itemList)
+    {
+        if (item->isSelected())
+        {
+           copy(static_cast<getEntity *>(item));
+        }
+    }
+}
+
+void CadGraphicsScene::editPaste()
+{
+    //pastes the cut/copied items
+    foreach (entityPos item, selectedEntities)
+    {
+        paste(startP);
+    }
+}
+
