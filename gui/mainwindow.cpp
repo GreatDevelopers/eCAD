@@ -111,6 +111,9 @@ void MainWindow::toggleActions(bool b)
     actionScripting->setEnabled(b);
     actionArc->setEnabled(b);
     actionPanning->setEnabled(b);
+    actionCut->setEnabled(b);
+    actionCopy->setEnabled(b);
+    actionPaste->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -213,6 +216,16 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(false);
         actionDeleteSelected->setEnabled(false);
         actionSelectWindow->setEnabled(false);
+        actionCut->setEnabled(false);
+        actionCopy->setEnabled(false);
+        if (clipboardStack::instance()->isEmpty())
+        {
+            actionPaste->setEnabled(false);
+        }
+        else
+        {
+            actionPaste->setEnabled(true);
+        }
     }
 
     else
@@ -234,6 +247,9 @@ void MainWindow::toggleMenuActions()
                 actionDeselectAll->setEnabled(true);
                 actionSelectEntity->setEnabled(false);
                 actionDeleteSelected->setEnabled(true);
+                actionCut->setEnabled(true);
+                actionCopy->setEnabled(true);
+                actionPaste->setEnabled(false);
             }
 
             else
@@ -241,6 +257,16 @@ void MainWindow::toggleMenuActions()
                 actionDeselectAll->setEnabled(false);
                 actionSelectEntity->setEnabled(true);
                 actionDeleteSelected->setEnabled(false);
+                actionCut->setEnabled(false);
+                actionCopy->setEnabled(false);
+                if (clipboardStack::instance()->isEmpty())
+                {
+                    actionPaste->setEnabled(false);
+                }
+                else
+                {
+                    actionPaste->setEnabled(true);
+                }
             }
         }
 
