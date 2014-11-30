@@ -119,6 +119,7 @@ getEntity *Ellipse::clone(int i)
     e->p2.y();
     e->p3.x();
     e->p3.y();
+    e->theta = theta;
     e->minRadius = minRadius;
     e->majRadius = majRadius;
     return e;
