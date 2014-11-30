@@ -45,7 +45,10 @@ public slots:
     void cut(getEntity *);
     void copy(getEntity *);
     void paste(const QPointF &pos);
-    void menuAction(QAction *);
+    void contextMenuAction(QAction *);
+    void editCut();
+    void editCopy();
+    void editPaste();
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEvent);

@@ -24,6 +24,9 @@ public:
     void setNoMode();
     void cursorMode();
     void showUndoStack();
+    void editCut();
+    void editCopy();
+    void editPaste();
 
     CadGraphicsScene *scene;
     QUndoStack *undoStack;

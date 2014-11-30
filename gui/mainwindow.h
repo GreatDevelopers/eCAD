@@ -55,6 +55,9 @@ private slots:
     void hideStatusBar(bool ok);
     void saveFile();
     void openFile();
+    void editCut();
+    void editCopy();
+    void editPaste();
     void showGrid(bool);
     void zoomIn();
     void zoomOut();

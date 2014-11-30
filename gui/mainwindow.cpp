@@ -55,6 +55,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(insertImage()));
     connect(actionAbout, SIGNAL(triggered()),
             this, SLOT(showAboutDialog()));
+    connect(actionCut, SIGNAL(triggered()),
+            this, SLOT(editCut()));
+    connect(actionCopy, SIGNAL(triggered()),
+            this, SLOT(editCopy()));
+    connect(actionPaste, SIGNAL(triggered()),
+            this, SLOT(editPaste()));
 
     connect(actionCommandConsole, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
@@ -342,6 +348,21 @@ void MainWindow::drawArc()
 {
     // calls the drawArc function of graphicsView
     view->drawArc();
+}
+
+void MainWindow::editCut()
+{
+    view->editCut();
+}
+
+void MainWindow::editCopy()
+{
+    view->editCopy();
+}
+
+void MainWindow::editPaste()
+{
+    view->editPaste();
 }
 
 void MainWindow::deleteItems()
