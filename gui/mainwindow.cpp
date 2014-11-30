@@ -11,6 +11,9 @@
 #include <QXmlStreamWriter>
 #include <QShortcut>
 
+#include "clipboardstack.h"
+#include "getEntity.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setupUi(this);
@@ -55,6 +58,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(insertImage()));
     connect(actionAbout, SIGNAL(triggered()),
             this, SLOT(showAboutDialog()));
+    connect(actionCut, SIGNAL(triggered()),
+            this, SLOT(editCut()));
+    connect(actionCopy, SIGNAL(triggered()),
+            this, SLOT(editCopy()));
+    connect(actionPaste, SIGNAL(triggered()),
+            this, SLOT(editPaste()));
 
     connect(actionCommandConsole, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
@@ -105,6 +114,9 @@ void MainWindow::toggleActions(bool b)
     actionScripting->setEnabled(b);
     actionArc->setEnabled(b);
     actionPanning->setEnabled(b);
+    actionCut->setEnabled(b);
+    actionCopy->setEnabled(b);
+    actionPaste->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -207,6 +219,16 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(false);
         actionDeleteSelected->setEnabled(false);
         actionSelectWindow->setEnabled(false);
+        actionCut->setEnabled(false);
+        actionCopy->setEnabled(false);
+        if (clipboardStack::instance()->isEmpty())
+        {
+            actionPaste->setEnabled(false);
+        }
+        else
+        {
+            actionPaste->setEnabled(true);
+        }
     }
 
     else
@@ -228,6 +250,9 @@ void MainWindow::toggleMenuActions()
                 actionDeselectAll->setEnabled(true);
                 actionSelectEntity->setEnabled(false);
                 actionDeleteSelected->setEnabled(true);
+                actionCut->setEnabled(true);
+                actionCopy->setEnabled(true);
+                actionPaste->setEnabled(false);
             }
 
             else
@@ -235,6 +260,16 @@ void MainWindow::toggleMenuActions()
                 actionDeselectAll->setEnabled(false);
                 actionSelectEntity->setEnabled(true);
                 actionDeleteSelected->setEnabled(false);
+                actionCut->setEnabled(false);
+                actionCopy->setEnabled(false);
+                if (clipboardStack::instance()->isEmpty())
+                {
+                    actionPaste->setEnabled(false);
+                }
+                else
+                {
+                    actionPaste->setEnabled(true);
+                }
             }
         }
 
@@ -557,4 +592,19 @@ void MainWindow::showAboutDialog()
     aboutUi.setupUi(aboutDialog);
     connect(aboutUi.Close, SIGNAL(pressed()), aboutDialog, SLOT(close()));
     aboutDialog->show();
+}
+
+void MainWindow::editCut()
+{
+    view->editCut();
+}
+
+void MainWindow::editCopy()
+{
+    view->editCopy();
+}
+
+void MainWindow::editPaste()
+{
+    view->editPaste();
 }
