@@ -195,8 +195,6 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     else if (item->type() == Line::Type)
     {
         Line *itemPtr = dynamic_cast<Line *>(item);
-        itemPtr->setLine(itemPtr->startP.x(), itemPtr->startP.y(),
-                         itemPtr->endP.x(), itemPtr->endP.y());
         itemList.append(itemPtr);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
@@ -371,6 +369,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         }
     }
 
+    // shows cut/copy/paste actions in context menu
     else
     {
         if (mouseEvent->button() == Qt::RightButton)
@@ -399,6 +398,45 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 cutAction->setEnabled(true);
                 copyAction->setEnabled(true);
                 pasteAction->setEnabled(false);
+
+                // ids of items are passed to cut/copy functions
+                if (contextItem->type() == Point::Type)
+                {
+                    Point *itemPtr = dynamic_cast<Point *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Line::Type)
+                {
+                    Line *itemPtr = dynamic_cast<Line *>(contextItem);
+                    contextItemId = itemPtr->id;
+                    lineStartPoint = itemPtr->startP;
+                    lineEndPoint = itemPtr->endP;
+                }
+
+                else if (contextItem->type() == Circle::Type)
+                {
+                    Circle *itemPtr = dynamic_cast<Circle *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Ellipse::Type)
+                {
+                    Ellipse *itemPtr = dynamic_cast<Ellipse *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Text::Type)
+                {
+                    Text *itemPtr = dynamic_cast<Text *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
+
+                else if (contextItem->type() == Arc::Type)
+                {
+                    Arc *itemPtr = dynamic_cast<Arc *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
             }
         }
     }
@@ -715,26 +753,66 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
 
 void CadGraphicsScene::cut(getEntity *obj)
 {
+    // id of item pasted is kept same as that of the item being cut
     removeItem(obj);
-    clipboardStack::instance()->push(obj->clone());
+    clipboardStack::instance()->push(obj->clone(contextItemId));
 }
 
 void CadGraphicsScene::copy(getEntity *obj)
 {
-    clipboardStack::instance()->push(obj->clone());
+    // id of item pasted is one more than total number of items in the scene
+    clipboardStack::instance()->push(obj->clone(++id));
 }
 
 void CadGraphicsScene::paste(const QPointF &pos)
 {
+    // gets the items cut/copy from clipboardStack to paste
     getEntity *pasteEntity = clipboardStack::instance()->pop();
 
-    if (pasteEntity)
+    if (pasteEntity->type() == Point::Type)
     {
-        pasteEntity->setPos(pos);
-        pasteEntity->setFlag(QGraphicsItem::ItemIsSelectable);
-        pasteEntity->setFlag(QGraphicsItem::ItemIsMovable);
-        mUndoStack->push(new CadCommandAdd(this, pasteEntity));
+        Point *itemPtr = dynamic_cast<Point *>(pasteEntity);
+        itemPtr->position = pos;
+        drawEntity(itemPtr);
     }
+
+    if (pasteEntity->type() == Line::Type)
+    {
+        Line *itemPtr = dynamic_cast<Line *>(pasteEntity);
+        itemPtr->startP = pos;
+
+        /* calculates difference between startP of line being cut/copy and line
+         * being pasted for proper pasting of line
+         */
+        differenceX = itemPtr->startP.x() - lineStartPoint.x();
+        differenceY = itemPtr->startP.y() - lineStartPoint.y();
+        itemPtr->endP = QPointF(lineEndPoint.x() + differenceX,
+                                lineEndPoint.y() + differenceY);
+        drawEntity(itemPtr);
+    }
+
+    if (pasteEntity->type() == Circle::Type)
+    {
+        Circle *itemPtr = dynamic_cast<Circle *>(pasteEntity);
+        itemPtr->centerP = pos;
+        drawEntity(itemPtr);
+    }
+
+    if (pasteEntity->type() == Ellipse::Type)
+    {
+        Ellipse *itemPtr = dynamic_cast<Ellipse *>(pasteEntity);
+        itemPtr->p1 = pos;
+        drawEntity(itemPtr);
+    }
+
+    if (pasteEntity->type() == Text::Type)
+    {
+        Text *itemPtr = dynamic_cast<Text *>(pasteEntity);
+        itemPtr->position = pos;
+        drawEntity(itemPtr);
+    }
+
+    setMode(NoMode);
 }
 
 void CadGraphicsScene::menuAction(QAction *action)

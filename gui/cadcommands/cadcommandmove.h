@@ -32,10 +32,10 @@ public:
         {
             Line *lineItem = dynamic_cast<Line *>(cadItem);
             setText(QString("Line moved to p1((%1,%2), p2(%3,%4))")
-                    .arg(lineItem->line().p1().x() + nPos.x())
-                    .arg(lineItem->line().p1().y() + nPos.y())
-                    .arg(lineItem->line().p2().x() + nPos.x())
-                    .arg(lineItem->line().p2().y() + nPos.y()));
+                    .arg(lineItem->startP.x() + nPos.x())
+                    .arg(lineItem->startP.y() + nPos.y())
+                    .arg(lineItem->endP.x() + nPos.x())
+                    .arg(lineItem->endP.y() + nPos.y()));
         }
 
         if (cadItem->type() == Circle::Type)

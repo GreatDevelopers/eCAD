@@ -33,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
+    connect(actionOpen, SIGNAL(triggered()),
+            this, SLOT(openFile()));
+    connect(actionSave, SIGNAL(triggered()),
+            this, SLOT(saveFile()));
     connect(actionClose, SIGNAL(triggered()),
             this, SLOT(closeActiveWindow()));
     connect(actionQuit, SIGNAL(triggered()),
@@ -535,16 +539,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->ignore();
 
     if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
-                                                 "Are you sure you want to exit?",
-                                                 QMessageBox::Yes|QMessageBox::No))
-    {
+                                                  "Are you sure you want to exit?",
+                                                  QMessageBox::Yes|QMessageBox::No))
         event->accept();
-    }
 
     if (aboutDialog)
-    {
         aboutDialog->close();
-    }
+
+    if (view->undoView)
+        view->undoView->close();
 }
 
 void MainWindow::showAboutDialog()

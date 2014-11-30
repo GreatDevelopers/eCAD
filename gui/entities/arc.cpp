@@ -118,9 +118,10 @@ void Arc::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawPath(path);
 }
 
-getEntity *Arc::clone()
+getEntity *Arc::clone(int i)
 {
     Arc *a = new Arc;
+    a->id = i;
     a->p1 = p1;
     a->p2 = p2;
     a->p3 = p3;

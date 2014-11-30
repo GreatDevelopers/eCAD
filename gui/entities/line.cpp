@@ -21,10 +21,8 @@ QRectF Line::boundingRect() const
     qreal extra = 1.0;
 
     // bounding rectangle for line
-    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
-                                      line().p2().y() - line().p1().y()))
-            .normalized()
-            .adjusted(-extra, -extra, extra, extra);
+    return QRectF(startP, QSizeF(endP.x() - startP.x(), endP.y() - startP.y()))
+            .normalized().adjusted(-extra, -extra, extra, extra);
 }
 
 void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -60,4 +58,13 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawEllipse(endP, 2, 2);
         painter->drawLine(startP, endP);
     }
+}
+
+getEntity *Line::clone(int i)
+{
+    Line *l = new Line;
+    l->id = i;
+    l->startP;
+    l->endP;
+    return l;
 }
