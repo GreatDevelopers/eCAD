@@ -168,7 +168,7 @@
    <addaction name="actionArc"/>
    <addaction name="actionText"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="mainStatusBar"/>
   <action name="actionNew">
    <property name="enabled">
     <bool>true</bool>
