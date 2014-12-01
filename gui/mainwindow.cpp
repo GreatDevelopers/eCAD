@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setupUi(this);
     setWindowTitle(tr("eCAD"));
     setCentralWidget(mdiArea);
-    Ui_MainWindow::statusBar->showMessage("Welcome to eCAD");
+    mainStatusBar->showMessage("Welcome to eCAD");
 
     connect(actionPoints, SIGNAL(triggered()),
             this, SLOT(drawPoint()));
@@ -134,7 +134,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         QString showMessage = QString("Mouse move (%1,%2)").
                 arg(mouseEvent->scenePos().x()).
                 arg(mouseEvent->scenePos().y());
-        Ui_MainWindow::statusBar->showMessage(showMessage);
+        mainStatusBar->showMessage(showMessage);
     }
 }
 
@@ -293,7 +293,7 @@ CadGraphicsView *MainWindow::createMdiView()
 void MainWindow::hideStatusBar(bool ok)
 {
     // hides/show the status bar on toggling of button
-    Ui_MainWindow::statusBar->setVisible(ok);
+    mainStatusBar->setVisible(ok);
 }
 
 void MainWindow::showUndoStack()
@@ -358,7 +358,6 @@ void MainWindow::openFile()
                                                   QString(),
                                                   tr("file Name(*.xml)"));
     newFile();
-    QMainWindow::statusBar()->showMessage("File opened successfully");
 
     if (!filename.isEmpty())
     {
@@ -373,8 +372,7 @@ void MainWindow::openFile()
         else
         {
             QXmlStreamReader  stream(&file);
-            CadGraphicsScene *newScene = new CadGraphicsScene(this,
-                                                              view->undoStack);
+
             while (!stream.atEnd())
             {
                 stream.readNext();
@@ -382,7 +380,7 @@ void MainWindow::openFile()
                 if (stream.isStartElement())
                 {
                     if (stream.name() == "SceneData")
-                        newScene->readStream(&stream);
+                        view->scene->readStream(&stream);
                     else
                         stream.raiseError(QString("Unrecognised element '%1'").
                                           arg(stream.name().toString()));
@@ -396,21 +394,14 @@ void MainWindow::openFile()
                 QMessageBox::warning(this, "Error",
                                      QString("Failed to load '%1' (%2)").
                                      arg(filename).arg(stream.errorString()));
-                delete newScene;
+                delete view->scene;
                 return;
             }
 
-            /**
-             * close file, display new scene, delete old scene
-             * and display useful message
-            */
+            // close file and display useful message
             file.close();
-
-            view->setScene( newScene );
-            delete view->scene;
-            view->scene = newScene;
-            QMessageBox::warning(this, "Done",
-                                 QString("Loaded '%1'").arg(filename));
+            mainStatusBar->showMessage(QString("Loaded '%1' successfully")
+                                       .arg(filename), 3000);
             return;
         }
     }

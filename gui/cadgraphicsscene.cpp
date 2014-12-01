@@ -520,6 +520,14 @@ void CadGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
             isInvertedSelection = true;
     }
 
+    else
+    {
+        QToolTip::showText(mouseEvent->screenPos(),
+                           QString("%1, %2")
+                           .arg(mouseEvent->scenePos().x())
+                           .arg(mouseEvent->scenePos().y()));
+    }
+
     emit(setSelectionSignal());
     QGraphicsScene::mouseMoveEvent(mouseEvent);
 }

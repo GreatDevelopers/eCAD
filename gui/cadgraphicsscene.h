@@ -6,6 +6,7 @@
 #include <QUndoStack>
 #include <cmath>
 #include <QMenu>
+#include <QToolTip>
 
 #include "cadcommands/cadcommandadd.h"
 #include "cadcommands/cadcommanddelete.h"
