@@ -4,7 +4,6 @@ CadGraphicsView::CadGraphicsView()
 {
     scaleFactor = 1.15;
     setAttribute(Qt::WA_DeleteOnClose);
-    isUntitled = true;
     isPanning = false;
     setMouseTracking(true);
 }
@@ -12,11 +11,6 @@ CadGraphicsView::CadGraphicsView()
 void CadGraphicsView::newFile()
 {
     // creates a new file/document and insert scene
-    static int fileNumber = 1;
-    isUntitled = true;
-    curFileName = tr("Document %1").arg(fileNumber++);
-    setWindowTitle(curFileName);
-
     undoStack = new QUndoStack(this);
     undoView = 0;
 

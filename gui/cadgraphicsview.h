@@ -37,10 +37,6 @@ public slots:
 
 protected:
     void wheelEvent(QWheelEvent *event);
-
-private:
-    QString curFileName;
-    bool isUntitled;
 };
 
 #endif // CADGRAPHICSVIEW_H
