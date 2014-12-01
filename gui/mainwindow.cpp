@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setupUi(this);
     setWindowTitle(tr("eCAD"));
     setCentralWidget(mdiArea);
+    fileNumber = 0;
     mainStatusBar->showMessage("Welcome to eCAD");
 
     connect(actionPoints, SIGNAL(triggered()),
@@ -149,6 +150,8 @@ void MainWindow::newFile()
     // creates a new file
     createMdiView();
     view->newFile();
+    curFileName = tr("Document %1").arg(++fileNumber);
+    view->setWindowTitle(curFileName);
     view->scene->installEventFilter(this);
     view->show();
     setActions();
@@ -357,10 +360,14 @@ void MainWindow::openFile()
                                                   tr("Open File"),
                                                   QString(),
                                                   tr("file Name(*.xml)"));
-    newFile();
+    if (filename.isNull())
+        return;
 
-    if (!filename.isEmpty())
+    else
     {
+        newFile();
+        view->setWindowTitle(filename);
+        --fileNumber;
         QFile file(filename);
 
         if (!file.open(QIODevice::ReadOnly))
@@ -443,6 +450,9 @@ void MainWindow::saveFile()
             file.close();
         }
     }
+
+    else
+        return;
 }
 
 void MainWindow::showGrid(bool b)

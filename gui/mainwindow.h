@@ -39,6 +39,8 @@ private:
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
+    QString curFileName;
+    int fileNumber;
 
 private slots:
     void drawPoint();
