@@ -36,6 +36,8 @@ private:
     CadCommandWidget *commandWidget;
     CadScriptWidget *scriptWidget;
     QDialog *aboutDialog;
+    typedef QPair<QMdiSubWindow *, CadGraphicsView *> windowViewPair;
+    QList<windowViewPair> windowViewList;
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
@@ -76,6 +78,7 @@ private slots:
     void filePrint();
     void print(QPrinter *);
     void showAboutDialog();
+    void updateView();
     CadGraphicsView *createMdiView();
 };
 
