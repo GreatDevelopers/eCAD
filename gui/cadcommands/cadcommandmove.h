@@ -72,6 +72,13 @@ public:
                     .arg(nPos.x() + arcItem->p3.x())
                     .arg(nPos.y() + arcItem->p3.y()));
         }
+
+        if (cadItem->type() == Image::Type)
+        {
+            Image *imageItem = dynamic_cast<Image *>(cadItem);
+            setText(QString("Image moved to (%1,%2)")
+                    .arg(nPos.x()).arg(nPos.y()));
+        }
     }
 
     virtual void undo()

@@ -12,5 +12,6 @@
         <file>images/task.svg</file>
         <file>images/logo.png</file>
         <file>images/arcs3p.png</file>
+        <file>images/image.png</file>
     </qresource>
 </RCC>

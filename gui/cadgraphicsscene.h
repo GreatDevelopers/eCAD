@@ -21,7 +21,7 @@ class CadGraphicsScene : public QGraphicsScene
 public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode,
-                ArcMode };
+                ArcMode, ImageMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -35,6 +35,7 @@ public:
     bool isInvertedSelection;
     bool isGridVisible;
     int id;
+    QString imagePath;
 
 public slots:
     void setMode(Mode mode);
@@ -82,6 +83,7 @@ private:
     Ellipse *ellipseItem;
     Text *textItem;
     Arc *arcItem;
+    Image *imageItem;
     QUndoStack *mUndoStack;
     QMenu *contextMenu;
     QAction *cutAction;
