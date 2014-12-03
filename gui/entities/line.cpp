@@ -35,7 +35,8 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setRenderHint(QPainter::Antialiasing);
     paintpen.setWidth(1);
 
-    if (isSelected()) {
+    if (isSelected())
+    {
         // sets brush for end points
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::red);
@@ -48,7 +49,9 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);
         painter->drawLine(startP, endP);
-    } else {
+    }
+    else
+    {
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);

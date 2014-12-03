@@ -14,11 +14,14 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
     d12 = qSqrt(qPow((p2.x() - p1.x()), 2) + qPow((p2.y() - p1.y()), 2));
     d13 = qSqrt(qPow((p3.x() - p1.x()), 2) + qPow((p3.y() - p1.y()), 2));
 
-    if (d12 > d13) {
+    if (d12 > d13)
+    {
         majRadius = d12;
         minRadius = d13;
         theta = atan2((p2.y() - p1.y()), (p2.x() - p1.x())) * (180 / M_PI);
-    } else {
+    }
+    else
+    {
         majRadius = d13;
         minRadius = d12;
         theta = atan2((p3.y() - p1.y()), (p3.x() - p1.x())) * (180 / M_PI);
@@ -66,7 +69,8 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    if (isSelected()) {
+    if (isSelected())
+    {
         // sets brush for center point
         painter->setBrush(Qt::SolidPattern);
         paintpen.setColor(Qt::red);
@@ -84,7 +88,9 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setPen(paintpen);
         painter->drawEllipse(p1, majRadius, minRadius);
         painter->restore();
-    } else {
+    }
+    else
+    {
         painter->setBrush(Qt::SolidPattern);
         painter->drawEllipse(p1, 2, 2);
         painter->save();

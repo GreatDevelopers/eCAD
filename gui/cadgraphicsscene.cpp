@@ -56,7 +56,8 @@ void CadGraphicsScene::editorLostFocus(mText *item)
 void CadGraphicsScene::areItemsSelectable(bool b)
 {
     // make items selectable
-    foreach(QGraphicsItem * item, itemList) {
+    foreach(QGraphicsItem * item, itemList)
+    {
         item->setFlag(QGraphicsItem::ItemIsSelectable, b);
         item->setFlag(QGraphicsItem::ItemIsMovable, b);
     }
@@ -65,8 +66,10 @@ void CadGraphicsScene::areItemsSelectable(bool b)
 void CadGraphicsScene::deleteItems()
 {
     // delete selected items
-    foreach(QGraphicsItem * item, itemList) {
-        if (item->isSelected()) {
+    foreach(QGraphicsItem * item, itemList)
+    {
+        if (item->isSelected())
+        {
             mUndoStack->push(new CadCommandDelete(this, item));
             item->setSelected(false);
         }
@@ -77,33 +80,40 @@ void CadGraphicsScene::selectItems()
 {
     // refresh record of selected items and their starting positions
     selectedEntities.clear();
-    foreach(QGraphicsItem * item, itemList) {
-        if (item->isSelected()) {
-            if (item->type() == Point::Type) {
+    foreach(QGraphicsItem * item, itemList)
+    {
+        if (item->isSelected())
+        {
+            if (item->type() == Point::Type)
+            {
                 Point *myItem = dynamic_cast<Point *>(item);
                 selectedEntities.append(qMakePair(myItem,
                                                   myItem->scenePos()));
             }
 
-            else if (item->type() == Line::Type) {
+            else if (item->type() == Line::Type)
+            {
                 Line *myItem = dynamic_cast<Line *>(item);
                 selectedEntities.append(qMakePair(myItem,
                                                   myItem->scenePos()));
             }
 
-            else if (item->type() == Circle::Type) {
+            else if (item->type() == Circle::Type)
+            {
                 Circle *myItem = dynamic_cast<Circle *>(item);
                 selectedEntities.append(qMakePair(myItem,
                                                   myItem->scenePos()));
             }
 
-            else if (item->type() == Ellipse::Type) {
+            else if (item->type() == Ellipse::Type)
+            {
                 Ellipse *myItem = dynamic_cast<Ellipse *>(item);
                 selectedEntities.append(qMakePair(myItem,
                                                   myItem->scenePos()));
             }
 
-            else if (item->type() == mText::Type) {
+            else if (item->type() == mText::Type)
+            {
                 mText *myItem = dynamic_cast<mText *>(item);
                 selectedEntities.append(qMakePair(myItem,
                                                   myItem->scenePos()));
@@ -115,7 +125,8 @@ void CadGraphicsScene::selectItems()
 void CadGraphicsScene::selectDeselectAllItems(bool b)
 {
     // sets selection for all items
-    foreach(QGraphicsItem * item, items()) {
+    foreach(QGraphicsItem * item, items())
+    {
         item->setSelected(b);
     }
 }
@@ -150,8 +161,10 @@ void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // mousePressEvent in the graphicsScene
-    if (mouseEvent->button() == Qt::LeftButton) {
-        switch (entityMode) {
+    if (mouseEvent->button() == Qt::LeftButton)
+    {
+        switch (entityMode)
+        {
         case NoMode:
             qDebug() << "No Mode";
             break;
@@ -164,19 +177,22 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             break;
 
         case LineMode:
-            if (mFirstClick) {
+            if (mFirstClick)
+            {
                 startP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
-            else if (!mFirstClick && mSecondClick) {
+            else if (!mFirstClick && mSecondClick)
+            {
                 endP = mouseEvent->scenePos();
                 mPaintFlag = true;
                 mSecondClick = false;
             }
 
-            if (mPaintFlag) {
+            if (mPaintFlag)
+            {
                 lineItem = new Line(++id, startP, endP);
                 lineItem->setLine(startP.x(), startP.y(), endP.x(), endP.y());
                 itemList.append(lineItem);
@@ -186,19 +202,22 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             break;
 
         case CircleMode:
-            if (mFirstClick) {
+            if (mFirstClick)
+            {
                 startP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
-            else if (!mFirstClick && mSecondClick) {
+            else if (!mFirstClick && mSecondClick)
+            {
                 endP = mouseEvent->scenePos();
                 mPaintFlag = true;
                 mSecondClick = false;
             }
 
-            if (mPaintFlag) {
+            if (mPaintFlag)
+            {
                 circleItem = new Circle(++id, startP, endP);
                 itemList.append(circleItem);
                 mUndoStack->push(new CadCommandAdd(this, circleItem));
@@ -207,26 +226,30 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             break;
 
         case EllipseMode:
-            if (mFirstClick) {
+            if (mFirstClick)
+            {
                 startP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
-            else if (!mFirstClick && mSecondClick) {
+            else if (!mFirstClick && mSecondClick)
+            {
                 midP = mouseEvent->scenePos();
                 mFirstClick = false;
                 mSecondClick = false;
                 mThirdClick = true;
             }
 
-            else if (!mSecondClick && mThirdClick) {
+            else if (!mSecondClick && mThirdClick)
+            {
                 endP = mouseEvent->scenePos();
                 mThirdClick = false;
                 mPaintFlag = true;
             }
 
-            if (mPaintFlag) {
+            if (mPaintFlag)
+            {
                 ellipseItem = new Ellipse(++id, startP, midP, endP);
                 itemList.append(ellipseItem);
                 mUndoStack->push(new CadCommandAdd(this, ellipseItem));
@@ -249,21 +272,30 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         default:
             ;
         }
-    } else {
-        if (mouseEvent->button() == Qt::RightButton) {
+    }
+    else
+    {
+        if (mouseEvent->button() == Qt::RightButton)
+        {
             contextItem = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
             contextPosition = mouseEvent->scenePos();
 
-            if (!contextItem) {
+            if (!contextItem)
+            {
                 cutAction->setEnabled(false);
                 copyAction->setEnabled(false);
 
-                if (clipboardStack::instance()->isEmpty()) {
+                if (clipboardStack::instance()->isEmpty())
+                {
                     pasteAction->setEnabled(false);
-                } else {
+                }
+                else
+                {
                     pasteAction->setEnabled(true);
                 }
-            } else {
+            }
+            else
+            {
                 cutAction->setEnabled(true);
                 copyAction->setEnabled(true);
                 pasteAction->setEnabled(false);
@@ -282,32 +314,38 @@ void CadGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *mouseEve
 void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     // if any items moved, then create undo commands
-    foreach(entityPos item, selectedEntities) {
-        if (item.first->type() == Point::Type) {
+    foreach(entityPos item, selectedEntities)
+    {
+        if (item.first->type() == Point::Type)
+        {
             Point *myItem = dynamic_cast<Point *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
 
-        else if (item.first->type() == Line::Type) {
+        else if (item.first->type() == Line::Type)
+        {
             Line *myItem = dynamic_cast<Line *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
 
-        else if (item.first->type() == Circle::Type) {
+        else if (item.first->type() == Circle::Type)
+        {
             Circle *myItem = dynamic_cast<Circle *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
 
-        else if (item.first->type() == Ellipse::Type) {
+        else if (item.first->type() == Ellipse::Type)
+        {
             Ellipse *myItem = dynamic_cast<Ellipse *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
         }
 
-        else if (item.first->type() == mText::Type) {
+        else if (item.first->type() == mText::Type)
+        {
             mText *myItem = dynamic_cast<mText *>(item.first);
             mUndoStack->push(new CadCommandMove(myItem, item.second,
                                                 myItem->scenePos()));
@@ -322,9 +360,12 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 {
     // write entities in a file
-    foreach(QGraphicsItem * item, itemList) {
-        if (items().contains(item)) {
-            if (item->type() == Point::Type) {
+    foreach(QGraphicsItem * item, itemList)
+    {
+        if (items().contains(item))
+        {
+            if (item->type() == Point::Type)
+            {
                 Point *myItem = dynamic_cast<Point *>(item);
                 stream->writeStartElement("Point");
                 stream->writeAttribute("id", QString::number(myItem->id));
@@ -333,7 +374,8 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeEndElement();  //end of Point Item
             }
 
-            else if (item->type() == Line::Type) {
+            else if (item->type() == Line::Type)
+            {
                 Line *myItem = dynamic_cast<Line *>(item);
                 stream->writeStartElement("Line");
                 stream->writeAttribute("id", QString::number(myItem->id));
@@ -352,7 +394,8 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeEndElement();  //end of Line Item
             }
 
-            else if (item->type() == Circle::Type) {
+            else if (item->type() == Circle::Type)
+            {
                 Circle *myItem = dynamic_cast<Circle *>(item);
                 stream->writeStartElement("Circle");
                 stream->writeAttribute("id", QString::number(myItem->id));
@@ -366,7 +409,8 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeEndElement();  //end of Circle Item
             }
 
-            else if (item->type() == Ellipse::Type) {
+            else if (item->type() == Ellipse::Type)
+            {
                 Ellipse *myItem = dynamic_cast<Ellipse *>(item);
                 stream->writeStartElement("Ellipse");
                 stream->writeAttribute("id", QString::number(myItem->id));
@@ -381,7 +425,8 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeEndElement();  //end of Ellipse Item
             }
 
-            else if (item->type() == mText::Type) {
+            else if (item->type() == mText::Type)
+            {
                 mText *myItem = dynamic_cast<mText *>(item);
                 stream->writeStartElement("Text");
                 stream->writeAttribute("id", QString::number(myItem->id));
@@ -396,10 +441,13 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
 
 void CadGraphicsScene::readStream(QXmlStreamReader *stream)
 {
-    while (!stream->atEnd()) {
+    while (!stream->atEnd())
+    {
         stream->readNext();
-        if (stream->isStartElement() && stream->name() == "Point") {
-            foreach(QXmlStreamAttribute attribute, stream->attributes()) {
+        if (stream->isStartElement() && stream->name() == "Point")
+        {
+            foreach(QXmlStreamAttribute attribute, stream->attributes())
+            {
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x")
@@ -413,8 +461,10 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             mUndoStack->push(new CadCommandAdd(this, pointItem));
         }
 
-        if (stream->isStartElement() && stream->name() == "Line") {
-            foreach(QXmlStreamAttribute attribute, stream->attributes()) {
+        if (stream->isStartElement() && stream->name() == "Line")
+        {
+            foreach(QXmlStreamAttribute attribute, stream->attributes())
+            {
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x1")
@@ -432,8 +482,10 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             mUndoStack->push(new CadCommandAdd(this, lineItem));
         }
 
-        if (stream->isStartElement() && stream->name() == "Circle") {
-            foreach(QXmlStreamAttribute attribute, stream->attributes()) {
+        if (stream->isStartElement() && stream->name() == "Circle")
+        {
+            foreach(QXmlStreamAttribute attribute, stream->attributes())
+            {
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "cx")
@@ -448,8 +500,10 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             mUndoStack->push(new CadCommandAdd(this, circleItem));
         }
 
-        if (stream->isStartElement() && stream->name() == "Ellipse") {
-            foreach(QXmlStreamAttribute attribute, stream->attributes()) {
+        if (stream->isStartElement() && stream->name() == "Ellipse")
+        {
+            foreach(QXmlStreamAttribute attribute, stream->attributes())
+            {
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "cx")
@@ -466,8 +520,10 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             mUndoStack->push(new CadCommandAdd(this, ellipseItem));
         }
 
-        if (stream->isStartElement() && stream->name() == "Text") {
-            foreach(QXmlStreamAttribute attribute, stream->attributes()) {
+        if (stream->isStartElement() && stream->name() == "Text")
+        {
+            foreach(QXmlStreamAttribute attribute, stream->attributes())
+            {
                 if (attribute.name() == "id")
                     id = attribute.value().toString().toDouble();
                 if (attribute.name() == "x")
@@ -501,7 +557,8 @@ void CadGraphicsScene::copy(getEntity *obj)
 void CadGraphicsScene::paste(const QPointF &pos)
 {
     getEntity *pasteEntity = clipboardStack::instance()->pop();
-    if (pasteEntity) {
+    if (pasteEntity)
+    {
         addItem(static_cast<QGraphicsItem *>(pasteEntity));
         pasteEntity->setPos(pos);
         pasteEntity->setFlag(QGraphicsItem::ItemIsSelectable);
@@ -512,11 +569,16 @@ void CadGraphicsScene::paste(const QPointF &pos)
 
 void CadGraphicsScene::menuAction(QAction *action)
 {
-    if (action == cutAction) {
+    if (action == cutAction)
+    {
         cut(static_cast<getEntity *>(contextItem));
-    } else if (action == copyAction) {
+    }
+    else if (action == copyAction)
+    {
         copy(static_cast<getEntity *>(contextItem));
-    } else if (action == pasteAction) {
+    }
+    else if (action == pasteAction)
+    {
         paste(contextPosition);
     }
 }

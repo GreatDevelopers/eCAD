@@ -23,7 +23,8 @@ DWGimpl::readFile(char *filename)
     int error;
     error = dwg_read_file(filename, &data);
 
-    if (!error) {
+    if (!error)
+    {
         ReadDWG(&data);
     }
 
@@ -91,7 +92,8 @@ DWGimpl::addText(dwg_object* obj)
     dwg_ent_text_get_insertion_point(text, &ins_pt, &error);
 
     /*TODO: Juca, fix it properly: */
-    if (text_value[0] == '&') {
+    if (text_value[0] == '&')
+    {
         return;
     }
 }
@@ -99,12 +101,14 @@ DWGimpl::addText(dwg_object* obj)
 void
 DWGimpl::OutputObject(dwg_object* obj)
 {
-    if (!obj) {
+    if (!obj)
+    {
         fprintf(stderr, "object is NULL\n");
         return;
     }
 
-    if (dwg_get_type(obj) == DWG_TYPE_LINE) {
+    if (dwg_get_type(obj) == DWG_TYPE_LINE)
+    {
         addLine(obj);
     }
 
@@ -130,19 +134,22 @@ void DWGimpl::output_BLOCK_HEADER(dwg_object_ref* ref)
     obj = dwg_obj_reference_get_object(ref, &error);
     abs_ref = dwg_obj_ref_get_abs_ref(ref, &error);
 
-    if (!ref) {
+    if (!ref)
+    {
         fprintf(stderr, "Found null object reference. Could not output an SVG symbol for this BLOCK_HEADER\n");
         return;
     }
 
-    if (!obj) {
+    if (!obj)
+    {
         fprintf(stderr, "Found null ref->obj\n");
         return;
     }
 
     /* TODO: Review.  (This check avoids a segfault, but it is
     still unclear whether or not the condition is valid.)  */
-    if (!dwg_object_to_object(obj, &error)) {
+    if (!dwg_object_to_object(obj, &error))
+    {
         fprintf(stderr, "Found null ref->obj->tio.object\n");
         return;
     }
@@ -151,7 +158,8 @@ void DWGimpl::output_BLOCK_HEADER(dwg_object_ref* ref)
     hdr = obj->tio.object->tio.BLOCK_HEADER;
     variable_obj = get_first_owned_object(obj, hdr);
 
-    while (variable_obj) {
+    while (variable_obj)
+    {
         OutputObject(variable_obj);
         variable_obj = get_next_owned_object(obj, variable_obj, hdr);
     }
@@ -174,7 +182,8 @@ DWGimpl::ReadDWG(dwg_data* dwg)
 
     num_hdr_objs = dwg_obj_block_control_get_num_entries(ctrl, &error);
 
-    for (i = 0; i < num_hdr_objs; i++) {
+    for (i = 0; i < num_hdr_objs; i++)
+    {
         output_BLOCK_HEADER(hdr_refs[i]);
     }
 

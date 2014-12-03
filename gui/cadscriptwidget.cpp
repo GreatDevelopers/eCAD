@@ -69,9 +69,11 @@ void CadScriptWidget::setupJSEngine()
 void CadScriptWidget::newScriptFxn()
 {
     // creates a new script file
-    if (!tEdit) {
+    if (!tEdit)
+    {
         tEdit = new QTextEdit;
-        if (isNew) {
+        if (isNew)
+        {
             saveAsScriptFxn();
             isNew = false;
         }
@@ -79,7 +81,8 @@ void CadScriptWidget::newScriptFxn()
         vBox->addWidget(tEdit);
     }
 
-    else {
+    else
+    {
         tEdit->clear();
     }
 
@@ -100,12 +103,14 @@ void CadScriptWidget::loadScriptFxn()
     // open script file dialog box
     QString fileName = QFileDialog::getOpenFileName(this);
 
-    if (!fileName.isEmpty()) {
+    if (!fileName.isEmpty())
+    {
         QFile file(fileName);
         isNew = false;
         newScriptFxn();
 
-        if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        if (!file.open(QFile::ReadOnly | QFile::Text))
+        {
             QMessageBox::warning(this, tr("Load Error"),
                                  tr("Cannot Read Script %1:\n%2.")
                                  .arg(fileName)
@@ -129,7 +134,8 @@ bool CadScriptWidget::saveScriptFxn(const QString &fileName)
 {
     // writes text stream to file
     QFile file(fileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+    {
         QMessageBox::warning(this, tr("Write Error"),
                              tr("Cannot write Script file %1:\n%2.")
                              .arg(fileName)

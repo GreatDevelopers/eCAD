@@ -115,7 +115,8 @@ void MainWindow::setActions()
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::GraphicsSceneMouseMove) {
+    if (event->type() == QEvent::GraphicsSceneMouseMove)
+    {
         QGraphicsSceneMouseEvent *mouseEvent =
             static_cast<QGraphicsSceneMouseEvent *>(event);
         QString showMessage = QString("Mouse move (%1,%2)").
@@ -171,26 +172,32 @@ void MainWindow::toggleWidgets()
 void MainWindow::toggleSelectDeselect()
 {
     // enables/disables Select Entity, Select All and Deselect All actions
-    if (view->scene->items().isEmpty()) {
+    if (view->scene->items().isEmpty())
+    {
         actionSelect_All->setEnabled(false);
         actionDeselect_All->setEnabled(false);
         actionSelect_Entity->setEnabled(false);
     }
 
-    else {
+    else
+    {
         actionSelect_All->setEnabled(true);
         actionSelect_Entity->setEnabled(true);
-        foreach(QGraphicsItem * item, view->scene->items()) {
-            if (item->isSelected()) {
+        foreach(QGraphicsItem * item, view->scene->items())
+        {
+            if (item->isSelected())
+            {
                 isEntitySelected = true;
             }
 
-            if (isEntitySelected == true) {
+            if (isEntitySelected == true)
+            {
                 actionDeselect_All->setEnabled(true);
                 actionSelect_Entity->setEnabled(false);
             }
 
-            else {
+            else
+            {
                 actionDeselect_All->setEnabled(false);
                 actionSelect_Entity->setEnabled(true);
             }
@@ -199,7 +206,8 @@ void MainWindow::toggleSelectDeselect()
         isEntitySelected = false;
 
         // if any one item is selected, Deselect All is enabled
-        if (!view->scene->selectedEntities.isEmpty()) {
+        if (!view->scene->selectedEntities.isEmpty())
+        {
             actionDeselect_All->setEnabled(true);
         }
     }
@@ -308,25 +316,31 @@ void MainWindow::on_actionOpen_triggered()
                        tr("dwg(*.dwg);;dxf(*.dxf)"));
     newFile();
     QMainWindow::statusBar()->showMessage("File opened successfully");
-    if (!filename.isEmpty()) {
+    if (!filename.isEmpty())
+    {
         CadGraphicsScene *newScene = new CadGraphicsScene(this,
                 view->undoStack);
 
         std::string ext = filename.toStdString().substr(filename.toStdString().length() - 3, 3);
-        if (ext == "dxf" || ext == "DXF") {
+        if (ext == "dxf" || ext == "DXF")
+        {
             DXFimpl *F = new DXFimpl(newScene);
             dxfRW R(filename.toStdString().c_str());
             R.read(F, true);
             view->setScene(F->getScene());
             delete view->scene;
             view->scene = F->getScene();
-        } else if (ext == "dwg" || ext == "DWG") {
+        }
+        else if (ext == "dwg" || ext == "DWG")
+        {
             DWGimpl* F = new DWGimpl(newScene);
             F->readFile((char*)filename.toStdString().c_str());
             view->setScene(F->getScene());
             delete view->scene;
             view->scene = F->getScene();
-        } else {
+        }
+        else
+        {
             QMessageBox::warning(this, "Done",
                                  QString("Non Recognised File extension").arg(filename));
             return;
@@ -345,12 +359,16 @@ void MainWindow::on_actionSave_triggered()
                        tr("Save File"),
                        QString(),
                        tr("file Name(*.xml)"));
-    if (!filename.isEmpty()) {
+    if (!filename.isEmpty())
+    {
         QFile file(filename);
-        if (!file.open(QIODevice::WriteOnly)) {
+        if (!file.open(QIODevice::WriteOnly))
+        {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
-        } else {
+        }
+        else
+        {
             QXmlStreamWriter xmlWriter(&file);
             xmlWriter.setAutoFormatting(true);
             xmlWriter.writeStartDocument();
@@ -420,10 +438,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->ignore();
     if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
             "Are you sure you want to exit?",
-            QMessageBox::Yes | QMessageBox::No)) {
+            QMessageBox::Yes | QMessageBox::No))
+    {
         event->accept();
     }
-    if (aboutDialog) {
+    if (aboutDialog)
+    {
         aboutDialog->close();
     }
 }
