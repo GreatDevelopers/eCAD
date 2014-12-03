@@ -125,6 +125,13 @@ void CadGraphicsScene::selectItems()
                 selectedEntities.append(qMakePair(itemPtr,
                                                   itemPtr->scenePos()));
             }
+
+            else if (item->type() == Image::Type)
+            {
+                Image *itemPtr = dynamic_cast<Image *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
+            }
         }
     }
 }
@@ -230,6 +237,13 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     else if (item->type() == Arc::Type)
     {
         Arc *itemPtr = dynamic_cast<Arc *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    else if (item->type() == Image::Type)
+    {
+        Image *itemPtr = dynamic_cast<Image *>(item);
         itemList.append(itemPtr);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
@@ -364,6 +378,12 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             break;
 
+        case ImageMode:
+            startP = mouseEvent->scenePos();
+            imageItem = new Image(++id, startP, imagePath);
+            drawEntity(imageItem);
+            break;
+
         default:
             ;
         }
@@ -437,6 +457,12 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                     Arc *itemPtr = dynamic_cast<Arc *>(contextItem);
                     contextItemId = itemPtr->id;
                 }
+
+                else if (contextItem->type() == Image::Type)
+                {
+                    Image *itemPtr = dynamic_cast<Image *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
             }
         }
     }
@@ -496,6 +522,13 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (item.first->type() == Arc::Type)
             {
                 Arc *itemPtr = dynamic_cast<Arc *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
+
+            else if (item.first->type() == Image::Type)
+            {
+                Image *itemPtr = dynamic_cast<Image *>(item.first);
                 mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                     itemPtr->scenePos()));
             }
@@ -636,6 +669,21 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                                                              .y()));
                 stream->writeEndElement();  //end of Arc Item
             }
+
+            else if (item->type() == Image::Type)
+            {
+                Image *itemPtr = dynamic_cast<Image *>(item);
+                stream->writeStartElement("Image");
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x", QString::number(itemPtr->startP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y", QString::number(itemPtr->startP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("path", itemPtr->path);
+                stream->writeEndElement();  //end of Image Item
+            }
         }
     }
 }
@@ -761,6 +809,24 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             arcItem = new Arc(id, startP, midP, endP);
             drawEntity(arcItem);
         }
+
+        if (stream->isStartElement() && stream->name() == "Image")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x")
+                    startP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y")
+                    startP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "path")
+                    imagePath = attribute.value().toString();
+            }
+
+            imageItem = new Image(id, startP, imagePath);
+            drawEntity(imageItem);
+        }
     }
 }
 
@@ -822,6 +888,13 @@ void CadGraphicsScene::paste(const QPointF &pos)
     {
         Text *itemPtr = dynamic_cast<Text *>(pasteEntity);
         itemPtr->position = pos;
+        drawEntity(itemPtr);
+    }
+
+    if (pasteEntity->type() == Image::Type)
+    {
+        Image *itemPtr = dynamic_cast<Image *>(pasteEntity);
+        itemPtr->startP = pos;
         drawEntity(itemPtr);
     }
 

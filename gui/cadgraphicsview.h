@@ -5,6 +5,7 @@
 #include <QWheelEvent>
 #include <QUndoStack>
 #include <QUndoView>
+#include <QFileDialog>
 
 #include "cadgraphicsscene.h"
 
@@ -21,6 +22,7 @@ public:
     void drawEllipse();
     void drawText();
     void drawArc();
+    void drawImage();
     void setNoMode();
     void cursorMode();
     void showUndoStack();

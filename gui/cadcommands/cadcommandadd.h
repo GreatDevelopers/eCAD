@@ -11,6 +11,7 @@
 #include "ellipse.h"
 #include "text.h"
 #include "arc.h"
+#include "image.h"
 
 class CadCommandAdd : public QUndoCommand
 {
@@ -72,6 +73,14 @@ public:
                     .arg(arcItem->p2.y())
                     .arg(arcItem->p3.x())
                     .arg(arcItem->p3.y()));
+        }
+
+        if (cadItem->type() == Image::Type)
+        {
+            Image *imageItem = dynamic_cast<Image *>(cadItem);
+            setText(QString("Image add p(%1,%2)")
+                    .arg(imageItem->startP.x())
+                    .arg(imageItem->startP.y()));
         }
     }
 

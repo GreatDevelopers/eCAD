@@ -97,6 +97,23 @@ void CadGraphicsView::drawArc()
     cursorMode();
 }
 
+void CadGraphicsView::drawImage()
+{
+    // sets the mode to Imagemode for scene and sets/resets the flags
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("open File"), "",
+                                                    tr("JPEG(*.jpg *.jpeg);;"
+                                                       "PNG(*.png)"));
+    if (!fileName.isEmpty())
+    {
+        scene->imagePath = fileName;
+        scene->setMode(CadGraphicsScene::ImageMode);
+        scene->setFlags();
+        viewport()->setCursor(Qt::CrossCursor);
+        cursorMode();
+    }
+}
+
 void CadGraphicsView::showUndoStack()
 {
     // shows the undoStack window

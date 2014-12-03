@@ -167,6 +167,7 @@
    <addaction name="actionEllipse"/>
    <addaction name="actionArc"/>
    <addaction name="actionText"/>
+   <addaction name="actionInsertImage"/>
   </widget>
   <widget class="QStatusBar" name="mainStatusBar"/>
   <action name="actionNew">
@@ -576,8 +577,15 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/image.png</normaloff>:/icons/images/image.png</iconset>
+   </property>
    <property name="text">
     <string>Insert Image</string>
+   </property>
+   <property name="shortcut">
+    <string>I</string>
    </property>
   </action>
   <action name="actionMove_Copy">

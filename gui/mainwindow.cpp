@@ -503,18 +503,8 @@ void MainWindow::panning()
 
 void MainWindow::insertImage()
 {
-    // insert image dialog
-    QString imagePath;
-    imagePath = QFileDialog::getOpenFileName(this,
-                                             tr("open File"), "",
-                                             tr("JPEG(*.jpg *.jpeg);;PNG(*.png)"));
-    imageObject = new QImage();
-    imageObject->load(imagePath);
-    image = QPixmap::fromImage(*imageObject);
-    //scene =new CadGraphicsScene(this);
-    //scene->addPixmap(image);
-    //scene->setSceneRect(image.rect());
-    //graphicsView->setScene(scene);
+    // insert image
+    view->drawImage();
 }
 
 void MainWindow::selectAll()
