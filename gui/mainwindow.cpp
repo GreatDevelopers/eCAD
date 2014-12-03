@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileNumber = 0;
     mainStatusBar->showMessage("Welcome to eCAD");
 
+    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
+            this, SLOT(updateView()));
     connect(actionPoints, SIGNAL(triggered()),
             this, SLOT(drawPoint()));
     connect(actionLine, SIGNAL(triggered()),
@@ -31,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(drawText()));
     connect(actionArc, SIGNAL(triggered()),
             this, SLOT(drawArc()));
+    connect(actionInsertImage, SIGNAL(triggered()),
+            this, SLOT(insertImage()));
 
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
@@ -52,8 +56,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(zoomOut()));
     connect(actionPanning, SIGNAL(triggered()),
             this, SLOT(panning()));
-    connect(actionInsertImage,SIGNAL(triggered()),
-            this, SLOT(insertImage()));
     connect(actionAbout, SIGNAL(triggered()),
             this, SLOT(showAboutDialog()));
 
@@ -156,7 +158,6 @@ void MainWindow::newFile()
     view->show();
     setActions();
     isEntitySelected = false;
-    showGrid(true);
 
     // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
@@ -177,8 +178,22 @@ void MainWindow::newFile()
     actionScripting->setChecked(true);
     addDockWidget(Qt::RightDockWidgetArea, scriptWidget);
 
+    showGrid(true);
+
     // toggle actions to true
     toggleActions(1);
+}
+
+void MainWindow::updateView()
+{
+    // updates the view according to the subwindow activated
+    QMdiSubWindow *m = mdiArea->activeSubWindow();
+
+    foreach (windowViewPair v, windowViewList)
+    {
+        if (m == v.first)
+            view = v.second;
+    }
 }
 
 void MainWindow::toggleWidgets()
@@ -289,7 +304,9 @@ CadGraphicsView *MainWindow::createMdiView()
 {
     // creates a graphicsView and add it to the MDI window
     view = new CadGraphicsView;
-    mdiArea->addSubWindow(view);
+    QMdiSubWindow *w = mdiArea->addSubWindow(view);
+    mdiArea->setActiveSubWindow(w);
+    windowViewList.append(qMakePair(w, view));
     return view;
 }
 
