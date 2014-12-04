@@ -34,6 +34,16 @@ int Circle::type() const
     return Type;
 }
 
+QPainterPath Circle::shape() const
+{
+    // sets the shape of the circle for selection
+    QPainterPath path, path2;
+    qreal adjust = 10;
+    path.addEllipse(centerP, radius + adjust, radius + adjust);
+    path2.addEllipse(centerP, radius - adjust, radius - adjust);
+    return path - path2;
+}
+
 QRectF Circle::boundingRect() const
 {
     // bounding rectangle for circle

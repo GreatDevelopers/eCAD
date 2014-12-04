@@ -16,6 +16,26 @@ int Line::type() const
     return Type;
 }
 
+QPainterPath Line::shape() const
+{
+    // sets the shape of the line for selection
+    QPainterPath path;
+    qreal adjust = 10;
+    QLineF line(startP, endP);
+    QPolygonF nPolygon;
+    qreal radAngle = line.angle()* M_PI / 180;
+    qreal dx = adjust * sin(radAngle);
+    qreal dy = adjust * cos(radAngle);
+    QPointF offset1 = QPointF(dx, dy);
+    QPointF offset2 = QPointF(-dx, -dy);
+    nPolygon << startP + offset1
+             << startP + offset2
+             << endP + offset2
+             << endP + offset1;
+    path.addPolygon(nPolygon);
+    return path;
+}
+
 QRectF Line::boundingRect() const
 {
     qreal extra = 1.0;
