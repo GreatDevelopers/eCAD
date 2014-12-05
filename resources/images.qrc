@@ -13,5 +13,8 @@
         <file>images/logo.png</file>
         <file>images/arcs3p.png</file>
         <file>images/image.png</file>
+        <file>images/editcut.png</file>
+        <file>images/editcopy.png</file>
+        <file>images/editpaste.png</file>
     </qresource>
 </RCC>
