@@ -16,6 +16,7 @@ public:
     Circle(QObject *parent = 0) : getEntity(parent) {}
     Circle(int, QPointF, QPointF);
     Circle(int, QPointF, qreal);
+    QPainterPath shape() const;
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,

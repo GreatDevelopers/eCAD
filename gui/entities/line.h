@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <QGraphicsItem>
+#include <qmath.h>
 
 #include "getEntity.h"
 
@@ -13,6 +14,7 @@ class Line : public getEntity
 public:
     Line(QObject *parent = 0) : getEntity(parent) {}
     Line(int, QPointF, QPointF);
+    QPainterPath shape() const;
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,
