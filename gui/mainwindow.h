@@ -66,6 +66,9 @@ private slots:
     void insertImage();
     void selectAll();
     void deselectAll();
+    void cutOperation();
+    void copyOperation();
+    void pasteOperation();
     void toggleMenuActions();
     void selectOneEntity();
     void selectWindow();

@@ -34,7 +34,7 @@ public:
     QPointF startP, midP, endP;
     bool isInvertedSelection;
     bool isGridVisible;
-    int id;
+    int id, contextItemId;
     QString imagePath;
 
 public slots:
@@ -72,7 +72,6 @@ private:
     QPointF contextPosition;
     QPointF lineEndPoint;
     QPointF lineStartPoint;
-    int contextItemId;
     float differenceX;
     float differenceY;
 

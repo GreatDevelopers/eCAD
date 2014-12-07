@@ -58,6 +58,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(panning()));
     connect(actionAbout, SIGNAL(triggered()),
             this, SLOT(showAboutDialog()));
+    connect(actionCut, SIGNAL(triggered()),
+            this, SLOT(cutOperation()));
+    connect(actionCopy, SIGNAL(triggered()),
+            this, SLOT(copyOperation()));
+    connect(actionPaste, SIGNAL(triggered()),
+            this, SLOT(pasteOperation()));
 
     connect(actionCommandConsole, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
@@ -108,6 +114,9 @@ void MainWindow::toggleActions(bool b)
     actionScripting->setEnabled(b);
     actionArc->setEnabled(b);
     actionPanning->setEnabled(b);
+    actionCut->setEnabled(b);
+    actionCopy->setEnabled(b);
+    actionPaste->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -145,6 +154,69 @@ void MainWindow::closeActiveWindow()
 {
     // closes the active subwindow
     mdiArea->closeActiveSubWindow();
+}
+
+void MainWindow::cutOperation()
+{
+    foreach (QGraphicsItem *item, view->scene->items())
+    {
+        if (item->isSelected())
+        {
+            if (actionCut)
+            {
+                if (item->type() == Point::Type)
+                {
+                    Point *itemPtr = dynamic_cast<Point *>(item);
+                    view->scene->contextItemId = itemPtr->id;
+                }
+
+                else if (item->type() == Circle::Type)
+                {
+                    Circle *itemPtr = dynamic_cast<Circle *>(item);
+                    view->scene->contextItemId = itemPtr->id;
+                }
+
+                else if (item->type() == Ellipse::Type)
+                {
+                    Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
+                    view->scene->contextItemId = itemPtr->id;
+                }
+
+                else if (item->type() == Line::Type)
+                {
+                    Line *itemPtr = dynamic_cast<Line *>(item);
+                    view->scene->contextItemId = itemPtr->id;
+                }
+
+                else if (item->type() == Text::Type)
+                {
+                    Text *itemPtr = dynamic_cast<Text *>(item);
+                    view->scene->contextItemId = itemPtr->id;
+                }
+
+                view->scene->cut(static_cast<getEntity *>(item));
+            }
+        }
+    }
+}
+
+void MainWindow::copyOperation()
+{
+    foreach (QGraphicsItem *item, view->scene->items())
+    {
+        if (item->isSelected())
+        {
+            if (actionCopy)
+            {
+                view->scene->copy(static_cast<getEntity *>(item));
+            }
+        }
+    }
+}
+
+void MainWindow::pasteOperation()
+{
+    view->scene->paste(view->scene->startP);
 }
 
 void MainWindow::newFile()
@@ -225,6 +297,18 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(false);
         actionDeleteSelected->setEnabled(false);
         actionSelectWindow->setEnabled(false);
+        actionCut->setEnabled(false);
+        actionCopy->setEnabled(false);
+
+        if (clipboardStack::instance()->isEmpty())
+        {
+            actionPaste->setEnabled(false);
+        }
+
+        else
+        {
+            actionPaste->setEnabled(true);
+        }
     }
 
     else
@@ -233,6 +317,9 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(true);
         actionInvertSelection->setEnabled(true);
         actionSelectWindow->setEnabled(true);
+        actionCut->setEnabled(true);
+        actionCopy->setEnabled(true);
+        actionPaste->setEnabled(false);
 
         foreach (QGraphicsItem *item, view->scene->items())
         {
@@ -246,6 +333,9 @@ void MainWindow::toggleMenuActions()
                 actionDeselectAll->setEnabled(true);
                 actionSelectEntity->setEnabled(false);
                 actionDeleteSelected->setEnabled(true);
+                actionCut->setEnabled(true);
+                actionCopy->setEnabled(true);
+                actionPaste->setEnabled(false);
             }
 
             else
@@ -253,6 +343,18 @@ void MainWindow::toggleMenuActions()
                 actionDeselectAll->setEnabled(false);
                 actionSelectEntity->setEnabled(true);
                 actionDeleteSelected->setEnabled(false);
+                actionCut->setEnabled(false);
+                actionCopy->setEnabled(false);
+
+                if (clipboardStack::instance()->isEmpty())
+                {
+                    actionPaste->setEnabled(false);
+                }
+
+                else
+                {
+                    actionPaste->setEnabled(true);
+                }
             }
         }
 

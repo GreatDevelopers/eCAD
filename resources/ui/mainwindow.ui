@@ -168,6 +168,9 @@
    <addaction name="actionArc"/>
    <addaction name="actionText"/>
    <addaction name="actionInsertImage"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
   </widget>
   <widget class="QStatusBar" name="mainStatusBar"/>
   <action name="actionNew">
@@ -261,6 +264,10 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/editcut.png</normaloff>:/icons/images/editcut.png</iconset>
+   </property>
    <property name="text">
     <string>Cut </string>
    </property>
@@ -272,6 +279,10 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/editcopy.png</normaloff>:/icons/images/editcopy.png</iconset>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
@@ -282,6 +293,10 @@
   <action name="actionPaste">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/editpaste.png</normaloff>:/icons/images/editpaste.png</iconset>
    </property>
    <property name="text">
     <string>Paste</string>
