@@ -2,9 +2,9 @@
 #define IMAGE_H
 
 #include <QPainter>
-#include <QGraphicsPixmapItem>
+#include <QGraphicsItem>
 
-class Image : public QObject, public QGraphicsPixmapItem
+class Image : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
