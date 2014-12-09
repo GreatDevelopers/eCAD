@@ -2,9 +2,9 @@
 #define LINE_H
 
 #include <QPainter>
-#include <QGraphicsItem>
-#include <qmath.h>
+#include <QStyleOptionGraphicsItem>
 
+#include "qmath.h"
 #include "getEntity.h"
 
 class Line : public getEntity

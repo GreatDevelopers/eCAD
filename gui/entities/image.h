@@ -2,9 +2,11 @@
 #define IMAGE_H
 
 #include <QPainter>
-#include <QGraphicsItem>
+#include <QStyleOptionGraphicsItem>
 
-class Image : public QObject, public QGraphicsItem
+#include "getEntity.h"
+
+class Image : public getEntity
 {
     Q_OBJECT
 

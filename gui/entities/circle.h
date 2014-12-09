@@ -2,11 +2,10 @@
 #define CIRCLE_H
 
 #include <QPainter>
-#include <QGraphicsItem>
+#include <QStyleOptionGraphicsItem>
 
 #include "qmath.h"
 #include "getEntity.h"
-#include "clipboardstack.h"
 
 class Circle : public getEntity
 {

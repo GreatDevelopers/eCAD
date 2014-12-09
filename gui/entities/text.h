@@ -2,14 +2,7 @@
 #define TEXT_H
 
 #include <QGraphicsTextItem>
-#include <QPen>
-
-QT_BEGIN_NAMESPACE
-class QFocusEvent;
-class QGraphicsItem;
-class QGraphicsScene;
-class QGraphicsSceneMouseEvent;
-QT_END_NAMESPACE
+#include <QStyleOptionGraphicsItem>
 
 class Text : public QGraphicsTextItem
 {

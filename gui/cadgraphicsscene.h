@@ -4,14 +4,13 @@
 #include <QGraphicsScene>
 #include <QXmlStreamWriter>
 #include <QUndoStack>
-#include <cmath>
 #include <QMenu>
 #include <QToolTip>
 
+#include "qmath.h"
 #include "cadcommands/cadcommandadd.h"
 #include "cadcommands/cadcommanddelete.h"
 #include "cadcommands/cadcommandmove.h"
-#include "getEntity.h"
 #include "clipboardstack.h"
 
 class CadGraphicsScene : public QGraphicsScene
