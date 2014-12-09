@@ -11,6 +11,7 @@
 #include "ellipse.h"
 #include "text.h"
 #include "arc.h"
+#include "image.h"
 
 class CadCommandMove : public QUndoCommand
 {
@@ -77,7 +78,8 @@ public:
         {
             Image *imageItem = dynamic_cast<Image *>(cadItem);
             setText(QString("Image moved to (%1,%2)")
-                    .arg(nPos.x()).arg(nPos.y()));
+                    .arg(nPos.x() + imageItem->startP.x())
+                    .arg(nPos.y() + imageItem->startP.y()));
         }
     }
 

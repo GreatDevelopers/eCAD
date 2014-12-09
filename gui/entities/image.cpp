@@ -29,5 +29,18 @@ int Image::type() const
 void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
+    QPen paintpen(Qt::black);
+    paintpen.setWidth(1);
+    paintpen.setStyle(Qt::DashLine);
+    paintpen.setColor(Qt::black);
+    painter->setRenderHint(QPainter::Antialiasing);
+
     painter->drawPixmap(startP, imagePixmap);
+
+    if (isSelected())
+    {
+        // sets pen for bounding rect after selection
+        painter->setPen(paintpen);
+        painter->drawRect(boundingRect());
+    }
 }
