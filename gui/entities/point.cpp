@@ -29,7 +29,7 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     // draws/paints the point
     QPen paintpen;
 
-    if (isSelected())
+    if (option->state & QStyle::State_Selected)
         paintpen.setColor(Qt::red);
     else
         paintpen.setColor(Qt::black);

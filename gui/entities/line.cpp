@@ -53,7 +53,7 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setRenderHint(QPainter::Antialiasing);
     paintpen.setWidth(1);
 
-    if (isSelected())
+    if (option->state & QStyle::State_Selected)
     {
         // sets brush for end points
         painter->setBrush(Qt::SolidPattern);

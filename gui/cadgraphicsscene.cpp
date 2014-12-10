@@ -164,10 +164,10 @@ void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
     if (isGridVisible)
     {
         const int gridSize = 50;
-        const int realLeft = static_cast<int>(std::floor(rect.left()));
-        const int realRight = static_cast<int>(std::ceil(rect.right()));
-        const int realTop = static_cast<int>(std::floor(rect.top()));
-        const int realBottom = static_cast<int>(std::ceil(rect.bottom()));
+        const int realLeft = static_cast<int>(qFloor(rect.left()));
+        const int realRight = static_cast<int>(qCeil(rect.right()));
+        const int realTop = static_cast<int>(qFloor(rect.top()));
+        const int realBottom = static_cast<int>(qCeil(rect.bottom()));
 
         // Draw grid.
         const int firstLeftGridLine = realLeft - (realLeft % gridSize);

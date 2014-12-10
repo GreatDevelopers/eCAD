@@ -1,13 +1,10 @@
 #ifndef ARC_H
 #define ARC_H
 
-#include <QGraphicsItem>
-#include <QLineF>
-#include <QPointF>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QWidget>
 
+#include "qmath.h"
 #include "getEntity.h"
 
 class Arc : public getEntity

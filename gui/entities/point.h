@@ -2,10 +2,9 @@
 #define POINT_H
 
 #include <QPainter>
-#include <QGraphicsItem>
+#include <QStyleOptionGraphicsItem>
 
 #include "getEntity.h"
-#include "clipboardstack.h"
 
 class Point : public getEntity
 {

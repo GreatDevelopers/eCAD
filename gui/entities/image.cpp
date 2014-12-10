@@ -37,7 +37,7 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     painter->drawPixmap(startP, imagePixmap);
 
-    if (isSelected())
+    if (option->state & QStyle::State_Selected)
     {
         // sets pen for bounding rect after selection
         painter->setPen(paintpen);

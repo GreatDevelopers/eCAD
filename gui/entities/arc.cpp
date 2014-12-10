@@ -1,7 +1,4 @@
 #include "arc.h"
-#include "qmath.h"
-#include <QPen>
-#include <QPainterPath>
 
 Arc::Arc(int i, QPointF point1, QPointF point2, QPointF point3)
 {
@@ -85,7 +82,7 @@ void Arc::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     paintpen.setWidth(1);
 
     // Draw arc
-    if (isSelected())
+    if (option->state & QStyle::State_Selected)
     {
         // sets brush for end points
         painter->setBrush(Qt::SolidPattern);
