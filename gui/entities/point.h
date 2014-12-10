@@ -13,6 +13,7 @@ class Point : public getEntity
 public:
     Point(QObject *parent = 0) : getEntity(parent) {}
     Point(int, QPointF);
+    Point(QPointF);
     enum { Type = UserType + 1 };
     int type() const;
     getEntity *clone(int);

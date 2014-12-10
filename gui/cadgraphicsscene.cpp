@@ -16,12 +16,55 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     copyAction = contextMenu->addAction("copy");
     pasteAction = contextMenu->addAction("paste");
     contextItem = 0;
+    installEventFilter(this);
 
     // connects context menu items to action slots
     connect(contextMenu, SIGNAL(triggered(QAction *)),
             this, SLOT(menuAction(QAction *)));
     // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
+}
+
+bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::GraphicsSceneMouseMove)
+    {
+        QGraphicsSceneMouseEvent *mouseEvent =
+                static_cast<QGraphicsSceneMouseEvent *>(event);
+
+        if (entityMode == NoMode)
+        {
+            if (!previewList.isEmpty())
+            {
+                removeItem(previewList.last());
+                previewList.clear();
+            }
+        }
+
+        if (entityMode == PointMode)
+        {
+            if (!previewList.isEmpty())
+                removeItem(pointItem);
+
+            pointItem = new Point(mouseEvent->scenePos());
+            pointItem->setPos(mouseEvent->scenePos());
+            previewList.append(pointItem);
+            addItem(pointItem);
+        }
+
+        if (entityMode == LineMode)
+        {
+            if (!previewList.isEmpty() && mSecondClick)
+                removeItem(lineItem);
+
+            if (mSecondClick)
+            {
+                lineItem = new Line(startP, mouseEvent->scenePos());
+                previewList.append(lineItem);
+                addItem(lineItem);
+            }
+        }
+    }
 }
 
 void CadGraphicsScene::setFlags()
