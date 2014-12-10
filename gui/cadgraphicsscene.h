@@ -27,6 +27,7 @@ public:
     void drawBackground(QPainter *painter, const QRectF &rect);
     void setFlags();
     void drawEntity(QGraphicsItem *item);
+    bool eventFilter(QObject *watched, QEvent *event);
 
     typedef QPair<QGraphicsItem *, QPointF> entityPos;
     QList<entityPos> selectedEntities;
@@ -75,6 +76,7 @@ private:
     float differenceY;
 
     QList<QGraphicsItem *> itemList;
+    QList<QGraphicsItem *> previewList;
     Point *pointItem;
     Line *lineItem;
     Circle *circleItem;

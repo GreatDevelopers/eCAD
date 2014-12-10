@@ -1,5 +1,17 @@
 #include "ellipse.h"
 
+Ellipse::Ellipse(QPointF point1, QPointF point2, QPointF point3)
+{
+    /** set values of three points
+     * and calculate radii of ellipse
+    */
+    p1 = point1;
+    p2 = point2;
+    p3 = point3;
+
+    calculate();
+}
+
 Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
 {
     // assigns id
@@ -12,6 +24,25 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
     p2 = point2;
     p3 = point3;
 
+    calculate();
+}
+
+Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM)
+{
+    // assigns id
+    id = i;
+
+    /**
+     * set values of center point
+     * and radii of ellipse
+    */
+    p1 = point1;
+    minRadius = rad;
+    majRadius = radM;
+}
+
+void Ellipse::calculate()
+{
     d12 = qSqrt(qPow((p2.x() - p1.x()), 2) + qPow((p2.y() - p1.y()), 2));
     d13 = qSqrt(qPow((p3.x() - p1.x()), 2) + qPow((p3.y() - p1.y()), 2));
 
@@ -27,20 +58,6 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
         minRadius = d12;
         theta = atan2((p3.y() - p1.y()), (p3.x() - p1.x())) * (180 / M_PI);
     }
-}
-
-Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM)
-{
-    // assigns id
-    id = i;
-
-    /**
-     * set values of center point
-     * and radii of ellipse
-    */
-    p1 = point1;
-    minRadius = rad;
-    majRadius = radM;
 }
 
 int Ellipse::type() const

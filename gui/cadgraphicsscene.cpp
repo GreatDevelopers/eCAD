@@ -16,12 +16,92 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     copyAction = contextMenu->addAction("copy");
     pasteAction = contextMenu->addAction("paste");
     contextItem = 0;
+    installEventFilter(this);
 
     // connects context menu items to action slots
     connect(contextMenu, SIGNAL(triggered(QAction *)),
             this, SLOT(menuAction(QAction *)));
     // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
+}
+
+bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::GraphicsSceneMouseMove)
+    {
+        QGraphicsSceneMouseEvent *mouseEvent =
+                static_cast<QGraphicsSceneMouseEvent *>(event);
+
+        // shows mouse position tooltip
+        QToolTip::showText(mouseEvent->screenPos(),
+                           QString("%1, %2")
+                           .arg(mouseEvent->scenePos().x())
+                           .arg(mouseEvent->scenePos().y()));
+
+        if (!previewList.isEmpty())
+        {
+            removeItem(previewList.last());
+            previewList.clear();
+        }
+
+        if (entityMode == PointMode)
+        {
+            if (!previewList.isEmpty())
+                removeItem(pointItem);
+
+            pointItem = new Point(mouseEvent->scenePos());
+            pointItem->setPos(mouseEvent->scenePos());
+            previewList.append(pointItem);
+            addItem(pointItem);
+        }
+
+        if (entityMode == LineMode)
+        {
+            if (!previewList.isEmpty() && mSecondClick)
+                removeItem(lineItem);
+
+            if (mSecondClick)
+            {
+                lineItem = new Line(startP, mouseEvent->scenePos());
+                previewList.append(lineItem);
+                addItem(lineItem);
+            }
+        }
+
+        if (entityMode == CircleMode)
+        {
+            if (!previewList.isEmpty() && mSecondClick)
+                removeItem(circleItem);
+
+            if (mSecondClick)
+            {
+                circleItem = new Circle(startP, mouseEvent->scenePos());
+                previewList.append(circleItem);
+                addItem(circleItem);
+            }
+        }
+
+        if (entityMode == EllipseMode)
+        {
+            if (!previewList.isEmpty() && (mSecondClick || mThirdClick))
+                removeItem(ellipseItem);
+
+            if (mSecondClick)
+            {
+                ellipseItem = new Ellipse(startP, mouseEvent->scenePos(),
+                                          mouseEvent->scenePos());
+                previewList.append(ellipseItem);
+                addItem(ellipseItem);
+            }
+
+            if (mThirdClick)
+            {
+                ellipseItem = new Ellipse(startP, midP, mouseEvent->scenePos());
+                previewList.append(ellipseItem);
+                addItem(ellipseItem);
+            }
+        }
+    }
 }
 
 void CadGraphicsScene::setFlags()
@@ -551,14 +631,6 @@ void CadGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
             isInvertedSelection = false;
         else
             isInvertedSelection = true;
-    }
-
-    else
-    {
-        QToolTip::showText(mouseEvent->screenPos(),
-                           QString("%1, %2")
-                           .arg(mouseEvent->scenePos().x())
-                           .arg(mouseEvent->scenePos().y()));
     }
 
     emit(setSelectionSignal());

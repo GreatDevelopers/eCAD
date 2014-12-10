@@ -14,6 +14,7 @@ class Line : public getEntity
 public:
     Line(QObject *parent = 0) : getEntity(parent) {}
     Line(int, QPointF, QPointF);
+    Line(QPointF, QPointF);
     QPainterPath shape() const;
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,

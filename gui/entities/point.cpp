@@ -1,5 +1,11 @@
 #include "point.h"
 
+Point::Point(QPointF p)
+{
+    // sets position of point
+    position = p;
+}
+
 Point::Point(int i, QPointF p)
 {
     // assigns id
