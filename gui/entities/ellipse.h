@@ -15,6 +15,8 @@ public:
     Ellipse(QObject *parent = 0) : getEntity(parent) {}
     Ellipse(int, QPointF, QPointF, QPointF);
     Ellipse(int, QPointF, qreal, qreal);
+    Ellipse(QPointF, QPointF, QPointF);
+    void calculate();
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,

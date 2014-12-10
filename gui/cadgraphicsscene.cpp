@@ -32,13 +32,16 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
         QGraphicsSceneMouseEvent *mouseEvent =
                 static_cast<QGraphicsSceneMouseEvent *>(event);
 
-        if (entityMode == NoMode)
+        // shows mouse position tooltip
+        QToolTip::showText(mouseEvent->screenPos(),
+                           QString("%1, %2")
+                           .arg(mouseEvent->scenePos().x())
+                           .arg(mouseEvent->scenePos().y()));
+
+        if (!previewList.isEmpty())
         {
-            if (!previewList.isEmpty())
-            {
-                removeItem(previewList.last());
-                previewList.clear();
-            }
+            removeItem(previewList.last());
+            previewList.clear();
         }
 
         if (entityMode == PointMode)
@@ -62,6 +65,40 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                 lineItem = new Line(startP, mouseEvent->scenePos());
                 previewList.append(lineItem);
                 addItem(lineItem);
+            }
+        }
+
+        if (entityMode == CircleMode)
+        {
+            if (!previewList.isEmpty() && mSecondClick)
+                removeItem(circleItem);
+
+            if (mSecondClick)
+            {
+                circleItem = new Circle(startP, mouseEvent->scenePos());
+                previewList.append(circleItem);
+                addItem(circleItem);
+            }
+        }
+
+        if (entityMode == EllipseMode)
+        {
+            if (!previewList.isEmpty() && (mSecondClick || mThirdClick))
+                removeItem(ellipseItem);
+
+            if (mSecondClick)
+            {
+                ellipseItem = new Ellipse(startP, mouseEvent->scenePos(),
+                                          mouseEvent->scenePos());
+                previewList.append(ellipseItem);
+                addItem(ellipseItem);
+            }
+
+            if (mThirdClick)
+            {
+                ellipseItem = new Ellipse(startP, midP, mouseEvent->scenePos());
+                previewList.append(ellipseItem);
+                addItem(ellipseItem);
             }
         }
     }
@@ -594,14 +631,6 @@ void CadGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
             isInvertedSelection = false;
         else
             isInvertedSelection = true;
-    }
-
-    else
-    {
-        QToolTip::showText(mouseEvent->screenPos(),
-                           QString("%1, %2")
-                           .arg(mouseEvent->scenePos().x())
-                           .arg(mouseEvent->scenePos().y()));
     }
 
     emit(setSelectionSignal());
