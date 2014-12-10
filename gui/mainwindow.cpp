@@ -652,17 +652,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
                                                   "Are you sure you want to exit?",
                                                   QMessageBox::Yes|QMessageBox::No))
         event->accept();
-
-    if (aboutDialog)
-        aboutDialog->close();
-
-    if (view->undoView)
-        view->undoView->close();
 }
 
 void MainWindow::showAboutDialog()
 {
-    aboutDialog = new QDialog;
+    aboutDialog = new QDialog(this);
     Ui::About aboutUi;
     aboutUi.setupUi(aboutDialog);
     connect(aboutUi.Close, SIGNAL(pressed()), aboutDialog, SLOT(close()));
