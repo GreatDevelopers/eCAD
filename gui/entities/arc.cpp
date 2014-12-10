@@ -2,7 +2,13 @@
 
 Arc::Arc(int i, QPointF point1, QPointF point2, QPointF point3)
 {
+    // assigns id
     id = i;
+
+    /**
+     * set values of three points
+     * and calls init() to do calculation for arc
+     */
     p1 = point1;
     p2 = point2;
     p3 = point3;
@@ -17,18 +23,19 @@ int Arc::type() const
 
 Arc::Arc(QPointF point1, QPointF point2, QPointF point3)
 {
+    /**
+     * set values of three points
+     * and calls init() to do calculation for arc
+     */
     p1 = point1;
     p2 = point2;
     p3 = point3;
-    p1 = QPointF(0,0);
-    p2 = QPointF(0,1);
-    p3 = QPointF(1,1);
     init();
 }
 
-// Calculates startangle and spanangle
 void Arc::init()
 {
+    // Calculates startangle and spanangle
     lineBC = QLineF(p2, p3);
     lineAC = QLineF(p1, p3);
     lineBA = QLineF(p2, p1);
@@ -55,7 +62,7 @@ void Arc::init()
     /**
      * Make sure that the span angle covers all three points with the
      * second point in the middle
-   */
+     */
     if (qAbs(spanAngle) < qAbs(lineOA.angleTo(lineOB)) ||
             qAbs(spanAngle) < qAbs(lineOB.angleTo(lineOC)))
     {
@@ -70,7 +77,7 @@ void Arc::init()
 
 QRectF Arc::boundingRect() const
 {
-    // outer most edges
+    // bounding rectangle for arc
     return boundingRectTemp;
 }
 

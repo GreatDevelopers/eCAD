@@ -101,6 +101,31 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                 addItem(ellipseItem);
             }
         }
+
+        if (entityMode == ArcMode)
+        {
+            if (!previewList.isEmpty())
+            {
+                if (mSecondClick)
+                    removeItem(lineItem);
+                if (mThirdClick)
+                    removeItem(arcItem);
+            }
+
+            if (mSecondClick)
+            {
+                lineItem = new Line(startP, mouseEvent->scenePos());
+                previewList.append(lineItem);
+                addItem(lineItem);
+            }
+
+            if (mThirdClick)
+            {
+                arcItem = new Arc(startP, midP, mouseEvent->scenePos());
+                previewList.append(arcItem);
+                addItem(arcItem);
+            }
+        }
     }
 }
 
