@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(openFile()));
     connect(actionSave, SIGNAL(triggered()),
             this, SLOT(saveFile()));
+    connect(actionSaveAs, SIGNAL(triggered()),
+            this, SLOT(saveFileAs()));
     connect(actionClose, SIGNAL(triggered()),
             this, SLOT(closeActiveWindow()));
     connect(actionQuit, SIGNAL(triggered()),
@@ -533,10 +535,10 @@ void MainWindow::openFile()
     }
 }
 
-void MainWindow::saveFile()
+void MainWindow::saveFileAs()
 {
     // save file dialog box
-    QString filename = QFileDialog::getSaveFileName(this,
+    filename = QFileDialog::getSaveFileName(this,
                                                   tr("Save File"),
                                                   QString(),
                                                   tr("file Name(*.xml)"));
@@ -572,6 +574,41 @@ void MainWindow::saveFile()
 
     else
         return;
+}
+
+void MainWindow::saveFile()
+{
+    if(filename.isEmpty())
+    {
+        return saveFileAs();
+    }
+
+    QFile file(filename);
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+        return;
+    }
+
+    else
+    {
+        QXmlStreamWriter xmlWriter(&file);
+        xmlWriter.setAutoFormatting(true);
+        xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("SceneData");
+        xmlWriter.writeAttribute("version", "v1.0");
+        xmlWriter.writeStartElement("Entities");
+
+        view->scene->writeStream(&xmlWriter);
+
+        xmlWriter.writeEndElement();   //end of Entities
+        xmlWriter.writeEndElement();   //end of SceneData
+        QMessageBox::warning(this, "Saved",
+                             QString("Saved Scene Data to '%1'").
+                             arg(filename));
+        file.close();
+    }
 }
 
 void MainWindow::showGrid(bool b)

@@ -41,7 +41,7 @@ private:
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
-    QString curFileName;
+    QString curFileName, filename;
     int fileNumber;
 
 private slots:
@@ -58,6 +58,7 @@ private slots:
     void toggleWidgets();
     void hideStatusBar(bool ok);
     void saveFile();
+    void saveFileAs();
     void openFile();
     void showGrid(bool);
     void zoomIn();
