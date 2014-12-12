@@ -58,6 +58,11 @@ void Ellipse::calculate()
         minRadius = d12;
         theta = atan2((p3.y() - p1.y()), (p3.x() - p1.x())) * (180 / M_PI);
     }
+
+    topLeft.setX(p1.x() - majRadius);
+    topLeft.setY(p1.y() - minRadius);
+    bottomRight.setX(p1.x() + majRadius);
+    bottomRight.setY(p1.y() + minRadius);
 }
 
 int Ellipse::type() const
@@ -66,19 +71,21 @@ int Ellipse::type() const
     return Type;
 }
 
+QPainterPath Ellipse::shape() const
+{
+    // sets the shape of the ellipse for selection
+    QPainterPath path, path2;
+    qreal adjust = 10;
+    path.addEllipse(p1, majRadius + adjust, minRadius + adjust);
+    path2.addEllipse(p1, majRadius - adjust, minRadius - adjust);
+    return path - path2;
+}
+
 QRectF Ellipse::boundingRect() const
 {
     // bounding rectangle for ellipse
-    float topLeftX = majRadius * cos(theta);
-    float topLeftY = majRadius * sin(theta);
-    float bottomRightX = minRadius * cos(theta + M_PI / 2);
-    float bottomRightY = minRadius * sin(theta + M_PI / 2);
-
-    float halfWidth = sqrt((topLeftX * topLeftX) + (bottomRightX * bottomRightX));
-    float halfHeight = sqrt((topLeftY * topLeftY) + (bottomRightY * bottomRightY));
-
-    return QRectF(p1.x() - 1.5 * halfWidth, p1.y() - 1.5 * halfHeight,
-                  3 * halfWidth, p1.y() + 3 * halfHeight);
+    return QRectF(p1.x() - majRadius, p1.y() - majRadius,
+                  majRadius * 2, majRadius * 2);
 }
 
 void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -96,10 +103,6 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         paintpen.setColor(Qt::red);
         painter->setPen(paintpen);
         painter->drawEllipse(p1, 2, 2);
-        painter->save();
-        painter->translate(p1.x(), p1.y());
-        painter->rotate(theta);
-        painter->translate(-p1.x(), -p1.y());
 
         // sets pen for circumference
         paintpen.setStyle(Qt::DashLine);
@@ -107,23 +110,20 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setBrush(Qt::NoBrush);
         painter->setPen(paintpen);
         painter->drawEllipse(p1, majRadius, minRadius);
-        painter->restore();
     }
 
     else
     {
         painter->setBrush(Qt::SolidPattern);
         painter->drawEllipse(p1, 2, 2);
-        painter->save();
-        painter->translate(p1.x(), p1.y());
-        painter->rotate(theta);
-        painter->translate(-p1.x(), -p1.y());
 
         painter->setBrush(Qt::NoBrush);
         painter->setPen(paintpen);
         painter->drawEllipse(p1, majRadius, minRadius);
-        painter->restore();
     }
+
+    setTransformOriginPoint(p1);
+    setRotation(theta);
 }
 
 getEntity *Ellipse::clone(int i)

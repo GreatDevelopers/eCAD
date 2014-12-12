@@ -41,7 +41,7 @@ private:
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
-    QString curFileName, filename;
+    QString curFileName, fileName;
     int fileNumber;
 
 private slots:

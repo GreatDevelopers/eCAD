@@ -101,6 +101,7 @@ MainWindow::~MainWindow()
 void MainWindow::toggleActions(bool b)
 {
     actionSave->setEnabled(b);
+    actionSaveAs->setEnabled(b);
     actionPrint->setEnabled(b);
     actionPrintPreview->setEnabled(b);
     actionGrid->setEnabled(b);
@@ -477,19 +478,20 @@ void MainWindow::deleteItems()
 void MainWindow::openFile()
 {
     // open file dialog box
-    QString filename = QFileDialog::getOpenFileName(this,
+    QString openFileName = QFileDialog::getOpenFileName(this,
                                                   tr("Open File"),
                                                   QString(),
                                                   tr("file Name(*.xml)"));
-    if (filename.isNull())
+
+    if (openFileName.isNull())
         return;
 
     else
     {
         newFile();
-        view->setWindowTitle(filename);
+        view->setWindowTitle(openFileName);
         --fileNumber;
-        QFile file(filename);
+        QFile file(openFileName);
 
         if (!file.open(QIODevice::ReadOnly))
         {
@@ -521,7 +523,7 @@ void MainWindow::openFile()
                 file.close();
                 QMessageBox::warning(this, "Error",
                                      QString("Failed to load '%1' (%2)").
-                                     arg(filename).arg(stream.errorString()));
+                                     arg(openFileName).arg(stream.errorString()));
                 delete view->scene;
                 return;
             }
@@ -529,7 +531,7 @@ void MainWindow::openFile()
             // close file and display useful message
             file.close();
             mainStatusBar->showMessage(QString("Loaded '%1' successfully")
-                                       .arg(filename), 3000);
+                                       .arg(openFileName), 3000);
             return;
         }
     }
@@ -538,13 +540,14 @@ void MainWindow::openFile()
 void MainWindow::saveFileAs()
 {
     // save file dialog box
-    filename = QFileDialog::getSaveFileName(this,
-                                                  tr("Save File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
-    if(!filename.isEmpty())
+    fileName = QFileDialog::getSaveFileName(this,
+                                            tr("Save File"),
+                                            QString(),
+                                            tr("file Name(*.xml)"));
+
+    if(!fileName.isEmpty())
     {
-        QFile file(filename);
+        QFile file(fileName);
 
         if (!file.open(QIODevice::WriteOnly))
         {
@@ -567,7 +570,7 @@ void MainWindow::saveFileAs()
             xmlWriter.writeEndElement();   //end of SceneData
             QMessageBox::warning(this, "Saved",
                                  QString("Saved Scene Data to '%1'").
-                                 arg(filename));
+                                 arg(fileName));
             file.close();
         }
     }
@@ -578,12 +581,10 @@ void MainWindow::saveFileAs()
 
 void MainWindow::saveFile()
 {
-    if(filename.isEmpty())
-    {
+    if(fileName.isEmpty())
         return saveFileAs();
-    }
 
-    QFile file(filename);
+    QFile file(fileName);
 
     if (!file.open(QIODevice::WriteOnly))
     {
@@ -606,7 +607,7 @@ void MainWindow::saveFile()
         xmlWriter.writeEndElement();   //end of SceneData
         QMessageBox::warning(this, "Saved",
                              QString("Saved Scene Data to '%1'").
-                             arg(filename));
+                             arg(fileName));
         file.close();
     }
 }

@@ -17,6 +17,7 @@ public:
     Ellipse(int, QPointF, qreal, qreal);
     Ellipse(QPointF, QPointF, QPointF);
     void calculate();
+    QPainterPath shape() const;
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,
@@ -26,9 +27,9 @@ public:
     getEntity *clone(int);
 
     int id;
-    QPointF p1, p2, p3;
-    float d12, d13, majRadius, minRadius;
-    float theta;
+    QPointF p1, p2, p3, topLeft, bottomRight;
+    qreal d12, d13, majRadius, minRadius;
+    qreal theta;
 };
 
 #endif // ELLIPSE_H

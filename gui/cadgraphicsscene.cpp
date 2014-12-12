@@ -613,8 +613,10 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (item.first->type() == Ellipse::Type)
             {
                 Ellipse *itemPtr = dynamic_cast<Ellipse *>(item.first);
+                itemPtr->setTransformOriginPoint(0, 0);
                 mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                     itemPtr->scenePos()));
+                update(itemPtr->boundingRect());
             }
 
             else if (item.first->type() == Text::Type)
@@ -717,6 +719,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
             else if (item->type() == Ellipse::Type)
             {
                 Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
+                itemPtr->setTransformOriginPoint(0, 0);
                 stream->writeStartElement("Ellipse");
                 stream->writeAttribute("id", QString::number(itemPtr->id));
                 stream->writeAttribute("cx", QString::number(itemPtr->p1.x()

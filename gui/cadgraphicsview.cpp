@@ -135,9 +135,9 @@ void CadGraphicsView::selectWindow()
      * intersects with the selection area.
      */
     if (!scene->isInvertedSelection)
-        setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
+        setRubberBandSelectionMode(Qt::ContainsItemShape);
     else
-        setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
+        setRubberBandSelectionMode(Qt::IntersectsItemShape);
 
     cursorMode();
 }
