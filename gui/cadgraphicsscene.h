@@ -66,7 +66,7 @@ private:
     bool mSecondClick;
     bool mThirdClick;
     bool mPaintFlag;
-    qreal x, y, rad, radM;
+    qreal x, y, rad, radM, angle;
     QString str;
     QPen paintpen, linePen;
     QPointF contextPosition;

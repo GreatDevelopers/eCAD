@@ -14,7 +14,7 @@ class Ellipse : public getEntity
 public:
     Ellipse(QObject *parent = 0) : getEntity(parent) {}
     Ellipse(int, QPointF, QPointF, QPointF);
-    Ellipse(int, QPointF, qreal, qreal);
+    Ellipse(int, QPointF, qreal, qreal, qreal);
     Ellipse(QPointF, QPointF, QPointF);
     void calculate();
     QPainterPath shape() const;

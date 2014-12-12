@@ -27,7 +27,7 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
     calculate();
 }
 
-Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM)
+Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM, qreal angle)
 {
     // assigns id
     id = i;
@@ -39,6 +39,7 @@ Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM)
     p1 = point1;
     minRadius = rad;
     majRadius = radM;
+    theta = angle;
 }
 
 void Ellipse::calculate()

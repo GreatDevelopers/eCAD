@@ -730,6 +730,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                                                              .y()));
                 stream->writeAttribute("majR", QString::number(itemPtr->majRadius));
                 stream->writeAttribute("minR", QString::number(itemPtr->minRadius));
+                stream->writeAttribute("angle", QString::number(itemPtr->theta));
                 stream->writeEndElement();  //end of Ellipse Item
             }
 
@@ -862,9 +863,11 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                     radM = attribute.value().toString().toDouble();
                 if (attribute.name() == "minR")
                     rad = attribute.value().toString().toDouble();
+                if (attribute.name() == "angle")
+                    angle = attribute.value().toString().toDouble();
             }
 
-            ellipseItem = new Ellipse(id, startP, rad, radM);
+            ellipseItem = new Ellipse(id, startP, rad, radM, angle);
             drawEntity(ellipseItem);
         }
 
