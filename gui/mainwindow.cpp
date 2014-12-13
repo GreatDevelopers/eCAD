@@ -402,7 +402,11 @@ void MainWindow::print(QPrinter *printer)
                      toString(Qt::DefaultLocaleShortDate));
 
     page.adjust(w/20, h/20, -w/20, -h/20);
+
+    //hides/disables grid for print and print preview
+    view->scene->isGridVisible = false;
     view->scene->render(&painter, page);
+    view->scene->isGridVisible = true;
 }
 
 CadGraphicsView *MainWindow::createMdiView()
@@ -479,9 +483,9 @@ void MainWindow::openFile()
 {
     // open file dialog box
     QString openFileName = QFileDialog::getOpenFileName(this,
-                                                  tr("Open File"),
-                                                  QString(),
-                                                  tr("file Name(*.xml)"));
+                                                        tr("Open File"),
+                                                        QString(),
+                                                        tr("file Name(*.xml)"));
 
     if (openFileName.isNull())
         return;

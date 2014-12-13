@@ -44,3 +44,14 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawRect(boundingRect());
     }
 }
+
+getEntity *Image::clone(int i)
+{
+    Image *image = new Image;
+    image->id = i;
+    image->startP = startP;
+    image->path = path;
+    image->img = img;
+    image->imagePixmap = imagePixmap;
+    return image;
+}
