@@ -406,6 +406,7 @@ void MainWindow::print(QPrinter *printer)
     //hides/disables grid for print and print preview
     view->scene->isGridVisible = false;
     view->scene->render(&painter, page);
+    view->scene->isGridVisible = true;
 }
 
 CadGraphicsView *MainWindow::createMdiView()
