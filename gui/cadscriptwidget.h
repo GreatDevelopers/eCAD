@@ -64,7 +64,7 @@ public slots:
     void point(qreal, qreal);
     void line(qreal, qreal, qreal, qreal);
     void circle(qreal, qreal, qreal);
-    void ellipse(qreal, qreal, qreal, qreal);
+    void ellipse(qreal, qreal, qreal, qreal, qreal);
     void text(qreal, qreal, QString);
     void arc(qreal, qreal, qreal, qreal, qreal, qreal);
 };

@@ -613,8 +613,10 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (item.first->type() == Ellipse::Type)
             {
                 Ellipse *itemPtr = dynamic_cast<Ellipse *>(item.first);
+                itemPtr->setTransformOriginPoint(0, 0);
                 mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                     itemPtr->scenePos()));
+                update(itemPtr->boundingRect());
             }
 
             else if (item.first->type() == Text::Type)
@@ -717,6 +719,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
             else if (item->type() == Ellipse::Type)
             {
                 Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
+                itemPtr->setTransformOriginPoint(0, 0);
                 stream->writeStartElement("Ellipse");
                 stream->writeAttribute("id", QString::number(itemPtr->id));
                 stream->writeAttribute("cx", QString::number(itemPtr->p1.x()
@@ -727,6 +730,7 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                                                              .y()));
                 stream->writeAttribute("majR", QString::number(itemPtr->majRadius));
                 stream->writeAttribute("minR", QString::number(itemPtr->minRadius));
+                stream->writeAttribute("angle", QString::number(itemPtr->theta));
                 stream->writeEndElement();  //end of Ellipse Item
             }
 
@@ -859,9 +863,11 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
                     radM = attribute.value().toString().toDouble();
                 if (attribute.name() == "minR")
                     rad = attribute.value().toString().toDouble();
+                if (attribute.name() == "angle")
+                    angle = attribute.value().toString().toDouble();
             }
 
-            ellipseItem = new Ellipse(id, startP, rad, radM);
+            ellipseItem = new Ellipse(id, startP, rad, radM, angle);
             drawEntity(ellipseItem);
         }
 

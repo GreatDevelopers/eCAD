@@ -30,7 +30,7 @@ QPainterPath Line::shape() const
     qreal adjust = 10;
     QLineF line(startP, endP);
     QPolygonF nPolygon;
-    qreal radAngle = line.angle()* M_PI / 180;
+    qreal radAngle = line.angle() * M_PI / 180;
     qreal dx = adjust * sin(radAngle);
     qreal dy = adjust * cos(radAngle);
     QPointF offset1 = QPointF(dx, dy);

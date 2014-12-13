@@ -223,10 +223,11 @@ void CadScriptWidget::circle(qreal x, qreal y, qreal r)
     currentScene->drawEntity(circleItem);
 }
 
-void CadScriptWidget::ellipse(qreal x, qreal y, qreal minR, qreal majR)
+void CadScriptWidget::ellipse(qreal x, qreal y, qreal minR,
+                              qreal majR, qreal angle)
 {
     // creates an ellipse entity in the scene
-    ellipseItem = new Ellipse(++id, QPointF(x,y), minR, majR);
+    ellipseItem = new Ellipse(++id, QPointF(x,y), minR, majR, angle);
     currentScene->drawEntity(ellipseItem);
 }
 
