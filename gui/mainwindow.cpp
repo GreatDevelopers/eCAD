@@ -19,6 +19,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileNumber = 0;
     mainStatusBar->showMessage("Welcome to eCAD");
 
+    // shortcut keys
+    new QShortcut(QKeySequence(Qt::Key_Escape),
+                  this, SLOT(setNoMode()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U),
+                  this, SLOT(showUndoStack()));
+    new QShortcut(QKeySequence(Qt::Key_Delete),
+                  this, SLOT(deleteItems()));
+
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateView()));
     connect(actionPoints, SIGNAL(triggered()),
@@ -124,14 +132,6 @@ void MainWindow::toggleActions(bool b)
 
 void MainWindow::setActions()
 {
-    // shortcut keys
-    new QShortcut(QKeySequence(Qt::Key_Escape),
-                  this, SLOT(setNoMode()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U),
-                  this, SLOT(showUndoStack()));
-    new QShortcut(QKeySequence(Qt::Key_Delete),
-                  this, SLOT(deleteItems()));
-
     QAction *actionUndo = view->undoStack->createUndoAction(this);
     QAction *actionRedo = view->undoStack->createRedoAction(this);
     actionUndo->setShortcut(QKeySequence::Undo);
