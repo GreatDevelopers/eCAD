@@ -30,6 +30,7 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
     QPen paintpen(Qt::black);
+    paintpen.setCosmetic(true);
     paintpen.setWidth(1);
     paintpen.setStyle(Qt::DashLine);
     paintpen.setColor(Qt::black);

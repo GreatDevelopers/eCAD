@@ -94,6 +94,7 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     // draws/paints the path of ellipse
     QPen paintpen;
+    paintpen.setCosmetic(true);
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
 
