@@ -92,6 +92,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(invertSelection()));
     connect(actionGrid, SIGNAL(toggled(bool)),
             this, SLOT(showGrid(bool)));
+    connect(actionToolbar, SIGNAL(toggled(bool)),
+            this, SLOT(toggleToolBar(bool)));
     connect(actionStatusBar, SIGNAL(toggled(bool)),
             this, SLOT(hideStatusBar(bool)));
 
@@ -128,6 +130,7 @@ void MainWindow::toggleActions(bool b)
     actionCut->setEnabled(b);
     actionCopy->setEnabled(b);
     actionPaste->setEnabled(b);
+    actionToolbar->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -417,6 +420,12 @@ CadGraphicsView *MainWindow::createMdiView()
     mdiArea->setActiveSubWindow(w);
     windowViewList.append(qMakePair(w, view));
     return view;
+}
+
+void MainWindow::toggleToolBar(bool ok)
+{
+    // hides/shows toolbar on toggling Toolbar option
+    mainToolBar->setVisible(ok);
 }
 
 void MainWindow::hideStatusBar(bool ok)

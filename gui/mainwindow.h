@@ -56,6 +56,7 @@ private slots:
     void setNoMode();
     void showUndoStack();
     void toggleWidgets();
+    void toggleToolBar(bool);
     void hideStatusBar(bool ok);
     void saveFile();
     void saveFileAs();
