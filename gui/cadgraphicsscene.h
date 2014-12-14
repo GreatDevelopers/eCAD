@@ -20,7 +20,7 @@ class CadGraphicsScene : public QGraphicsScene
 public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode,
-                ArcMode, ImageMode };
+                ArcMode, ImageMode, DeleteMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -43,6 +43,7 @@ public slots:
     void selectDeselectAllItems(bool b);
     void invertSelection();
     void deleteItems();
+    void deleteSingleItem();
     void editorLostFocus(Text *item);
     void cut(getEntity *);
     void copy(getEntity *);
@@ -90,6 +91,7 @@ private:
     QAction *copyAction;
     QAction *pasteAction;
     QGraphicsItem *contextItem;
+    QGraphicsItem *clickedItem;
 };
 
 #endif // CADGRAPHICSSCENE_H

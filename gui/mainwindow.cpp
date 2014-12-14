@@ -240,6 +240,8 @@ void MainWindow::newFile()
     // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
             this, SLOT(toggleMenuActions()));
+    connect(actionDeleteEntity, SIGNAL(triggered()),
+            view->scene, SLOT(deleteSingleItem()));
     connect(actionDeleteSelected, SIGNAL(triggered()),
             view->scene, SLOT(deleteItems()));
 
@@ -301,6 +303,7 @@ void MainWindow::toggleMenuActions()
         actionSelectAll->setEnabled(false);
         actionDeselectAll->setEnabled(false);
         actionSelectEntity->setEnabled(false);
+        actionDeleteEntity->setEnabled(false);
         actionDeleteSelected->setEnabled(false);
         actionSelectWindow->setEnabled(false);
         actionCut->setEnabled(false);
@@ -323,6 +326,7 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(true);
         actionInvertSelection->setEnabled(true);
         actionSelectWindow->setEnabled(true);
+        actionDeleteEntity->setEnabled(true);
         actionCut->setEnabled(true);
         actionCopy->setEnabled(true);
         actionPaste->setEnabled(false);
