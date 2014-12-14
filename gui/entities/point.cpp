@@ -40,6 +40,7 @@ void Point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     else
         paintpen.setColor(Qt::black);
 
+    paintpen.setCosmetic(true);
     paintpen.setWidth(2);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(Qt::SolidPattern);

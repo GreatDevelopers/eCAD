@@ -86,6 +86,7 @@ void Arc::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     QPen paintpen;
     painter->setRenderHint(QPainter::Antialiasing);
+    paintpen.setCosmetic(true);
     paintpen.setWidth(1);
 
     // Draw arc

@@ -68,6 +68,7 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
     // draws/paints the path of circle
     QPen paintpen(Qt::black);
+    paintpen.setCosmetic(true);
     paintpen.setWidth(1);
     painter->setRenderHint(QPainter::Antialiasing);
 

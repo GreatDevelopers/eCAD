@@ -58,6 +58,7 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     // draws/paints the path of line
     QPen paintpen;
     painter->setRenderHint(QPainter::Antialiasing);
+    paintpen.setCosmetic(true);
     paintpen.setWidth(1);
 
     if (option->state & QStyle::State_Selected)
