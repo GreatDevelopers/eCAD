@@ -81,8 +81,7 @@
      <property name="title">
       <string>Toolbars</string>
      </property>
-     <addaction name="actionLayers"/>
-     <addaction name="actionBlocks"/>
+     <addaction name="actionToolbar"/>
      <addaction name="actionCommandConsole"/>
      <addaction name="actionScripting"/>
     </widget>
@@ -877,6 +876,20 @@
    </property>
    <property name="text">
     <string>Scripting</string>
+   </property>
+  </action>
+  <action name="actionToolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Toolbar</string>
    </property>
   </action>
  </widget>
