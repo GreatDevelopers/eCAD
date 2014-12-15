@@ -241,7 +241,7 @@ void MainWindow::newFile()
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
             this, SLOT(toggleMenuActions()));
     connect(actionDeleteEntity, SIGNAL(triggered()),
-            view->scene, SLOT(deleteSingleItem()));
+            view, SLOT(deleteSingleItem()));
     connect(actionDeleteSelected, SIGNAL(triggered()),
             view->scene, SLOT(deleteItems()));
 

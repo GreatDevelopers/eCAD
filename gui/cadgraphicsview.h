@@ -36,6 +36,7 @@ public:
 
 public slots:
     void selectWindow();
+    void deleteSingleItem();
 
 protected:
     void wheelEvent(QWheelEvent *event);

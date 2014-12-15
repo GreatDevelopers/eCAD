@@ -114,6 +114,15 @@ void CadGraphicsView::drawImage()
     }
 }
 
+void CadGraphicsView::deleteSingleItem()
+{
+    // sets delete mode to delete single item in the scene
+    scene->setMode(CadGraphicsScene::DeleteMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
 void CadGraphicsView::showUndoStack()
 {
     // shows the undoStack window

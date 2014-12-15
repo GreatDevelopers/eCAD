@@ -264,12 +264,6 @@ void CadGraphicsScene::invertSelection()
     }
 }
 
-void CadGraphicsScene::deleteSingleItem()
-{
-    // sets delete mode to delete single item in the scene
-    setMode(DeleteMode);
-}
-
 void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if (isGridVisible)
