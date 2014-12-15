@@ -45,12 +45,6 @@ private:
     int fileNumber;
 
 private slots:
-    void drawPoint();
-    void drawLine();
-    void drawCircle();
-    void drawEllipse();
-    void drawText();
-    void drawArc();
     void newFile();
     void closeActiveWindow();
     void setNoMode();
@@ -65,16 +59,13 @@ private slots:
     void zoomIn();
     void zoomOut();
     void panning();
-    void insertImage();
     void selectAll();
     void deselectAll();
     void cutOperation();
     void copyOperation();
     void pasteOperation();
     void toggleMenuActions();
-    void selectOneEntity();
     void selectWindow();
-    void invertSelection();
     void deleteItems();
     void toggleActions(bool b);
     void setActions();
