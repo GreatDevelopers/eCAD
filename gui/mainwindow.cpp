@@ -29,21 +29,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateView()));
-    connect(actionPoints, SIGNAL(triggered()),
-            this, SLOT(drawPoint()));
-    connect(actionLine, SIGNAL(triggered()),
-            this, SLOT(drawLine()));
-    connect(actionCircle, SIGNAL(triggered()),
-            this, SLOT(drawCircle()));
-    connect(actionEllipse, SIGNAL(triggered()),
-            this, SLOT(drawEllipse()));
-    connect(actionText, SIGNAL(triggered()),
-            this, SLOT(drawText()));
-    connect(actionArc, SIGNAL(triggered()),
-            this, SLOT(drawArc()));
-    connect(actionInsertImage, SIGNAL(triggered()),
-            this, SLOT(insertImage()));
-
     connect(actionNew, SIGNAL(triggered()),
             this, SLOT(newFile()));
     connect(actionOpen, SIGNAL(triggered()),
@@ -84,12 +69,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(selectAll()));
     connect(actionDeselectAll, SIGNAL(triggered()),
             this, SLOT(deselectAll()));
-    connect(actionSelectEntity, SIGNAL(triggered()),
-            this, SLOT(selectOneEntity()));
     connect(actionSelectWindow, SIGNAL(triggered()),
             this, SLOT(selectWindow()));
-    connect(actionInvertSelection, SIGNAL(triggered()),
-            this, SLOT(invertSelection()));
     connect(actionGrid, SIGNAL(toggled(bool)),
             this, SLOT(showGrid(bool)));
     connect(actionToolbar, SIGNAL(toggled(bool)),
@@ -240,10 +221,28 @@ void MainWindow::newFile()
     // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
             this, SLOT(toggleMenuActions()));
+    connect(actionPoints, SIGNAL(triggered()),
+            view, SLOT(drawPoint()));
+    connect(actionLine, SIGNAL(triggered()),
+            view, SLOT(drawLine()));
+    connect(actionCircle, SIGNAL(triggered()),
+            view, SLOT(drawCircle()));
+    connect(actionEllipse, SIGNAL(triggered()),
+            view, SLOT(drawEllipse()));
+    connect(actionText, SIGNAL(triggered()),
+            view, SLOT(drawText()));
+    connect(actionArc, SIGNAL(triggered()),
+            view, SLOT(drawArc()));
+    connect(actionInsertImage, SIGNAL(triggered()),
+            view, SLOT(drawImage()));
+    connect(actionSelectEntity, SIGNAL(triggered()),
+            view, SLOT(setNoMode()));
     connect(actionDeleteEntity, SIGNAL(triggered()),
             view, SLOT(deleteSingleItem()));
     connect(actionDeleteSelected, SIGNAL(triggered()),
             view->scene, SLOT(deleteItems()));
+    connect(actionInvertSelection, SIGNAL(triggered()),
+            view->scene, SLOT(invertSelection()));
 
     // creates a new command widget
     commandWidget = new CadCommandWidget;
@@ -444,46 +443,10 @@ void MainWindow::showUndoStack()
     view->showUndoStack();
 }
 
-void MainWindow::drawPoint()
-{
-    // calls the drawPoint function of graphicsView
-    view->drawPoint();
-}
-
 void MainWindow::setNoMode()
 {
     // calls the setNoMode function of graphicsView
     view->setNoMode();
-}
-
-void MainWindow::drawLine()
-{
-    // calls the drawLine function of graphicsView
-    view->drawLine();
-}
-
-void MainWindow::drawCircle()
-{
-    // calls the drawCircle function of graphicsView
-    view->drawCircle();
-}
-
-void MainWindow::drawEllipse()
-{
-    // calls the drawEllipse function of graphicsView
-    view->drawEllipse();
-}
-
-void MainWindow::drawText()
-{
-    // calls the drawText function of graphicsView
-    view->drawText();
-}
-
-void MainWindow::drawArc()
-{
-    // calls the drawArc function of graphicsView
-    view->drawArc();
 }
 
 void MainWindow::deleteItems()
@@ -658,12 +621,6 @@ void MainWindow::panning()
     view->isPanning = true;
 }
 
-void MainWindow::insertImage()
-{
-    // insert image
-    view->drawImage();
-}
-
 void MainWindow::selectAll()
 {
     // selects all items in the scene
@@ -677,12 +634,6 @@ void MainWindow::deselectAll()
     view->scene->selectDeselectAllItems(0);
 }
 
-void MainWindow::selectOneEntity()
-{
-    // sets no mode of scene to enable selection without using escape key
-    view->scene->setMode(CadGraphicsScene::NoMode);
-}
-
 void MainWindow::selectWindow()
 {
     QMessageBox messageBox;
@@ -691,12 +642,6 @@ void MainWindow::selectWindow()
     messageBox.setText(message);
     messageBox.exec();
     view->viewport()->setCursor(Qt::CrossCursor);
-}
-
-void MainWindow::invertSelection()
-{
-    // calls the invertSelection of graphicsScene
-    view->scene->invertSelection();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

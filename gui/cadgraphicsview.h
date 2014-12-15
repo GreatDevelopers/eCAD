@@ -16,14 +16,6 @@ class CadGraphicsView : public QGraphicsView
 public:
     CadGraphicsView();
     void newFile();
-    void drawPoint();
-    void drawLine();
-    void drawCircle();
-    void drawEllipse();
-    void drawText();
-    void drawArc();
-    void drawImage();
-    void setNoMode();
     void cursorMode();
     void showUndoStack();
 
@@ -35,6 +27,14 @@ public:
     bool isPanning;
 
 public slots:
+    void drawPoint();
+    void drawLine();
+    void drawCircle();
+    void drawEllipse();
+    void drawText();
+    void drawArc();
+    void drawImage();
+    void setNoMode();
     void selectWindow();
     void deleteSingleItem();
 
