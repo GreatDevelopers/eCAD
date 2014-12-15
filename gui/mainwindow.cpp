@@ -112,6 +112,7 @@ void MainWindow::toggleActions(bool b)
     actionCopy->setEnabled(b);
     actionPaste->setEnabled(b);
     actionToolbar->setEnabled(b);
+    actionClose->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -411,6 +412,8 @@ void MainWindow::print(QPrinter *printer)
 
     //hides/disables grid for print and print preview
     view->scene->isGridVisible = false;
+    view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                              .adjusted(-10,-10,10,10));
     view->scene->render(&painter, page);
     view->scene->isGridVisible = true;
 }
