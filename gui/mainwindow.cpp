@@ -39,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(saveFileAs()));
     connect(actionClose, SIGNAL(triggered()),
             this, SLOT(closeActiveWindow()));
+    connect(actionExport, SIGNAL(triggered()),
+            this, SLOT(exportFile()));
     connect(actionQuit, SIGNAL(triggered()),
             this, SLOT(close()));
     connect(actionPrint, SIGNAL(triggered()),
@@ -104,6 +106,7 @@ void MainWindow::toggleActions(bool b)
     actionEllipse->setEnabled(b);
     actionText->setEnabled(b);
     actionInsertImage->setEnabled(b);
+    menuToolbars->setEnabled(b);
     actionCommandConsole->setEnabled(b);
     actionScripting->setEnabled(b);
     actionArc->setEnabled(b);
@@ -113,6 +116,9 @@ void MainWindow::toggleActions(bool b)
     actionPaste->setEnabled(b);
     actionToolbar->setEnabled(b);
     actionClose->setEnabled(b);
+    menuImport->setEnabled(b);
+    actionImportImage->setEnabled(b);
+    actionExport->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -240,6 +246,8 @@ void MainWindow::newFile()
             view, SLOT(setNoMode()));
     connect(actionDeleteEntity, SIGNAL(triggered()),
             view, SLOT(deleteSingleItem()));
+    connect(actionImportImage, SIGNAL(triggered()),
+            view, SLOT(drawImage()));
     connect(actionDeleteSelected, SIGNAL(triggered()),
             view->scene, SLOT(deleteItems()));
     connect(actionInvertSelection, SIGNAL(triggered()),
@@ -372,6 +380,47 @@ void MainWindow::toggleMenuActions()
     }
 }
 
+void MainWindow::exportFile()
+{
+    // export file dialog box
+    fileName = QFileDialog::getSaveFileName(this,
+                                            tr("Save File"),
+                                            QString(),
+                                            tr("JPEG(*.jpg *.jpeg);;"
+                                               "PNG(*.png)"));
+
+    if(!fileName.isEmpty())
+    {
+        QFile file(fileName);
+
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+            return;
+        }
+
+        else
+        {
+            /**
+             * selections are cleared and the area in which items are present is
+             * grabbed to be saved as an image
+             */
+            view->scene->clearSelection();
+            view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                                      .adjusted(-10, -10, 10, 10));
+            QImage image(view->scene->sceneRect().size().toSize(),
+                         QImage::Format_ARGB32);
+            image.fill(QColor(Qt::white));
+
+            QPainter painter(&image);
+            view->scene->isGridVisible = false;
+            view->scene->render(&painter);
+            image.save(fileName);
+            view->scene->isGridVisible = true;
+        }
+    }
+}
+
 void MainWindow::filePrintPreview()
 {
     // display print preview dialog
@@ -410,8 +459,13 @@ void MainWindow::print(QPrinter *printer)
 
     page.adjust(w/20, h/20, -w/20, -h/20);
 
-    //hides/disables grid for print and print preview
+    /**
+     * hides/disables grid for print and print preview and clears selection
+     * so that it is not printed and the area in which items are present is
+     * grabbed to be printed
+     */
     view->scene->isGridVisible = false;
+    view->scene->clearSelection();
     view->scene->setSceneRect(view->scene->itemsBoundingRect()
                               .adjusted(-10, -10, 10, 10));
     view->scene->render(&painter, page);
