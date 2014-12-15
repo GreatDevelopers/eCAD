@@ -264,6 +264,12 @@ void CadGraphicsScene::invertSelection()
     }
 }
 
+void CadGraphicsScene::deleteSingleItem()
+{
+    // sets delete mode to delete single item in the scene
+    setMode(DeleteMode);
+}
+
 void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if (isGridVisible)
@@ -487,6 +493,16 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             startP = mouseEvent->scenePos();
             imageItem = new Image(++id, startP, imagePath);
             drawEntity(imageItem);
+            break;
+
+        case DeleteMode:
+            clickedItem = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
+
+            if (clickedItem)
+            {
+                mUndoStack->push(new CadCommandDelete(this, clickedItem));
+                clickedItem->setSelected(false);
+            }
             break;
 
         default:

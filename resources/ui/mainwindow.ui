@@ -121,7 +121,7 @@
     <property name="title">
      <string>Modify</string>
     </property>
-    <addaction name="actionDelete"/>
+    <addaction name="actionDeleteEntity"/>
     <addaction name="actionDeleteSelected"/>
    </widget>
    <widget class="QMenu" name="menuDimension">
@@ -733,12 +733,12 @@
     <string>Attributes</string>
    </property>
   </action>
-  <action name="actionDelete">
+  <action name="actionDeleteEntity">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Delete</string>
+    <string>Delete Entity</string>
    </property>
   </action>
   <action name="actionDeleteSelected">
