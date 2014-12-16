@@ -6,6 +6,8 @@ CadGraphicsView::CadGraphicsView()
     setAttribute(Qt::WA_DeleteOnClose);
     isPanning = false;
     setMouseTracking(true);
+    translate((width() / 2) - 250, (height() / 2) + 300);
+    scale(1, -1);
 }
 
 void CadGraphicsView::newFile()
@@ -15,7 +17,7 @@ void CadGraphicsView::newFile()
     undoView = 0;
 
     scene = new CadGraphicsScene(this, undoStack);
-    scene->setSceneRect(0,0,2000,2000);
+    scene->setSceneRect(-20000, -20000, 40000, 40000);
     setScene(scene);
 }
 

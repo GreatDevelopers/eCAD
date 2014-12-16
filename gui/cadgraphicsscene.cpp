@@ -23,6 +23,10 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
             this, SLOT(menuAction(QAction *)));
     // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
+
+    // creates cross at (0,0) to depict origin
+    addLine(-25, 0, 25, 0);
+    addLine(0, -25, 0, 25);
 }
 
 bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
@@ -338,6 +342,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         Text *itemPtr = dynamic_cast<Text *>(item);
         itemPtr->setPos(itemPtr->position);
         itemPtr->setPlainText(itemPtr->str);
+        itemPtr->setTransform(QTransform::fromScale(1, -1));
         itemList.append(itemPtr);
         itemPtr->setTextInteractionFlags(Qt::TextEditorInteraction);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
@@ -357,6 +362,8 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     else if (item->type() == Image::Type)
     {
         Image *itemPtr = dynamic_cast<Image *>(item);
+        itemPtr->setTransform(QTransform::fromScale(1, -1).
+                              translate(0, -2 * startP.y()));
         itemList.append(itemPtr);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
