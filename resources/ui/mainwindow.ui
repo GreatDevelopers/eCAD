@@ -53,11 +53,18 @@
      </property>
      <addaction name="actionImportImage"/>
     </widget>
+    <widget class="QMenu" name="menuExport">
+     <property name="title">
+      <string>Export</string>
+     </property>
+     <addaction name="actionJPEG"/>
+     <addaction name="actionPDF"/>
+    </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
-    <addaction name="actionExport"/>
+    <addaction name="menuExport"/>
     <addaction name="menuImport"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
@@ -220,14 +227,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
-   </property>
-  </action>
-  <action name="actionExport">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Export</string>
    </property>
   </action>
   <action name="actionClose">
@@ -900,6 +899,16 @@
    </property>
    <property name="text">
     <string>Insert Image</string>
+   </property>
+  </action>
+  <action name="actionJPEG">
+   <property name="text">
+    <string>JPEG</string>
+   </property>
+  </action>
+  <action name="actionPDF">
+   <property name="text">
+    <string>PDF</string>
    </property>
   </action>
  </widget>

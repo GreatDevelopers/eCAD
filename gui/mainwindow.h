@@ -55,7 +55,8 @@ private slots:
     void saveFile();
     void saveFileAs();
     void openFile();
-    void exportFile();
+    void exportAsJPG();
+    void exportAsPDF();
     void showGrid(bool);
     void zoomIn();
     void zoomOut();

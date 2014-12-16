@@ -39,8 +39,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(saveFileAs()));
     connect(actionClose, SIGNAL(triggered()),
             this, SLOT(closeActiveWindow()));
-    connect(actionExport, SIGNAL(triggered()),
-            this, SLOT(exportFile()));
+    connect(actionJPEG, SIGNAL(triggered()),
+            this, SLOT(exportAsJPG()));
+    connect(actionPDF, SIGNAL(triggered()),
+            this, SLOT(exportAsPDF()));
     connect(actionQuit, SIGNAL(triggered()),
             this, SLOT(close()));
     connect(actionPrint, SIGNAL(triggered()),
@@ -118,7 +120,9 @@ void MainWindow::toggleActions(bool b)
     actionClose->setEnabled(b);
     menuImport->setEnabled(b);
     actionImportImage->setEnabled(b);
-    actionExport->setEnabled(b);
+    menuExport->setEnabled(b);
+    actionJPEG->setEnabled(b);
+    actionPDF->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -380,7 +384,8 @@ void MainWindow::toggleMenuActions()
     }
 }
 
-void MainWindow::exportFile()
+// export file as jpg/jpeg/png
+void MainWindow::exportAsJPG()
 {
     // export file dialog box
     fileName = QFileDialog::getSaveFileName(this,
@@ -418,6 +423,29 @@ void MainWindow::exportFile()
             image.save(fileName);
             view->scene->isGridVisible = true;
         }
+    }
+}
+
+// export file as pdf
+void MainWindow::exportAsPDF()
+{
+    // export file dialog box
+    fileName = QFileDialog::getSaveFileName(this, "Export PDF",
+                                            QString(), "*.pdf");
+
+    if (!fileName.isEmpty())
+    {
+        if (QFileInfo(fileName).suffix().isEmpty())
+            fileName.append(".pdf");
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setOutputFormat(QPrinter::PdfFormat);
+        printer.setOutputFileName(fileName);
+        print(&printer);
+        view->scene->isGridVisible = false;
+        view->scene->clearSelection();
+        view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                                  .adjusted(-10, -10, 10, 10));
+        view->scene->isGridVisible = true;
     }
 }
 
