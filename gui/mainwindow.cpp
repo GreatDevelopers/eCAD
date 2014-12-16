@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(saveFileAs()));
     connect(actionClose, SIGNAL(triggered()),
             this, SLOT(closeActiveWindow()));
-    connect(actionExport, SIGNAL(triggered()),
-            this, SLOT(exportFile()));
+    connect(menuExport, SIGNAL(triggered(QAction *)),
+            this, SLOT(exportFile(QAction *)));
     connect(actionQuit, SIGNAL(triggered()),
             this, SLOT(close()));
     connect(actionPrint, SIGNAL(triggered()),
@@ -118,7 +118,9 @@ void MainWindow::toggleActions(bool b)
     actionClose->setEnabled(b);
     menuImport->setEnabled(b);
     actionImportImage->setEnabled(b);
-    actionExport->setEnabled(b);
+    menuExport->setEnabled(b);
+    actionJPEG_PNG->setEnabled(b);
+    actionPDF->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -380,42 +382,69 @@ void MainWindow::toggleMenuActions()
     }
 }
 
-void MainWindow::exportFile()
+void MainWindow::exportFile(QAction *action)
 {
-    // export file dialog box
-    fileName = QFileDialog::getSaveFileName(this,
-                                            tr("Save File"),
-                                            QString(),
-                                            tr("JPEG(*.jpg *.jpeg);;"
-                                               "PNG(*.png)"));
-
-    if(!fileName.isEmpty())
+    // export file as JPEG/JPG/PNG
+    if (action == actionJPEG_PNG)
     {
-        QFile file(fileName);
+        // export file dialog box
+        fileName = QFileDialog::getSaveFileName(this,
+                                                tr("Save File"),
+                                                QString(),
+                                                tr("JPEG(*.jpg *.jpeg);;"
+                                                   "PNG(*.png)"));
 
-        if (!file.open(QIODevice::WriteOnly))
+        if(!fileName.isEmpty())
         {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-            return;
+            QFile file(fileName);
+
+            if (!file.open(QIODevice::WriteOnly))
+            {
+                QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+                return;
+            }
+
+            else
+            {
+                /**
+                 * selections are cleared and the area in which items are present is
+                 * grabbed to be saved as an image
+                 */
+                view->scene->clearSelection();
+                view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                                          .adjusted(-10, -10, 10, 10));
+                QImage image(view->scene->sceneRect().size().toSize(),
+                             QImage::Format_ARGB32);
+                image.fill(QColor(Qt::white));
+
+                QPainter painter(&image);
+                view->scene->isGridVisible = false;
+                view->scene->render(&painter);
+                image.save(fileName);
+                view->scene->isGridVisible = true;
+            }
         }
+    }
 
-        else
+    // export file as PDF
+    else if (action == actionPDF)
+    {
+        // export file dialog box
+        fileName = QFileDialog::getSaveFileName(this, "Export PDF",
+                                                QString(), "*.pdf");
+
+        if (!fileName.isEmpty())
         {
-            /**
-             * selections are cleared and the area in which items are present is
-             * grabbed to be saved as an image
-             */
+            if (QFileInfo(fileName).suffix().isEmpty())
+                fileName.append(".pdf");
+            QPrinter printer(QPrinter::HighResolution);
+            printer.setOutputFormat(QPrinter::PdfFormat);
+            printer.setOutputFileName(fileName);
+            print(&printer);
+            view->scene->isGridVisible = false;
             view->scene->clearSelection();
             view->scene->setSceneRect(view->scene->itemsBoundingRect()
                                       .adjusted(-10, -10, 10, 10));
-            QImage image(view->scene->sceneRect().size().toSize(),
-                         QImage::Format_ARGB32);
-            image.fill(QColor(Qt::white));
-
-            QPainter painter(&image);
-            view->scene->isGridVisible = false;
-            view->scene->render(&painter);
-            image.save(fileName);
             view->scene->isGridVisible = true;
         }
     }
