@@ -155,6 +155,14 @@ void CadGraphicsScene::editorLostFocus(Text *item)
     QTextCursor cursor = item->textCursor();
     cursor.clearSelection();
     item->setTextCursor(cursor);
+
+    if (item->toPlainText().isEmpty())
+    {
+        --id;
+        removeItem(item);
+        itemList.removeOne(item);
+        item->deleteLater();
+    }
 }
 
 void CadGraphicsScene::areItemsSelectable(bool b)
