@@ -55,7 +55,7 @@ private slots:
     void saveFile();
     void saveFileAs();
     void openFile();
-    void exportFile();
+    void exportFile(QAction *action);
     void showGrid(bool);
     void zoomIn();
     void zoomOut();
