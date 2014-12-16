@@ -39,8 +39,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(saveFileAs()));
     connect(actionClose, SIGNAL(triggered()),
             this, SLOT(closeActiveWindow()));
-    connect(actionExport, SIGNAL(triggered()),
-            this, SLOT(exportFile()));
     connect(actionQuit, SIGNAL(triggered()),
             this, SLOT(close()));
     connect(actionPrint, SIGNAL(triggered()),
@@ -61,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(copyOperation()));
     connect(actionPaste, SIGNAL(triggered()),
             this, SLOT(pasteOperation()));
+    connect(menuExport, SIGNAL(triggered(QAction *)),
+            this, SLOT(exportFile(QAction *)));
 
     connect(actionCommandConsole, SIGNAL(triggered()),
             this, SLOT(toggleWidgets()));
@@ -116,9 +116,11 @@ void MainWindow::toggleActions(bool b)
     actionPaste->setEnabled(b);
     actionToolbar->setEnabled(b);
     actionClose->setEnabled(b);
-    menuImport->setEnabled(b);
     actionImportImage->setEnabled(b);
-    actionExport->setEnabled(b);
+    actionExportImage->setEnabled(b);
+    actionExportPDF->setEnabled(b);
+    menuImport->setEnabled(b);
+    menuExport->setEnabled(b);
 }
 
 void MainWindow::setActions()
@@ -380,16 +382,22 @@ void MainWindow::toggleMenuActions()
     }
 }
 
-void MainWindow::exportFile()
+void MainWindow::exportFile(QAction *action)
 {
+    QString str;
+    if (action == actionExportImage)
+        str = "JPEG(*.jpg *.jpeg);;""PNG(*.png)";
+
+    else if (action == actionExportPDF)
+        str = "*.pdf";
+
     // export file dialog box
     fileName = QFileDialog::getSaveFileName(this,
                                             tr("Save File"),
                                             QString(),
-                                            tr("JPEG(*.jpg *.jpeg);;"
-                                               "PNG(*.png)"));
+                                            str);
 
-    if(!fileName.isEmpty())
+    if (!fileName.isEmpty())
     {
         QFile file(fileName);
 
@@ -401,22 +409,38 @@ void MainWindow::exportFile()
 
         else
         {
-            /**
-             * selections are cleared and the area in which items are present is
-             * grabbed to be saved as an image
-             */
-            view->scene->clearSelection();
-            view->scene->setSceneRect(view->scene->itemsBoundingRect()
-                                      .adjusted(-10, -10, 10, 10));
-            QImage image(view->scene->sceneRect().size().toSize(),
-                         QImage::Format_ARGB32);
-            image.fill(QColor(Qt::white));
+            if (action = actionExportImage)
+            {
+                /**
+                 * selections are cleared and the area in which items are present
+                 * is grabbed to be saved as an image
+                 */
+                view->scene->clearSelection();
+                view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                                          .adjusted(-10, -10, 10, 10));
+                QImage image(view->scene->sceneRect().size().toSize(),
+                             QImage::Format_ARGB32);
+                image.fill(QColor(Qt::white));
 
-            QPainter painter(&image);
-            view->scene->isGridVisible = false;
-            view->scene->render(&painter);
-            image.save(fileName);
-            view->scene->isGridVisible = true;
+                QPainter painter(&image);
+                view->scene->isGridVisible = false;
+                view->scene->render(&painter);
+                image.save(fileName);
+                view->scene->isGridVisible = true;
+            }
+
+            else if (action = actionExportPDF)
+            {
+                QPrinter printer(QPrinter::HighResolution);
+                printer.setOutputFormat(QPrinter::PdfFormat);
+                printer.setOutputFileName(fileName);
+                print(&printer);
+                view->scene->isGridVisible = false;
+                view->scene->clearSelection();
+                view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                                          .adjusted(-10, -10, 10, 10));
+                view->scene->isGridVisible = true;
+            }
         }
     }
 }
