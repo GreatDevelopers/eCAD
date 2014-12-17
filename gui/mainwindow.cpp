@@ -411,12 +411,14 @@ void MainWindow::exportFile(QAction *action)
 
         else
         {
-            if (action = actionExportImage)
+            if (action == actionExportImage)
             {
                 /**
                  * selections are cleared and the area in which items are present
                  * is grabbed to be saved as an image
                  */
+                if (QFileInfo(fileName).suffix().isEmpty())
+                    fileName.append(".jpg");
                 view->scene->clearSelection();
                 view->scene->setSceneRect(view->scene->itemsBoundingRect()
                                           .adjusted(-10, -10, 10, 10));
@@ -431,8 +433,10 @@ void MainWindow::exportFile(QAction *action)
                 view->scene->isGridVisible = true;
             }
 
-            else if (action = actionExportPDF)
+            else if (action == actionExportPDF)
             {
+                if (QFileInfo(fileName).suffix().isEmpty())
+                    fileName.append(".pdf");
                 QPrinter printer(QPrinter::HighResolution);
                 printer.setOutputFormat(QPrinter::PdfFormat);
                 printer.setOutputFileName(fileName);
@@ -620,6 +624,8 @@ void MainWindow::saveFileAs()
 
         else
         {
+            if (QFileInfo(fileName).suffix().isEmpty())
+                fileName.append(".xml");
             QXmlStreamWriter xmlWriter(&file);
             xmlWriter.setAutoFormatting(true);
             xmlWriter.writeStartDocument();
