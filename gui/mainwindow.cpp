@@ -27,6 +27,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     new QShortcut(QKeySequence(Qt::Key_Delete),
                   this, SLOT(deleteItems()));
 
+    // creates a new script widget
+    scriptWidget = new CadScriptWidget;
+
+    // creates a new command widget
+    commandWidget = new CadCommandWidget;
+
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateView()));
     connect(actionNew, SIGNAL(triggered()),
@@ -255,15 +261,11 @@ void MainWindow::newFile()
     connect(actionInvertSelection, SIGNAL(triggered()),
             view->scene, SLOT(invertSelection()));
 
-    // creates a new command widget
-    commandWidget = new CadCommandWidget;
     commandWidget->setMinimumHeight(50);
     commandWidget->setMaximumHeight(100);
     addDockWidget(Qt::BottomDockWidgetArea, commandWidget);
     commandWidget->hide();
 
-    // creates a new script widget
-    scriptWidget = new CadScriptWidget;
     scriptWidget->getCurrentScene(view->scene);
     actionScripting->setChecked(true);
     addDockWidget(Qt::RightDockWidgetArea, scriptWidget);
