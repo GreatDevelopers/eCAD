@@ -8,6 +8,8 @@
 #include <QFileDialog>
 
 #include "cadgraphicsscene.h"
+#include "cadscriptwidget.h"
+#include "cadcommandwidget.h"
 
 class CadGraphicsView : public QGraphicsView
 {
@@ -22,6 +24,8 @@ public:
     CadGraphicsScene *scene;
     QUndoStack *undoStack;
     QUndoView *undoView;
+    CadScriptWidget *scriptWidget;
+    CadCommandWidget *commandWidget;
 
     double scaleFactor;
     bool isPanning;

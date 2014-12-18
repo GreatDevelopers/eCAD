@@ -13,8 +13,6 @@
 #include "ui_mainwindow.h"
 #include "ui_aboutdialog.h"
 #include "cadgraphicsview.h"
-#include "cadcommandwidget.h"
-#include "cadscriptwidget.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -33,11 +31,11 @@ private:
     QPixmap image;
     QImage *imageObject;
     CadGraphicsView *view;
-    CadCommandWidget *commandWidget;
-    CadScriptWidget *scriptWidget;
     QDialog *aboutDialog;
     typedef QPair<QMdiSubWindow *, CadGraphicsView *> windowViewPair;
     QList<windowViewPair> windowViewList;
+    QList<CadScriptWidget *> scriptWidgetList;
+    QList<CadCommandWidget *> commandWidgetList;
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
