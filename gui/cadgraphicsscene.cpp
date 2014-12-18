@@ -10,6 +10,7 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
 {
     setFlags();
     id = 0;
+    setMode(NoMode);
     mUndoStack = undoStack;
     contextMenu = new QMenu;
     cutAction = contextMenu->addAction("cut");
@@ -42,28 +43,51 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                            .arg(mouseEvent->scenePos().x())
                            .arg(mouseEvent->scenePos().y()));
 
+        horizontalAxis = new Line(QPointF(sceneRect().bottomLeft().x(),
+                                          mouseEvent->scenePos().y()),
+                                  QPointF(sceneRect().bottomRight().x(),
+                                          mouseEvent->scenePos().y()));
+        verticalAxis = new Line(QPointF(mouseEvent->scenePos().x(),
+                                        sceneRect().topLeft().y()),
+                                QPointF(mouseEvent->scenePos().x(),
+                                        sceneRect().bottomLeft().y()));
+
+        // sets graphicscoloreffect for axis
+        effect1 = new QGraphicsColorizeEffect;
+        effect2 = new QGraphicsColorizeEffect;
+        effect1->setColor(Qt::red);
+        effect2->setColor(Qt::red);
+        effect1->setStrength(0.5);
+        effect2->setStrength(0.5);
+        horizontalAxis->setGraphicsEffect(effect1);
+        verticalAxis->setGraphicsEffect(effect2);
+
         if (!previewList.isEmpty())
         {
-            removeItem(previewList.last());
+            foreach (QGraphicsItem *item, previewList)
+                removeItem(item);
+
             previewList.clear();
+        }
+
+        if (entityMode != NoMode)
+        {
+            addItem(horizontalAxis);
+            addItem(verticalAxis);
+            previewList.append(horizontalAxis);
+            previewList.append(verticalAxis);
         }
 
         if (entityMode == PointMode)
         {
-            if (!previewList.isEmpty())
-                removeItem(pointItem);
-
             pointItem = new Point(mouseEvent->scenePos());
             pointItem->setPos(mouseEvent->scenePos());
             previewList.append(pointItem);
             addItem(pointItem);
         }
 
-        if (entityMode == LineMode)
+        else if (entityMode == LineMode)
         {
-            if (!previewList.isEmpty() && mSecondClick)
-                removeItem(lineItem);
-
             if (mSecondClick)
             {
                 lineItem = new Line(startP, mouseEvent->scenePos());
@@ -72,11 +96,8 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
-        if (entityMode == CircleMode)
+        else if (entityMode == CircleMode)
         {
-            if (!previewList.isEmpty() && mSecondClick)
-                removeItem(circleItem);
-
             if (mSecondClick)
             {
                 circleItem = new Circle(startP, mouseEvent->scenePos());
@@ -85,11 +106,8 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
-        if (entityMode == EllipseMode)
+        else if (entityMode == EllipseMode)
         {
-            if (!previewList.isEmpty() && (mSecondClick || mThirdClick))
-                removeItem(ellipseItem);
-
             if (mSecondClick)
             {
                 ellipseItem = new Ellipse(startP, mouseEvent->scenePos(),
@@ -106,16 +124,8 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
-        if (entityMode == ArcMode)
+        else if (entityMode == ArcMode)
         {
-            if (!previewList.isEmpty())
-            {
-                if (mSecondClick)
-                    removeItem(lineItem);
-                if (mThirdClick)
-                    removeItem(arcItem);
-            }
-
             if (mSecondClick)
             {
                 lineItem = new Line(startP, mouseEvent->scenePos());
