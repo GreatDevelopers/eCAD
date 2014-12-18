@@ -27,12 +27,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     new QShortcut(QKeySequence(Qt::Key_Delete),
                   this, SLOT(deleteItems()));
 
-    // creates a new script widget
-    scriptWidget = new CadScriptWidget;
-
-    // creates a new command widget
-    commandWidget = new CadCommandWidget;
-
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateView()));
     connect(actionNew, SIGNAL(triggered()),
@@ -233,6 +227,16 @@ void MainWindow::newFile()
     setActions();
     isEntitySelected = false;
 
+    // appends script widget and command widget in their respective lists
+    scriptWidgetList.append(view->scriptWidget);
+    commandWidgetList.append(view->commandWidget);
+
+    // associate both script and command widgets with current view
+    updateView();
+
+    // command widget must be hidden at startup
+    view->commandWidget->hide();
+
     // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
             this, SLOT(toggleMenuActions()));
@@ -261,14 +265,7 @@ void MainWindow::newFile()
     connect(actionInvertSelection, SIGNAL(triggered()),
             view->scene, SLOT(invertSelection()));
 
-    commandWidget->setMinimumHeight(50);
-    commandWidget->setMaximumHeight(100);
-    addDockWidget(Qt::BottomDockWidgetArea, commandWidget);
-    commandWidget->hide();
-
-    scriptWidget->getCurrentScene(view->scene);
     actionScripting->setChecked(true);
-    addDockWidget(Qt::RightDockWidgetArea, scriptWidget);
 
     showGrid(true);
 
@@ -284,7 +281,28 @@ void MainWindow::updateView()
     foreach (windowViewPair v, windowViewList)
     {
         if (m == v.first)
+        {
             view = v.second;
+
+            /**
+             * hides all other script and command widgets not associated with
+             * current view
+             */
+            foreach (CadScriptWidget *sw, scriptWidgetList)
+                removeDockWidget(sw);
+
+            foreach (CadCommandWidget *cw, commandWidgetList)
+                removeDockWidget(cw);
+
+            // adds script and command widgets associated with current view
+            addDockWidget(Qt::RightDockWidgetArea, view->scriptWidget);
+            view->scriptWidget->show();
+            view->scriptWidget->getCurrentScene(view->scene);
+            view->commandWidget->setMinimumHeight(50);
+            view->commandWidget->setMaximumHeight(100);
+            addDockWidget(Qt::BottomDockWidgetArea, view->commandWidget);
+            view->commandWidget->show();
+        }
     }
 }
 
@@ -292,15 +310,15 @@ void MainWindow::toggleWidgets()
 {
     // toggles Command Widget
     if (actionCommandConsole->isChecked())
-        commandWidget->show();
+        view->commandWidget->show();
     else
-        commandWidget->hide();
+        view->commandWidget->hide();
 
     // toggles Script Widget
     if (actionScripting->isChecked())
-        scriptWidget->show();
+        view->scriptWidget->show();
     else
-        scriptWidget->hide();
+        view->scriptWidget->hide();
 }
 
 void MainWindow::toggleMenuActions()

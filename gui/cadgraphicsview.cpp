@@ -19,6 +19,12 @@ void CadGraphicsView::newFile()
     scene = new CadGraphicsScene(this, undoStack);
     scene->setSceneRect(-20000, -20000, 40000, 40000);
     setScene(scene);
+
+    // creates a new script widget
+    scriptWidget = new CadScriptWidget;
+
+    // creates a new command widget
+    commandWidget = new CadCommandWidget;
 }
 
 void CadGraphicsView::wheelEvent(QWheelEvent *event)
