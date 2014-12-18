@@ -80,8 +80,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(actionStatusBar, SIGNAL(toggled(bool)),
             this, SLOT(hideStatusBar(bool)));
 
-    actionStatusBar->setCheckable(true);
     actionStatusBar->setChecked(true);
+    actionScripting->setChecked(true);
 
     // toggle actions to false
     toggleActions(0);
@@ -265,8 +265,6 @@ void MainWindow::newFile()
     connect(actionInvertSelection, SIGNAL(triggered()),
             view->scene, SLOT(invertSelection()));
 
-    actionScripting->setChecked(true);
-
     showGrid(true);
 
     // toggle actions to true
@@ -296,12 +294,17 @@ void MainWindow::updateView()
 
             // adds script and command widgets associated with current view
             addDockWidget(Qt::RightDockWidgetArea, view->scriptWidget);
-            view->scriptWidget->show();
             view->scriptWidget->getCurrentScene(view->scene);
+
+            if (actionScripting->isChecked())
+                view->scriptWidget->show();
+
             view->commandWidget->setMinimumHeight(50);
             view->commandWidget->setMaximumHeight(100);
             addDockWidget(Qt::BottomDockWidgetArea, view->commandWidget);
-            view->commandWidget->show();
+
+            if (actionCommandConsole->isChecked())
+                view->commandWidget->show();
         }
     }
 }
