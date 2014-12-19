@@ -24,6 +24,8 @@ public:
     CadGraphicsScene *scene;
     QUndoStack *undoStack;
     QUndoView *undoView;
+    QAction *undoAction;
+    QAction *redoAction;
     CadScriptWidget *scriptWidget;
     CadCommandWidget *commandWidget;
 

@@ -36,6 +36,7 @@ private:
     QList<windowViewPair> windowViewList;
     QList<CadScriptWidget *> scriptWidgetList;
     QList<CadCommandWidget *> commandWidgetList;
+    QList<QAction *> undoList, redoList;
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
@@ -67,7 +68,6 @@ private slots:
     void selectWindow();
     void deleteItems();
     void toggleActions(bool b);
-    void setActions();
     void filePrintPreview();
     void closeEvent(QCloseEvent *event);
     void filePrint();

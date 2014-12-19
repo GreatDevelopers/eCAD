@@ -123,16 +123,6 @@ void MainWindow::toggleActions(bool b)
     menuExport->setEnabled(b);
 }
 
-void MainWindow::setActions()
-{
-    QAction *actionUndo = view->undoStack->createUndoAction(this);
-    QAction *actionRedo = view->undoStack->createRedoAction(this);
-    actionUndo->setShortcut(QKeySequence::Undo);
-    actionRedo->setShortcut(QKeySequence::Redo);
-    menuEdit->addAction(actionUndo);
-    menuEdit->addAction(actionRedo);
-}
-
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneMouseMove)
@@ -224,14 +214,20 @@ void MainWindow::newFile()
     view->setWindowTitle(curFileName);
     view->scene->installEventFilter(this);
     view->show();
-    setActions();
     isEntitySelected = false;
 
     // appends script widget and command widget in their respective lists
     scriptWidgetList.append(view->scriptWidget);
     commandWidgetList.append(view->commandWidget);
 
-    // associate both script and command widgets with current view
+    // appends undoAction and redoAction in their respective lists
+    undoList.append(view->undoAction);
+    redoList.append(view->redoAction);
+
+    /**
+     * associate undoAction, redoAction, script widget and command widget
+     * with current view
+     */
     updateView();
 
     // command widget must be hidden at startup
@@ -283,14 +279,20 @@ void MainWindow::updateView()
             view = v.second;
 
             /**
-             * hides all other script and command widgets not associated with
-             * current view
+             * hides all other undoAction, redoAction, script widget and command
+             * widget not associated with current view
              */
             foreach (CadScriptWidget *sw, scriptWidgetList)
                 removeDockWidget(sw);
 
             foreach (CadCommandWidget *cw, commandWidgetList)
                 removeDockWidget(cw);
+
+            foreach (QAction *undo, undoList)
+                menuEdit->removeAction(undo);
+
+            foreach (QAction *redo, redoList)
+                menuEdit->removeAction(redo);
 
             // adds script and command widgets associated with current view
             addDockWidget(Qt::RightDockWidgetArea, view->scriptWidget);
@@ -305,6 +307,12 @@ void MainWindow::updateView()
 
             if (actionCommandConsole->isChecked())
                 view->commandWidget->show();
+
+            // adds undoAction and redoAction associated with current view
+            view->undoAction->setShortcut(QKeySequence::Undo);
+            view->redoAction->setShortcut(QKeySequence::Redo);
+            menuEdit->addAction(view->undoAction);
+            menuEdit->addAction(view->redoAction);
         }
     }
 }
