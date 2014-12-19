@@ -216,6 +216,9 @@ void MainWindow::newFile()
     view->show();
     isEntitySelected = false;
 
+    // grid is set to true for every new document
+    view->scene->isGridVisible = true;
+
     // appends script widget and command widget in their respective lists
     scriptWidgetList.append(view->scriptWidget);
     commandWidgetList.append(view->commandWidget);
@@ -260,8 +263,6 @@ void MainWindow::newFile()
             view->scene, SLOT(deleteItems()));
     connect(actionInvertSelection, SIGNAL(triggered()),
             view->scene, SLOT(invertSelection()));
-
-    showGrid(true);
 
     // toggle actions to true
     toggleActions(1);
@@ -313,6 +314,12 @@ void MainWindow::updateView()
             view->redoAction->setShortcut(QKeySequence::Redo);
             menuEdit->addAction(view->undoAction);
             menuEdit->addAction(view->redoAction);
+
+            // checks/unchecks the actionGrid according to the grid visibility
+            if (view->scene->isGridVisible)
+                actionGrid->setChecked(true);
+            else
+                actionGrid->setChecked(false);
         }
     }
 }
