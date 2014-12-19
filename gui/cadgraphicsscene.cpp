@@ -24,10 +24,6 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
             this, SLOT(menuAction(QAction *)));
     // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
-
-    // creates cross at (0,0) to depict origin
-    addLine(-25, 0, 25, 0);
-    addLine(0, -25, 0, 25);
 }
 
 bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
@@ -314,6 +310,11 @@ void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
         painter->drawLine(0, realTop, 0, realBottom);
         painter->drawLine(realLeft, 0, realRight, 0);
     }
+
+    // creates cross at (0,0) to depict origin
+    painter->setPen(QPen(Qt::red, 0.0));
+    painter->drawLine(-25, 0, 25, 0);
+    painter->drawLine(0, -25, 0, 25);
 }
 
 void CadGraphicsScene::drawEntity(QGraphicsItem *item)
