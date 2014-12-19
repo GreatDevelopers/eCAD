@@ -464,8 +464,13 @@ void MainWindow::exportFile(QAction *action)
 
                 QPainter painter(&image);
                 view->scene->isGridVisible = false;
+                foreach (QGraphicsItem *item, view->scene->items())
+                    item->setTransform(QTransform::fromScale(1, -1));
                 view->scene->render(&painter);
                 image.save(fileName);
+                foreach (QGraphicsItem *item, view->scene->items())
+                    item->setTransform(QTransform::fromScale(1, 1));
+                view->modifySceneRect();
                 view->scene->isGridVisible = true;
             }
 
@@ -477,11 +482,6 @@ void MainWindow::exportFile(QAction *action)
                 printer.setOutputFormat(QPrinter::PdfFormat);
                 printer.setOutputFileName(fileName);
                 print(&printer);
-                view->scene->isGridVisible = false;
-                view->scene->clearSelection();
-                view->scene->setSceneRect(view->scene->itemsBoundingRect()
-                                          .adjusted(-10, -10, 10, 10));
-                view->scene->isGridVisible = true;
             }
         }
     }
@@ -531,10 +531,15 @@ void MainWindow::print(QPrinter *printer)
      * grabbed to be printed
      */
     view->scene->isGridVisible = false;
+    foreach (QGraphicsItem *item, view->scene->items())
+        item->setTransform(QTransform::fromScale(1, -1));
     view->scene->clearSelection();
     view->scene->setSceneRect(view->scene->itemsBoundingRect()
                               .adjusted(-10, -10, 10, 10));
     view->scene->render(&painter, page);
+    foreach (QGraphicsItem *item, view->scene->items())
+        item->setTransform(QTransform::fromScale(1, 1));
+    view->modifySceneRect();
     view->scene->isGridVisible = true;
 }
 

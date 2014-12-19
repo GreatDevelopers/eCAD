@@ -20,6 +20,7 @@ public:
     void newFile();
     void cursorMode();
     void showUndoStack();
+    void modifySceneRect();
 
     CadGraphicsScene *scene;
     QUndoStack *undoStack;
