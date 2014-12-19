@@ -20,6 +20,9 @@ void CadGraphicsView::newFile()
     scene->setSceneRect(-20000, -20000, 40000, 40000);
     setScene(scene);
 
+    undoAction = undoStack->createUndoAction(this);
+    redoAction = undoStack->createRedoAction(this);
+
     // creates a new script widget
     scriptWidget = new CadScriptWidget;
 
