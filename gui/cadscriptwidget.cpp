@@ -163,6 +163,7 @@ bool CadScriptWidget::saveAsScriptFxn()
 {
     // save script file dialog box
     QFileDialog dialog(this);
+    dialog.setDefaultSuffix(".js");
     dialog.setWindowModality(Qt::WindowModal);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.exec();

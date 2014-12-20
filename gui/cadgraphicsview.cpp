@@ -17,7 +17,7 @@ void CadGraphicsView::newFile()
     undoView = 0;
 
     scene = new CadGraphicsScene(this, undoStack);
-    scene->setSceneRect(-20000, -20000, 40000, 40000);
+    modifySceneRect();
     setScene(scene);
 
     undoAction = undoStack->createUndoAction(this);
@@ -28,6 +28,12 @@ void CadGraphicsView::newFile()
 
     // creates a new command widget
     commandWidget = new CadCommandWidget;
+}
+
+void CadGraphicsView::modifySceneRect()
+{
+    // sets scene rect
+    scene->setSceneRect(-20000, -20000, 40000, 40000);
 }
 
 void CadGraphicsView::wheelEvent(QWheelEvent *event)

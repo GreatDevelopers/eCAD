@@ -40,6 +40,7 @@ private:
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
+    bool autoSaveCount;
     QString curFileName, fileName;
     int fileNumber;
 
@@ -51,8 +52,10 @@ private slots:
     void toggleWidgets();
     void toggleToolBar(bool);
     void hideStatusBar(bool ok);
-    void saveFile();
-    void saveFileAs();
+    bool saveFile(const QString &fileName);
+    bool saveFileAs();
+    bool save();
+    void autoSave();
     void openFile();
     void exportFile(QAction *action);
     void showGrid(bool);
