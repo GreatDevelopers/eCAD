@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(actionOpen, SIGNAL(triggered()),
             this, SLOT(openFile()));
     connect(actionSave, SIGNAL(triggered()),
-            this, SLOT(saveFile()));
+            this, SLOT(save()));
     connect(actionSaveAs, SIGNAL(triggered()),
             this, SLOT(saveFileAs()));
     connect(actionClose, SIGNAL(triggered()),
@@ -210,7 +210,7 @@ void MainWindow::newFile()
     // creates a new file
     createMdiView();
     view->newFile();
-    curFileName = tr("Document %1").arg(++fileNumber);
+    curFileName = tr("Drawing %1").arg(++fileNumber);
     view->setWindowTitle(curFileName);
     view->scene->installEventFilter(this);
     view->show();
@@ -266,6 +266,16 @@ void MainWindow::newFile()
 
     // toggle actions to true
     toggleActions(1);
+
+    view->firstSave = true;
+    autoSaveCount = true;
+
+    // sets timer for 60 seconds to auto save
+    QTimer *timer = new QTimer(this);
+    timer->setInterval(60000);
+    connect(timer, SIGNAL(timeout()),
+            this, SLOT(autoSave()));
+    timer->start();
 }
 
 void MainWindow::updateView()
@@ -466,6 +476,7 @@ void MainWindow::exportFile(QAction *action)
                 view->scene->isGridVisible = false;
                 view->scene->render(&painter);
                 image.save(fileName);
+                view->modifySceneRect();
                 view->scene->isGridVisible = true;
             }
 
@@ -535,6 +546,7 @@ void MainWindow::print(QPrinter *printer)
     view->scene->setSceneRect(view->scene->itemsBoundingRect()
                               .adjusted(-10, -10, 10, 10));
     view->scene->render(&painter, page);
+    view->modifySceneRect();
     view->scene->isGridVisible = true;
 }
 
@@ -640,61 +652,43 @@ void MainWindow::openFile()
     }
 }
 
-void MainWindow::saveFileAs()
+void MainWindow::autoSave()
 {
-    // save file dialog box
-    fileName = QFileDialog::getSaveFileName(this,
-                                            tr("Save File"),
-                                            QString(),
-                                            tr("file Name(*.xml)"));
-
-    if(!fileName.isEmpty())
-    {
-        QFile file(fileName);
-
-        if (!file.open(QIODevice::WriteOnly))
-        {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-            return;
-        }
-
-        else
-        {
-            if (QFileInfo(fileName).suffix().isEmpty())
-                fileName.append(".xml");
-            QXmlStreamWriter xmlWriter(&file);
-            xmlWriter.setAutoFormatting(true);
-            xmlWriter.writeStartDocument();
-            xmlWriter.writeStartElement("SceneData");
-            xmlWriter.writeAttribute("version", "v1.0");
-            xmlWriter.writeStartElement("Entities");
-
-            view->scene->writeStream(&xmlWriter);
-
-            xmlWriter.writeEndElement();   //end of Entities
-            xmlWriter.writeEndElement();   //end of SceneData
-            QMessageBox::warning(this, "Saved",
-                                 QString("Saved Scene Data to '%1'").
-                                 arg(fileName));
-            file.close();
-        }
-    }
-
-    else
+    if (autoSaveCount && curFileName.startsWith("Drawing"))
         return;
+    else
+        saveFile(view->currentFile);
 }
 
-void MainWindow::saveFile()
+bool MainWindow::saveFileAs()
 {
-    if(fileName.isEmpty())
-        return saveFileAs();
+    // save file dialog box
+    QFileDialog fileDialog(this);
+    fileDialog.setDefaultSuffix("xml");
+    fileDialog.setWindowModality(Qt::WindowModal);
+    fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog.exec();
 
+    QStringList files = fileDialog.selectedFiles();
+
+    if(files.isEmpty())
+        return false;
+
+    autoSaveCount = false;
+
+    return saveFile(files.at(0));
+}
+
+bool MainWindow::saveFile(const QString &fileName)
+{
     QFile file(fileName);
+    QFileInfo info(file);
 
     if (!file.open(QIODevice::WriteOnly))
     {
         QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-        return;
+        view->firstSave = false;
+        return false;
     }
 
     else
@@ -710,10 +704,27 @@ void MainWindow::saveFile()
 
         xmlWriter.writeEndElement();   //end of Entities
         xmlWriter.writeEndElement();   //end of SceneData
-        QMessageBox::warning(this, "Saved",
-                             QString("Saved Scene Data to '%1'").
-                             arg(fileName));
+        mainStatusBar->showMessage(QString("File saved %1").arg(fileName));
         file.close();
+        view->currentFile = fileName;
+        view->setWindowTitle(info.fileName());
+        return true;
+    }
+}
+
+bool MainWindow::save()
+{
+    if (view->firstSave)
+    {
+        view->firstSave = false;
+        return saveFileAs();
+    }
+    else
+    {
+        if (view->currentFile.isEmpty())
+            return saveFileAs();
+        else
+            return saveFile(view->currentFile);
     }
 }
 

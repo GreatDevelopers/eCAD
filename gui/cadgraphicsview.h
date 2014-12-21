@@ -20,6 +20,8 @@ public:
     void newFile();
     void cursorMode();
     void showUndoStack();
+    void modifySceneRect();
+    void setCurrentFile(const QString &fileName);
 
     CadGraphicsScene *scene;
     QUndoStack *undoStack;
@@ -31,6 +33,8 @@ public:
 
     double scaleFactor;
     bool isPanning;
+    bool firstSave;
+    QString currentFile;
 
 public slots:
     void drawPoint();
