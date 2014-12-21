@@ -48,16 +48,6 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                                 QPointF(mouseEvent->scenePos().x(),
                                         sceneRect().bottomLeft().y()));
 
-        // sets graphicscoloreffect for axis
-        effect1 = new QGraphicsColorizeEffect;
-        effect2 = new QGraphicsColorizeEffect;
-        effect1->setColor(Qt::red);
-        effect2->setColor(Qt::red);
-        effect1->setStrength(0.5);
-        effect2->setStrength(0.5);
-        horizontalAxis->setGraphicsEffect(effect1);
-        verticalAxis->setGraphicsEffect(effect2);
-
         if (!previewList.isEmpty())
         {
             foreach (QGraphicsItem *item, previewList)
