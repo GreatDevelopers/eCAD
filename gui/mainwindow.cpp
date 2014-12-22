@@ -432,18 +432,31 @@ void MainWindow::toggleMenuActions()
 
 void MainWindow::exportFile(QAction *action)
 {
-    QString str;
+    // export file dialog box
+    QFileDialog fileDialog(this);
     if (action == actionExportImage)
-        str = "JPEG(*.jpg *.jpeg);;""PNG(*.png)";
+    {
+        fileDialog.setNameFilter("PNG (*.png);;"
+                                 "JPG (*.jpg)");
+
+        if (fileDialog.selectedNameFilter() == fileDialog.nameFilters().at(0))
+            fileDialog.setDefaultSuffix("png");
+        if (fileDialog.selectedNameFilter() == fileDialog.nameFilters().at(1))
+            fileDialog.setDefaultSuffix("jpg");
+    }
 
     else if (action == actionExportPDF)
-        str = "*.pdf";
+    {
+        fileDialog.setNameFilter(" PDF (*.pdf)");
+        fileDialog.setDefaultSuffix("pdf");
+    }
 
-    // export file dialog box
-    fileName = QFileDialog::getSaveFileName(this,
-                                            tr("Save File"),
-                                            QString(),
-                                            str);
+    fileDialog.setWindowModality(Qt::WindowModal);
+    fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog.exec();
+
+    QStringList files = fileDialog.selectedFiles();
+    fileName = files.at(0);
 
     if (!fileName.isEmpty())
     {
@@ -463,8 +476,6 @@ void MainWindow::exportFile(QAction *action)
                  * selections are cleared and the area in which items are present
                  * is grabbed to be saved as an image
                  */
-                if (QFileInfo(fileName).suffix().isEmpty())
-                    fileName.append(".jpg");
                 view->scene->clearSelection();
                 view->scene->setSceneRect(view->scene->itemsBoundingRect()
                                           .adjusted(-10, -10, 10, 10));
@@ -474,25 +485,29 @@ void MainWindow::exportFile(QAction *action)
 
                 QPainter painter(&image);
                 view->scene->isGridVisible = false;
+                view->scene->clearSelection();
+
+                foreach (QGraphicsItem *item, view->scene->items())
+                    item->setTransform(QTransform::fromScale(1, -1));
+
+                view->scene->setSceneRect(view->scene->itemsBoundingRect()
+                                          .adjusted(-10, -10, 10, 10));
                 view->scene->render(&painter);
                 image.save(fileName);
                 view->modifySceneRect();
+
+                foreach (QGraphicsItem *item, view->scene->items())
+                    item->setTransform(QTransform::fromScale(1, 1));
+
                 view->scene->isGridVisible = true;
             }
 
             else if (action == actionExportPDF)
             {
-                if (QFileInfo(fileName).suffix().isEmpty())
-                    fileName.append(".pdf");
                 QPrinter printer(QPrinter::HighResolution);
                 printer.setOutputFormat(QPrinter::PdfFormat);
                 printer.setOutputFileName(fileName);
                 print(&printer);
-                view->scene->isGridVisible = false;
-                view->scene->clearSelection();
-                view->scene->setSceneRect(view->scene->itemsBoundingRect()
-                                          .adjusted(-10, -10, 10, 10));
-                view->scene->isGridVisible = true;
             }
         }
     }
@@ -543,10 +558,18 @@ void MainWindow::print(QPrinter *printer)
      */
     view->scene->isGridVisible = false;
     view->scene->clearSelection();
+
+    foreach (QGraphicsItem *item, view->scene->items())
+        item->setTransform(QTransform::fromScale(1, -1));
+
     view->scene->setSceneRect(view->scene->itemsBoundingRect()
                               .adjusted(-10, -10, 10, 10));
     view->scene->render(&painter, page);
     view->modifySceneRect();
+
+    foreach (QGraphicsItem *item, view->scene->items())
+        item->setTransform(QTransform::fromScale(1, 1));
+
     view->scene->isGridVisible = true;
 }
 
