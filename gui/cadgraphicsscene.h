@@ -28,14 +28,16 @@ public:
     void setFlags();
     void drawEntity(QGraphicsItem *item);
     bool eventFilter(QObject *watched, QEvent *event);
+    qreal roundOff(qreal, qreal);
 
     typedef QPair<QGraphicsItem *, QPointF> entityPos;
     QList<entityPos> selectedEntities;
-    QPointF startP, midP, endP;
+    QPointF startP, midP, endP, tempPoint;
     bool isInvertedSelection;
     bool isGridVisible;
     int id, contextItemId;
     QString imagePath;
+    qreal snapTo;
 
 public slots:
     void setMode(Mode mode);

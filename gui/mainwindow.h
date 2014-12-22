@@ -77,6 +77,7 @@ private slots:
     void print(QPrinter *);
     void showAboutDialog();
     void updateView();
+    void setSnapping();
     CadGraphicsView *createMdiView();
 };
 

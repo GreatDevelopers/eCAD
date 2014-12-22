@@ -157,6 +157,12 @@
     <addaction name="actionManual"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuSnap">
+    <property name="title">
+     <string>Snap</string>
+    </property>
+    <addaction name="actionGridSnap"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
@@ -164,6 +170,7 @@
    <addaction name="menuDraw"/>
    <addaction name="menuModify"/>
    <addaction name="menuDimension"/>
+   <addaction name="menuSnap"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -912,6 +919,17 @@
   <action name="actionExportPDF">
    <property name="text">
     <string>PDF</string>
+   </property>
+  </action>
+  <action name="actionGridSnap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Grid</string>
    </property>
   </action>
  </widget>

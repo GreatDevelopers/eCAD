@@ -121,6 +121,7 @@ void MainWindow::toggleActions(bool b)
     actionExportPDF->setEnabled(b);
     menuImport->setEnabled(b);
     menuExport->setEnabled(b);
+    actionGridSnap->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -263,6 +264,8 @@ void MainWindow::newFile()
             view->scene, SLOT(deleteItems()));
     connect(actionInvertSelection, SIGNAL(triggered()),
             view->scene, SLOT(invertSelection()));
+    connect(actionGridSnap, SIGNAL(toggled(bool)),
+            this, SLOT(setSnapping()));
 
     // toggle actions to true
     toggleActions(1);
@@ -581,6 +584,15 @@ CadGraphicsView *MainWindow::createMdiView()
     mdiArea->setActiveSubWindow(w);
     windowViewList.append(qMakePair(w, view));
     return view;
+}
+
+void MainWindow::setSnapping()
+{
+    // sets snapping value for Snap-to-Grid
+    if (!actionGridSnap->isChecked())
+        view->scene->snapTo = 1;
+    else
+        view->scene->snapTo = 50;
 }
 
 void MainWindow::toggleToolBar(bool ok)

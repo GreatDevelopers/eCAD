@@ -17,6 +17,7 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     copyAction = contextMenu->addAction("copy");
     pasteAction = contextMenu->addAction("paste");
     contextItem = 0;
+    snapTo = 1;
     installEventFilter(this);
 
     // connects context menu items to action slots
@@ -24,6 +25,11 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
             this, SLOT(menuAction(QAction *)));
     // connects selectionChanged signal to selectItems slot
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectItems()));
+}
+
+qreal CadGraphicsScene::roundOff(qreal value, qreal multipleOf)
+{
+    return qFloor((value + multipleOf / 2) / multipleOf) * multipleOf;
 }
 
 bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
@@ -39,15 +45,6 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                            .arg(mouseEvent->scenePos().x())
                            .arg(mouseEvent->scenePos().y()));
 
-        horizontalAxis = new Line(QPointF(sceneRect().bottomLeft().x(),
-                                          mouseEvent->scenePos().y()),
-                                  QPointF(sceneRect().bottomRight().x(),
-                                          mouseEvent->scenePos().y()));
-        verticalAxis = new Line(QPointF(mouseEvent->scenePos().x(),
-                                        sceneRect().topLeft().y()),
-                                QPointF(mouseEvent->scenePos().x(),
-                                        sceneRect().bottomLeft().y()));
-
         if (!previewList.isEmpty())
         {
             foreach (QGraphicsItem *item, previewList)
@@ -58,16 +55,32 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
 
         if (entityMode != NoMode)
         {
+            horizontalAxis = new Line(QPointF(sceneRect().bottomLeft().x(),
+                                              roundOff(mouseEvent->scenePos().y(),
+                                                       snapTo)),
+                                      QPointF(sceneRect().bottomRight().x(),
+                                              roundOff(mouseEvent->scenePos().y(),
+                                                       snapTo)));
+            verticalAxis = new Line(QPointF(roundOff(mouseEvent->scenePos().x(),
+                                                     snapTo),
+                                            sceneRect().topLeft().y()),
+                                    QPointF(roundOff(mouseEvent->scenePos().x(),
+                                                     snapTo),
+                                            sceneRect().bottomLeft().y()));
+
             addItem(horizontalAxis);
             addItem(verticalAxis);
             previewList.append(horizontalAxis);
             previewList.append(verticalAxis);
+
+            tempPoint = QPointF(roundOff(mouseEvent->scenePos().x(), snapTo),
+                                roundOff(mouseEvent->scenePos().y(), snapTo));
         }
 
         if (entityMode == PointMode)
         {
-            pointItem = new Point(mouseEvent->scenePos());
-            pointItem->setPos(mouseEvent->scenePos());
+            pointItem = new Point(tempPoint);
+            pointItem->setPos(tempPoint);
             previewList.append(pointItem);
             addItem(pointItem);
         }
@@ -76,7 +89,7 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
         {
             if (mSecondClick)
             {
-                lineItem = new Line(startP, mouseEvent->scenePos());
+                lineItem = new Line(startP, tempPoint);
                 previewList.append(lineItem);
                 addItem(lineItem);
             }
@@ -86,7 +99,7 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
         {
             if (mSecondClick)
             {
-                circleItem = new Circle(startP, mouseEvent->scenePos());
+                circleItem = new Circle(startP, tempPoint);
                 previewList.append(circleItem);
                 addItem(circleItem);
             }
@@ -96,15 +109,14 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
         {
             if (mSecondClick)
             {
-                ellipseItem = new Ellipse(startP, mouseEvent->scenePos(),
-                                          mouseEvent->scenePos());
+                ellipseItem = new Ellipse(startP, tempPoint, tempPoint);
                 previewList.append(ellipseItem);
                 addItem(ellipseItem);
             }
 
             if (mThirdClick)
             {
-                ellipseItem = new Ellipse(startP, midP, mouseEvent->scenePos());
+                ellipseItem = new Ellipse(startP, midP, tempPoint);
                 previewList.append(ellipseItem);
                 addItem(ellipseItem);
             }
@@ -114,14 +126,14 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
         {
             if (mSecondClick)
             {
-                lineItem = new Line(startP, mouseEvent->scenePos());
+                lineItem = new Line(startP, tempPoint);
                 previewList.append(lineItem);
                 addItem(lineItem);
             }
 
             if (mThirdClick)
             {
-                arcItem = new Arc(startP, midP, mouseEvent->scenePos());
+                arcItem = new Arc(startP, midP, tempPoint);
                 previewList.append(arcItem);
                 addItem(arcItem);
             }
@@ -381,11 +393,11 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         {
         case NoMode:
             if (mFirstClick)
-                startP = mouseEvent->scenePos();
+                startP = tempPoint;
             break;
 
         case PointMode:
-            startP = mouseEvent->scenePos();
+            startP = tempPoint;
             pointItem = new Point(++id, startP);
             drawEntity(pointItem);
             break;
@@ -393,14 +405,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case LineMode:
             if (mFirstClick)
             {
-                startP = mouseEvent->scenePos();
+                startP = tempPoint;
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                endP = mouseEvent->scenePos();
+                endP = tempPoint;
                 mPaintFlag = true;
                 mSecondClick = false;
             }
@@ -415,14 +427,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case CircleMode:
             if (mFirstClick)
             {
-                startP = mouseEvent->scenePos();
+                startP = tempPoint;
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                endP = mouseEvent->scenePos();
+                endP = tempPoint;
                 mPaintFlag = true;
                 mSecondClick = false;
             }
@@ -437,14 +449,14 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case EllipseMode:
             if (mFirstClick)
             {
-                startP = mouseEvent->scenePos();
+                startP = tempPoint;
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                midP = mouseEvent->scenePos();
+                midP = tempPoint;
                 mFirstClick = false;
                 mSecondClick = false;
                 mThirdClick = true;
@@ -452,7 +464,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
             else if (!mSecondClick && mThirdClick)
             {
-                endP = mouseEvent->scenePos();
+                endP = tempPoint;
                 mThirdClick = false;
                 mPaintFlag = true;
             }
@@ -465,7 +477,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             break;
 
         case TextMode:
-            startP = mouseEvent->scenePos();
+            startP = tempPoint;
             textItem = new Text(++id, startP, str);
             drawEntity(textItem);
             break;
@@ -473,21 +485,21 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case ArcMode:
             if (mFirstClick)
             {
-                startP = mouseEvent->scenePos();
+                startP = tempPoint;
                 mFirstClick = false;
                 mSecondClick = true;
             }
 
             else if (!mFirstClick && mSecondClick)
             {
-                midP = mouseEvent->scenePos();
+                midP = tempPoint;
                 mSecondClick = false;
                 mThirdClick = true;
             }
 
             else if (!mSecondClick && mThirdClick)
             {
-                endP = mouseEvent->scenePos();
+                endP = tempPoint;
                 mPaintFlag = true;
                 mThirdClick = false;
             }
@@ -500,7 +512,7 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             break;
 
         case ImageMode:
-            startP = mouseEvent->scenePos();
+            startP = tempPoint;
             imageItem = new Image(++id, startP, imagePath);
             drawEntity(imageItem);
             break;
