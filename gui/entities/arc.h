@@ -14,6 +14,7 @@ public:
     Arc(int i, QPointF point1, QPointF point2, QPointF point3);
     Arc(QPointF point1, QPointF point2, QPointF point3);
     QRectF boundingRect() const;
+    QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
     enum { Type = UserType + 6 };
