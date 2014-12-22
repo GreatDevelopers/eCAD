@@ -6,7 +6,6 @@
 #include <QUndoStack>
 #include <QMenu>
 #include <QToolTip>
-#include <QGraphicsColorizeEffect>
 
 #include "qmath.h"
 #include "cadcommands/cadcommandadd.h"
@@ -78,7 +77,6 @@ private:
 
     QList<QGraphicsItem *> itemList;
     QList<QGraphicsItem *> previewList;
-    QGraphicsColorizeEffect *effect1, *effect2;
     Point *pointItem;
     Line *lineItem;
     Line *horizontalAxis, *verticalAxis;
