@@ -33,6 +33,21 @@ Arc::Arc(QPointF point1, QPointF point2, QPointF point3)
     init();
 }
 
+QPainterPath Arc::shape() const
+{
+    // sets the shape of the arc for selection
+    QPainterPath path, path2;
+    qreal adjust = 10;
+    qreal radAngle = qAbs(lineBC.length() / (2 * qSin(qDegreesToRadians
+                                            (lineAC.angleTo(lineBA))
+                                                      ))) * M_PI / 180;
+    qreal dx = adjust * tan(radAngle);
+    qreal dy = adjust * (-(tan(radAngle)));
+    path.arcTo(circle, startAngle + dx, spanAngle + dx);
+    path2.arcTo(circle, startAngle + dy, spanAngle + dy);
+    return path - path2;
+}
+
 void Arc::init()
 {
     // Calculates startangle and spanangle
