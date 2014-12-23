@@ -43,6 +43,7 @@ private:
     bool autoSaveCount;
     QString curFileName, fileName;
     int fileNumber;
+    QLabel *messageLeft, *messageMiddle;
 
 private slots:
     void newFile();
@@ -78,6 +79,7 @@ private slots:
     void showAboutDialog();
     void updateView();
     void setSnapping();
+    void setStatusBarMessage();
     CadGraphicsView *createMdiView();
 };
 
