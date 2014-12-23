@@ -17,7 +17,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(tr("eCAD"));
     setCentralWidget(mdiArea);
     fileNumber = 0;
-    mainStatusBar->showMessage("Welcome to eCAD");
+    messageLeft = new QLabel(this->mainStatusBar);
+    messageMiddle = new QLabel(this->mainStatusBar);
+    mainStatusBar->addPermanentWidget(messageLeft, 1);
+    mainStatusBar->addPermanentWidget(messageMiddle, 4);
+    messageLeft->setText("Welcome to eCAD");
 
     // shortcut keys
     new QShortcut(QKeySequence(Qt::Key_Escape),
@@ -133,7 +137,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         QString showMessage = QString("Mouse move (%1,%2)").
                 arg(mouseEvent->scenePos().x()).
                 arg(mouseEvent->scenePos().y());
-        mainStatusBar->showMessage(showMessage);
+        messageLeft->setText(showMessage);
     }
 }
 
@@ -240,6 +244,8 @@ void MainWindow::newFile()
     // connect signals
     connect(view->scene, SIGNAL(changed(QList<QRectF>)),
             this, SLOT(toggleMenuActions()));
+    connect(view->scene, SIGNAL(setMessage()),
+            this, SLOT(setStatusBarMessage()));
     connect(actionPoints, SIGNAL(triggered()),
             view, SLOT(drawPoint()));
     connect(actionLine, SIGNAL(triggered()),
@@ -832,4 +838,9 @@ void MainWindow::showAboutDialog()
     aboutUi.setupUi(aboutDialog);
     connect(aboutUi.Close, SIGNAL(pressed()), aboutDialog, SLOT(close()));
     aboutDialog->show();
+}
+
+void MainWindow::setStatusBarMessage()
+{
+    messageMiddle->setText(view->scene->setStatusBarMessage());
 }

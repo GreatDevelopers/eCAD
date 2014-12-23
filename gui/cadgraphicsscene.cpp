@@ -77,6 +77,8 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                                 roundOff(mouseEvent->scenePos().y(), snapTo));
         }
 
+        emit setMessage();
+
         if (entityMode == PointMode)
         {
             pointItem = new Point(tempPoint);
@@ -1058,4 +1060,63 @@ void CadGraphicsScene::menuAction(QAction *action)
     {
         paste(contextPosition);
     }
+}
+
+QString CadGraphicsScene::setStatusBarMessage()
+{
+    switch (entityMode)
+    {
+    case NoMode:
+        message = "";
+        break;
+
+    case PointMode:
+        message = "POINT: Specify a point";
+        break;
+
+    case LineMode:
+        if (mFirstClick)
+            message = "LINE: Specify start point";
+        else if (!mFirstClick && mSecondClick)
+            message = "LINE: Specify end point";
+        break;
+
+    case CircleMode:
+        if (mFirstClick)
+            message = "CIRCLE: Specify center";
+        else if (!mFirstClick && mSecondClick)
+            message = "CIRCLE: Specify point for radius";
+        break;
+
+    case EllipseMode:
+        if (mFirstClick)
+            message = "ELLIPSE: Specify center";
+        else if (!mFirstClick && mSecondClick)
+            message = "ELLIPSE: Specify next point";
+        else if (!mSecondClick && mThirdClick)
+            message = "ELLIPSE: Specify last point";
+        break;
+
+    case TextMode:
+        message = "TEXT: Specify position";
+        break;
+
+    case ArcMode:
+        if (mFirstClick)
+            message = "ARC: Specify first point";
+        else if (!mFirstClick && mSecondClick)
+            message = "ARC: Specify next point";
+        else if (!mSecondClick && mThirdClick)
+            message = "ARC: Specify last point";
+        break;
+
+    case ImageMode:
+        message = "IMAGE: Specify position";
+        break;
+
+    default:
+        break;
+    }
+
+    return message;
 }

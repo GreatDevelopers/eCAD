@@ -29,6 +29,7 @@ public:
     void drawEntity(QGraphicsItem *item);
     bool eventFilter(QObject *watched, QEvent *event);
     qreal roundOff(qreal, qreal);
+    QString setStatusBarMessage();
 
     typedef QPair<QGraphicsItem *, QPointF> entityPos;
     QList<entityPos> selectedEntities;
@@ -37,6 +38,7 @@ public:
     bool isGridVisible;
     int id, contextItemId;
     QString imagePath;
+    QString message;
     qreal snapTo;
 
 public slots:
@@ -61,6 +63,7 @@ protected:
 signals:
     void itemSelected(QGraphicsItem *item);
     void setSelectionSignal();
+    void setMessage();
 
 private:
     Mode entityMode;
