@@ -21,6 +21,22 @@ int Arc::type() const
     return Type;
 }
 
+QPainterPath Arc::shape() const
+{
+    // sets the shape of the arc for selection
+    QPainterPath path, path2;
+    qreal adjust = 10;
+    path.arcMoveTo(circle.adjusted(-adjust, -adjust, adjust, adjust),
+                   startAngle);
+    path2.arcMoveTo(circle.adjusted(adjust, adjust, -adjust, -adjust),
+                    startAngle);
+    path.arcTo(circle.adjusted(-adjust, -adjust, adjust, adjust), startAngle,
+               spanAngle);
+    path2.arcTo(circle.adjusted(adjust, adjust, -adjust, -adjust), startAngle,
+                spanAngle);
+    return path - path2;
+}
+
 Arc::Arc(QPointF point1, QPointF point2, QPointF point3)
 {
     /**
