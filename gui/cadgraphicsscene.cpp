@@ -45,6 +45,11 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                            .arg(mouseEvent->scenePos().x())
                            .arg(mouseEvent->scenePos().y()));
 
+        // shows statusbarmessage tooltip
+        QToolTip::showText(mouseEvent->screenPos(), message
+                           .arg(mouseEvent->scenePos().x())
+                           .arg(mouseEvent->scenePos().y()));
+
         if (!previewList.isEmpty())
         {
             foreach (QGraphicsItem *item, previewList)
