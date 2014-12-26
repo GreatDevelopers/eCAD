@@ -39,11 +39,23 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
         QGraphicsSceneMouseEvent *mouseEvent =
                 static_cast<QGraphicsSceneMouseEvent *>(event);
 
-        // shows mouse position tooltip
-        QToolTip::showText(mouseEvent->screenPos(),
-                           QString("%1, %2")
-                           .arg(mouseEvent->scenePos().x())
-                           .arg(mouseEvent->scenePos().y()));
+        // shows mouse position and status bar message tooltip
+        if(entityMode)
+        {
+            QToolTip::showText(mouseEvent->screenPos(),
+                               QString("%1, %2 %3")
+                               .arg(tempPoint.x())
+                               .arg(tempPoint.y())
+                               .arg(message));
+        }
+
+        else
+        {
+            QToolTip::showText(mouseEvent->screenPos(),
+                               QString("%1, %2")
+                               .arg(mouseEvent->scenePos().x())
+                               .arg(mouseEvent->scenePos().y()));
+        }
 
         if (!previewList.isEmpty())
         {
