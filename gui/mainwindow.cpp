@@ -19,8 +19,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileNumber = 0;
     messageLeft = new QLabel(this->mainStatusBar);
     messageMiddle = new QLabel(this->mainStatusBar);
+    hidebutton = new QPushButton("Hide");
     mainStatusBar->addPermanentWidget(messageLeft, 1);
     mainStatusBar->addPermanentWidget(messageMiddle, 4);
+    mainStatusBar->addPermanentWidget(hidebutton);
     messageLeft->setText("Welcome to eCAD");
 
     // shortcut keys
@@ -83,6 +85,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(toggleToolBar(bool)));
     connect(actionStatusBar, SIGNAL(toggled(bool)),
             this, SLOT(hideStatusBar(bool)));
+    connect(hidebutton, SIGNAL(clicked()),
+            this, SLOT(hideStatusBar()));
 
     actionStatusBar->setChecked(true);
     actionScripting->setChecked(true);
@@ -126,6 +130,7 @@ void MainWindow::toggleActions(bool b)
     menuImport->setEnabled(b);
     menuExport->setEnabled(b);
     actionGridSnap->setEnabled(b);
+    hidebutton->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -611,6 +616,12 @@ void MainWindow::hideStatusBar(bool ok)
 {
     // hides/show the status bar on toggling of button
     mainStatusBar->setVisible(ok);
+}
+
+void MainWindow::hideStatusBar()
+{
+    mainStatusBar->hide();
+    actionStatusBar->setChecked(false);
 }
 
 void MainWindow::showUndoStack()
