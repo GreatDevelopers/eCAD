@@ -231,6 +231,8 @@ void MainWindow::newFile()
     // appends undoAction and redoAction in their respective lists
     undoList.append(view->undoAction);
     redoList.append(view->redoAction);
+    standardToolBar->addAction(view->undoAction);
+    standardToolBar->addAction(view->redoAction);
 
     /**
      * associate undoAction, redoAction, script widget and command widget
