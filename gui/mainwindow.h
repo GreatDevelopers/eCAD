@@ -6,6 +6,7 @@
 #include <QGraphicsView>
 #include <QPainter>
 #include <QMdiArea>
+#include <QPushButton>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
@@ -32,6 +33,7 @@ private:
     QImage *imageObject;
     CadGraphicsView *view;
     QDialog *aboutDialog;
+    QPushButton *hidebutton;
     typedef QPair<QMdiSubWindow *, CadGraphicsView *> windowViewPair;
     QList<windowViewPair> windowViewList;
     QList<CadScriptWidget *> scriptWidgetList;
@@ -53,6 +55,7 @@ private slots:
     void toggleWidgets();
     void toggleToolBar(bool);
     void hideStatusBar(bool ok);
+    void hideStatusBar();
     bool saveFile(const QString &fileName);
     bool saveFileAs();
     bool save();
