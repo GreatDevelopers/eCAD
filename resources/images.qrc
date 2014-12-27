@@ -1,20 +1,25 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>images/circles.png</file>
-        <file>images/ellipse.png</file>
-        <file>images/line.png</file>
-        <file>images/points.png</file>
-        <file>images/menutext.png</file>
         <file>images/document.svg</file>
         <file>images/loop-circular.svg</file>
         <file>images/browser.svg</file>
         <file>images/play-circle.svg</file>
         <file>images/task.svg</file>
         <file>images/logo.png</file>
-        <file>images/arcs3p.png</file>
-        <file>images/image.png</file>
-        <file>images/editcut.png</file>
-        <file>images/editcopy.png</file>
-        <file>images/editpaste.png</file>
+        <file>images/arc.svg</file>
+        <file>images/circle.svg</file>
+        <file>images/copy.svg</file>
+        <file>images/ellipse.svg</file>
+        <file>images/image.svg</file>
+        <file>images/line.svg</file>
+        <file>images/newDrawing.svg</file>
+        <file>images/openDrawing.svg</file>
+        <file>images/paste.svg</file>
+        <file>images/point.svg</file>
+        <file>images/redo.svg</file>
+        <file>images/saveDrawing.svg</file>
+        <file>images/text.svg</file>
+        <file>images/undo.svg</file>
+        <file>images/cut.svg</file>
     </qresource>
 </RCC>

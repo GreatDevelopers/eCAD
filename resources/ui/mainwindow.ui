@@ -173,6 +173,23 @@
    <addaction name="menuSnap"/>
    <addaction name="menuHelp"/>
   </widget>
+  <widget class="QToolBar" name="standardToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
+  </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -187,14 +204,15 @@
    <addaction name="actionArc"/>
    <addaction name="actionText"/>
    <addaction name="actionInsertImage"/>
-   <addaction name="actionCut"/>
-   <addaction name="actionCopy"/>
-   <addaction name="actionPaste"/>
   </widget>
   <widget class="QStatusBar" name="mainStatusBar"/>
   <action name="actionNew">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/newDrawing.svg</normaloff>:/icons/images/newDrawing.svg</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -207,6 +225,10 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/openDrawing.svg</normaloff>:/icons/images/openDrawing.svg</iconset>
+   </property>
    <property name="text">
     <string>Open</string>
    </property>
@@ -217,6 +239,10 @@
   <action name="actionSave">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../images.qrc">
+     <normaloff>:/icons/images/saveDrawing.svg</normaloff>:/icons/images/saveDrawing.svg</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -272,7 +298,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/editcut.png</normaloff>:/icons/images/editcut.png</iconset>
+     <normaloff>:/icons/images/cut.svg</normaloff>:/icons/images/cut.svg</iconset>
    </property>
    <property name="text">
     <string>Cut </string>
@@ -287,7 +313,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/editcopy.png</normaloff>:/icons/images/editcopy.png</iconset>
+     <normaloff>:/icons/images/copy.svg</normaloff>:/icons/images/copy.svg</iconset>
    </property>
    <property name="text">
     <string>Copy</string>
@@ -302,7 +328,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/editpaste.png</normaloff>:/icons/images/editpaste.png</iconset>
+     <normaloff>:/icons/images/paste.svg</normaloff>:/icons/images/paste.svg</iconset>
    </property>
    <property name="text">
     <string>Paste</string>
@@ -486,7 +512,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/points.png</normaloff>:/icons/images/points.png</iconset>
+     <normaloff>:/icons/images/point.svg</normaloff>:/icons/images/point.svg</iconset>
    </property>
    <property name="text">
     <string>Points</string>
@@ -501,7 +527,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/line.png</normaloff>:/icons/images/line.png</iconset>
+     <normaloff>:/icons/images/line.svg</normaloff>:/icons/images/line.svg</iconset>
    </property>
    <property name="text">
     <string>Line</string>
@@ -516,7 +542,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/arcs3p.png</normaloff>:/icons/images/arcs3p.png</iconset>
+     <normaloff>:/icons/images/arc.svg</normaloff>:/icons/images/arc.svg</iconset>
    </property>
    <property name="text">
     <string>Arc</string>
@@ -531,7 +557,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/circles.png</normaloff>:/icons/images/circles.png</iconset>
+     <normaloff>:/icons/images/circle.svg</normaloff>:/icons/images/circle.svg</iconset>
    </property>
    <property name="text">
     <string>Circle</string>
@@ -546,7 +572,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/ellipse.png</normaloff>:/icons/images/ellipse.png</iconset>
+     <normaloff>:/icons/images/ellipse.svg</normaloff>:/icons/images/ellipse.svg</iconset>
    </property>
    <property name="text">
     <string>Ellipse</string>
@@ -577,7 +603,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/menutext.png</normaloff>:/icons/images/menutext.png</iconset>
+     <normaloff>:/icons/images/text.svg</normaloff>:/icons/images/text.svg</iconset>
    </property>
    <property name="text">
     <string>Text</string>
@@ -603,7 +629,7 @@
    </property>
    <property name="icon">
     <iconset resource="../images.qrc">
-     <normaloff>:/icons/images/image.png</normaloff>:/icons/images/image.png</iconset>
+     <normaloff>:/icons/images/image.svg</normaloff>:/icons/images/image.svg</iconset>
    </property>
    <property name="text">
     <string>Insert Image</string>
@@ -904,7 +930,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../images.qrc">
+    <iconset>
      <normaloff>:/icons/images/image.png</normaloff>:/icons/images/image.png</iconset>
    </property>
    <property name="text">

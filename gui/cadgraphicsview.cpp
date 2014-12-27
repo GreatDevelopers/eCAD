@@ -22,6 +22,8 @@ void CadGraphicsView::newFile()
 
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
+    undoAction->setIcon(QIcon(":/icons/images/undo.svg"));
+    redoAction->setIcon(QIcon(":/icons/images/redo.svg"));
 
     // creates a new script widget
     scriptWidget = new CadScriptWidget;
