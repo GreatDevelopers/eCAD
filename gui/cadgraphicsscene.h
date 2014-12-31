@@ -40,6 +40,8 @@ public:
     QString imagePath;
     QString message;
     qreal snapTo;
+    QPointF endPoint;
+    bool endPointSnap;
 
 public slots:
     void setMode(Mode mode);
@@ -79,6 +81,7 @@ private:
     QPointF lineStartPoint;
     float differenceX;
     float differenceY;
+    QList<QPointF> endPointsList;
 
     QList<QGraphicsItem *> itemList;
     QList<QGraphicsItem *> previewList;

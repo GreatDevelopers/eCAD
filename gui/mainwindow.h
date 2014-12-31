@@ -37,6 +37,7 @@ private:
     QList<CadScriptWidget *> scriptWidgetList;
     QList<CadCommandWidget *> commandWidgetList;
     QList<QAction *> undoList, redoList;
+    QActionGroup *snapActionGroup;
 
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
