@@ -394,6 +394,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setPlainText(itemPtr->str);
         itemPtr->setTransform(QTransform::fromScale(1, -1));
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->position);
         itemPtr->setTextInteractionFlags(Qt::TextEditorInteraction);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
         connect(itemPtr, SIGNAL(lostFocus(Text *)),
@@ -417,6 +418,17 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setTransform(QTransform::fromScale(1, -1).
                               translate(0, -2 * startP.y()));
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->startP);
+        endPointsList.append(QPointF(itemPtr->startP.x() +
+                                     itemPtr->img.width(),
+                                     itemPtr->startP.y()));
+        endPointsList.append(QPointF(itemPtr->startP.x(),
+                                     itemPtr->startP.y() -
+                                     itemPtr->img.height()));
+        endPointsList.append(QPointF(itemPtr->startP.x() +
+                                     itemPtr->img.width(),
+                                     itemPtr->startP.y() -
+                                     itemPtr->img.height()));
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
