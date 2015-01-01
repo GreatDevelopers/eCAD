@@ -164,6 +164,7 @@
     <addaction name="actionFree"/>
     <addaction name="actionGridSnap"/>
     <addaction name="actionEndPoints"/>
+    <addaction name="actionCenter"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -983,6 +984,17 @@
    </property>
    <property name="text">
     <string>Free</string>
+   </property>
+  </action>
+  <action name="actionCenter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Center</string>
    </property>
   </action>
  </widget>
