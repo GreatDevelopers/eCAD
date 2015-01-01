@@ -18,6 +18,7 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     pasteAction = contextMenu->addAction("paste");
     contextItem = 0;
     snapTo = 1;
+    endPointSnap = false;
     installEventFilter(this);
 
     // connects context menu items to action slots
@@ -67,26 +68,44 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
 
         if (entityMode != NoMode)
         {
+            /**
+             * snaps the mouse to the end points of entities if the distance
+             * between any of the end points of any entity and mouse's position
+             * is less than 30 units along both axes
+             */
+            if (endPointSnap)
+            {
+                foreach (endPoint, endPointsList)
+                {
+                    qreal dx = 30;
+                    qreal dy = 30;
+                    if ((endPoint.x() - dx <= mouseEvent->scenePos().x())
+                            && (mouseEvent->scenePos().x() <= endPoint.x() + dx)
+                            && (endPoint.y() - dy <= mouseEvent->scenePos().y())
+                            && (mouseEvent->scenePos().y() <= endPoint.y() + dy))
+                        tempPoint = endPoint;
+                }
+            }
+
+            else
+            {
+                tempPoint = QPointF(roundOff(mouseEvent->scenePos().x(), snapTo),
+                                    roundOff(mouseEvent->scenePos().y(), snapTo));
+            }
+
             horizontalAxis = new Line(QPointF(sceneRect().bottomLeft().x(),
-                                              roundOff(mouseEvent->scenePos().y(),
-                                                       snapTo)),
+                                              tempPoint.y()),
                                       QPointF(sceneRect().bottomRight().x(),
-                                              roundOff(mouseEvent->scenePos().y(),
-                                                       snapTo)));
-            verticalAxis = new Line(QPointF(roundOff(mouseEvent->scenePos().x(),
-                                                     snapTo),
+                                              tempPoint.y()));
+            verticalAxis = new Line(QPointF(tempPoint.x(),
                                             sceneRect().topLeft().y()),
-                                    QPointF(roundOff(mouseEvent->scenePos().x(),
-                                                     snapTo),
+                                    QPointF(tempPoint.x(),
                                             sceneRect().bottomLeft().y()));
 
             addItem(horizontalAxis);
             addItem(verticalAxis);
             previewList.append(horizontalAxis);
             previewList.append(verticalAxis);
-
-            tempPoint = QPointF(roundOff(mouseEvent->scenePos().x(), snapTo),
-                                roundOff(mouseEvent->scenePos().y(), snapTo));
         }
 
         emit setMessage();
@@ -340,6 +359,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         Point *itemPtr = dynamic_cast<Point *>(item);
         itemPtr->setPos(itemPtr->position.x(), itemPtr->position.y());
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->position);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -347,6 +367,8 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Line *itemPtr = dynamic_cast<Line *>(item);
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->startP);
+        endPointsList.append(itemPtr->endP);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -361,6 +383,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->p2);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -371,6 +394,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setPlainText(itemPtr->str);
         itemPtr->setTransform(QTransform::fromScale(1, -1));
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->position);
         itemPtr->setTextInteractionFlags(Qt::TextEditorInteraction);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
         connect(itemPtr, SIGNAL(lostFocus(Text *)),
@@ -383,6 +407,8 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Arc *itemPtr = dynamic_cast<Arc *>(item);
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->p1);
+        endPointsList.append(itemPtr->p3);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -392,6 +418,17 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setTransform(QTransform::fromScale(1, -1).
                               translate(0, -2 * startP.y()));
         itemList.append(itemPtr);
+        endPointsList.append(itemPtr->startP);
+        endPointsList.append(QPointF(itemPtr->startP.x() +
+                                     itemPtr->img.width(),
+                                     itemPtr->startP.y()));
+        endPointsList.append(QPointF(itemPtr->startP.x(),
+                                     itemPtr->startP.y() -
+                                     itemPtr->img.height()));
+        endPointsList.append(QPointF(itemPtr->startP.x() +
+                                     itemPtr->img.width(),
+                                     itemPtr->startP.y() -
+                                     itemPtr->img.height()));
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 

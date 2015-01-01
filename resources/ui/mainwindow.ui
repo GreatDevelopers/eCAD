@@ -161,7 +161,9 @@
     <property name="title">
      <string>Snap</string>
     </property>
+    <addaction name="actionFree"/>
     <addaction name="actionGridSnap"/>
+    <addaction name="actionEndPoints"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -956,6 +958,31 @@
    </property>
    <property name="text">
     <string>Grid</string>
+   </property>
+  </action>
+  <action name="actionEndPoints">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>End Points</string>
+   </property>
+  </action>
+  <action name="actionFree">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Free</string>
    </property>
   </action>
  </widget>

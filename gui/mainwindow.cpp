@@ -89,6 +89,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // toggle actions to false
     toggleActions(0);
+
+    /**
+     * create action group for snap menu so that only one option is checkable
+     * at a time
+     */
+    snapActionGroup = new QActionGroup(this);
+
+    foreach (QAction *a, menuSnap->actions())
+        snapActionGroup->addAction(a);
 }
 
 MainWindow::~MainWindow()
@@ -125,7 +134,9 @@ void MainWindow::toggleActions(bool b)
     actionExportPDF->setEnabled(b);
     menuImport->setEnabled(b);
     menuExport->setEnabled(b);
+    actionFree->setEnabled(b);
     actionGridSnap->setEnabled(b);
+    actionEndPoints->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -272,7 +283,11 @@ void MainWindow::newFile()
             view->scene, SLOT(deleteItems()));
     connect(actionInvertSelection, SIGNAL(triggered()),
             view->scene, SLOT(invertSelection()));
-    connect(actionGridSnap, SIGNAL(toggled(bool)),
+    connect(actionFree, SIGNAL(triggered()),
+            this, SLOT(setSnapping()));
+    connect(actionGridSnap, SIGNAL(triggered()),
+            this, SLOT(setSnapping()));
+    connect(actionEndPoints, SIGNAL(triggered()),
             this, SLOT(setSnapping()));
 
     // toggle actions to true
@@ -596,11 +611,26 @@ CadGraphicsView *MainWindow::createMdiView()
 
 void MainWindow::setSnapping()
 {
-    // sets snapping value for Snap-to-Grid
-    if (!actionGridSnap->isChecked())
+    // sets values for free snapping
+    if (actionFree->isChecked())
+    {
         view->scene->snapTo = 1;
-    else
+        view->scene->endPointSnap = false;
+    }
+
+    // sets snapping value for Snap-to-Grid
+    else if (actionGridSnap->isChecked())
+    {
         view->scene->snapTo = 50;
+        view->scene->endPointSnap = false;
+    }
+
+    // sets snapping to end points
+    else if (actionEndPoints->isChecked())
+    {
+        view->scene->snapTo = 1;
+        view->scene->endPointSnap = true;
+    }
 }
 
 void MainWindow::toggleToolBar(bool ok)
