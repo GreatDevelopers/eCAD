@@ -19,7 +19,11 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     contextItem = 0;
     snapTo = 1;
     endPointSnap = false;
+    centerSnap = false;
     installEventFilter(this);
+
+    dx = 30;
+    dy = 30;
 
     // connects context menu items to action slots
     connect(contextMenu, SIGNAL(triggered(QAction *)),
@@ -77,13 +81,28 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
             {
                 foreach (endPoint, endPointsList)
                 {
-                    qreal dx = 30;
-                    qreal dy = 30;
                     if ((endPoint.x() - dx <= mouseEvent->scenePos().x())
                             && (mouseEvent->scenePos().x() <= endPoint.x() + dx)
                             && (endPoint.y() - dy <= mouseEvent->scenePos().y())
                             && (mouseEvent->scenePos().y() <= endPoint.y() + dy))
                         tempPoint = endPoint;
+                }
+            }
+
+            /**
+             * snaps the mouse to the center points of entities if the distance
+             * between any of the end points of any entity and mouse's position
+             * is less than 30 units along both axes
+             */
+            else if (centerSnap)
+            {
+                foreach (centerPoint, centerPointsList)
+                {
+                    if ((centerPoint.x() - dx <= mouseEvent->scenePos().x())
+                            && (mouseEvent->scenePos().x() <= centerPoint.x() + dx)
+                            && (centerPoint.y() - dy <= mouseEvent->scenePos().y())
+                            && (mouseEvent->scenePos().y() <= centerPoint.y() + dy))
+                        tempPoint = centerPoint;
                 }
             }
 
@@ -360,6 +379,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setPos(itemPtr->position.x(), itemPtr->position.y());
         itemList.append(itemPtr);
         endPointsList.append(itemPtr->position);
+        centerPointsList.append(itemPtr->position);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -376,6 +396,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Circle *itemPtr = dynamic_cast<Circle *>(item);
         itemList.append(itemPtr);
+        centerPointsList.append(itemPtr->centerP);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -384,6 +405,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
         itemList.append(itemPtr);
         endPointsList.append(itemPtr->p2);
+        centerPointsList.append(itemPtr->p1);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -409,6 +431,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemList.append(itemPtr);
         endPointsList.append(itemPtr->p1);
         endPointsList.append(itemPtr->p3);
+        centerPointsList.append(itemPtr->center);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -429,6 +452,20 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
                                      itemPtr->img.width(),
                                      itemPtr->startP.y() -
                                      itemPtr->img.height()));
+        centerPointsList.append(QPointF(itemPtr->startP.x() +
+                                        (itemPtr->img.width() / 2),
+                                        itemPtr->startP.y()));
+        centerPointsList.append(QPointF(itemPtr->startP.x(),
+                                        itemPtr->startP.y() -
+                                        (itemPtr->img.height() / 2)));
+        centerPointsList.append(QPointF(itemPtr->startP.x() +
+                                        (itemPtr->img.width() / 2),
+                                        itemPtr->startP.y() -
+                                        itemPtr->img.height()));
+        centerPointsList.append(QPointF(itemPtr->startP.x() +
+                                        itemPtr->img.width(),
+                                        itemPtr->startP.y() -
+                                        (itemPtr->img.height() / 2)));
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 

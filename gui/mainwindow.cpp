@@ -137,6 +137,7 @@ void MainWindow::toggleActions(bool b)
     actionFree->setEnabled(b);
     actionGridSnap->setEnabled(b);
     actionEndPoints->setEnabled(b);
+    actionCenter->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -288,6 +289,8 @@ void MainWindow::newFile()
     connect(actionGridSnap, SIGNAL(triggered()),
             this, SLOT(setSnapping()));
     connect(actionEndPoints, SIGNAL(triggered()),
+            this, SLOT(setSnapping()));
+    connect(actionCenter, SIGNAL(triggered()),
             this, SLOT(setSnapping()));
 
     // toggle actions to true
@@ -616,6 +619,7 @@ void MainWindow::setSnapping()
     {
         view->scene->snapTo = 1;
         view->scene->endPointSnap = false;
+        view->scene->centerSnap = false;
     }
 
     // sets snapping value for Snap-to-Grid
@@ -623,6 +627,7 @@ void MainWindow::setSnapping()
     {
         view->scene->snapTo = 50;
         view->scene->endPointSnap = false;
+        view->scene->centerSnap = false;
     }
 
     // sets snapping to end points
@@ -630,6 +635,15 @@ void MainWindow::setSnapping()
     {
         view->scene->snapTo = 1;
         view->scene->endPointSnap = true;
+        view->scene->centerSnap = false;
+    }
+
+    // sets snapping to center points of entities
+    else if (actionCenter->isChecked())
+    {
+        view->scene->snapTo = 1;
+        view->scene->endPointSnap = false;
+        view->scene->centerSnap = true;
     }
 }
 

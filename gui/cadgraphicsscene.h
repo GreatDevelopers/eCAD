@@ -41,7 +41,9 @@ public:
     QString message;
     qreal snapTo;
     QPointF endPoint;
+    QPointF centerPoint;
     bool endPointSnap;
+    bool centerSnap;
 
 public slots:
     void setMode(Mode mode);
@@ -73,7 +75,7 @@ private:
     bool mSecondClick;
     bool mThirdClick;
     bool mPaintFlag;
-    qreal x, y, rad, radM, angle;
+    qreal x, y, rad, radM, angle, dx, dy;
     QString str;
     QPen paintpen, linePen;
     QPointF contextPosition;
@@ -82,6 +84,7 @@ private:
     float differenceX;
     float differenceY;
     QList<QPointF> endPointsList;
+    QList<QPointF> centerPointsList;
 
     QList<QGraphicsItem *> itemList;
     QList<QGraphicsItem *> previewList;
