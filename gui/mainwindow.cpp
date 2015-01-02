@@ -243,8 +243,6 @@ void MainWindow::newFile()
     // appends undoAction and redoAction in their respective lists
     undoList.append(view->undoAction);
     redoList.append(view->redoAction);
-    standardToolBar->addAction(view->undoAction);
-    standardToolBar->addAction(view->redoAction);
 
     /**
      * associate undoAction, redoAction, script widget and command widget
@@ -329,10 +327,16 @@ void MainWindow::updateView()
                 removeDockWidget(cw);
 
             foreach (QAction *undo, undoList)
+            {
                 menuEdit->removeAction(undo);
+                standardToolBar->removeAction(undo);
+            }
 
             foreach (QAction *redo, redoList)
+            {
                 menuEdit->removeAction(redo);
+                standardToolBar->removeAction(redo);
+            }
 
             // adds script and command widgets associated with current view
             addDockWidget(Qt::RightDockWidgetArea, view->scriptWidget);
@@ -351,8 +355,12 @@ void MainWindow::updateView()
             // adds undoAction and redoAction associated with current view
             view->undoAction->setShortcut(QKeySequence::Undo);
             view->redoAction->setShortcut(QKeySequence::Redo);
+            view->undoAction->setIcon(QIcon(":/icons/images/undo.svg"));
+            view->redoAction->setIcon(QIcon(":/icons/images/redo.svg"));
             menuEdit->addAction(view->undoAction);
             menuEdit->addAction(view->redoAction);
+            standardToolBar->addAction(view->undoAction);
+            standardToolBar->addAction(view->redoAction);
 
             // checks/unchecks the actionGrid according to the grid visibility
             if (view->scene->isGridVisible)
