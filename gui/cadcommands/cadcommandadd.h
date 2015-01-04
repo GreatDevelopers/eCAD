@@ -12,6 +12,7 @@
 #include "text.h"
 #include "arc.h"
 #include "image.h"
+#include "dimhorizontal.h"
 
 class CadCommandAdd : public QUndoCommand
 {
@@ -81,6 +82,17 @@ public:
             setText(QString("Image add p(%1,%2)")
                     .arg(imageItem->startP.x())
                     .arg(imageItem->startP.y()));
+        }
+
+        if (cadItem->type() == DimHorizontal::Type)
+        {
+            DimHorizontal *dimHorizontalItem =
+                    dynamic_cast<DimHorizontal *>(cadItem);
+            setText(QString("DimHorizontal add p1(%1,%2), p2(%3,%4)")
+                    .arg(dimHorizontalItem->startP.x())
+                    .arg(dimHorizontalItem->endP.y())
+                    .arg(dimHorizontalItem->midP.x())
+                    .arg(dimHorizontalItem->endP.y()));
         }
     }
 

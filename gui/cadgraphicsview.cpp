@@ -131,6 +131,15 @@ void CadGraphicsView::drawImage()
     }
 }
 
+void CadGraphicsView::drawDimHorizontal()
+{
+    // sets the mode to DimHorizontalMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::DimHorizontalMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
 void CadGraphicsView::deleteSingleItem()
 {
     // sets delete mode to delete single item in the scene
