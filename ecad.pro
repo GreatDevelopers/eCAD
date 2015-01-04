@@ -29,7 +29,9 @@ SOURCES += \
     gui/cadscriptwidget.cpp \
     gui/cadcommandwidget.cpp \
     gui/entities/arc.cpp \
-    gui/entities/image.cpp
+    gui/entities/image.cpp \
+    gui/entities/arrow.cpp \
+    gui/entities/dimhorizontal.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -48,7 +50,9 @@ HEADERS += \
     gui/getEntity.h \
     gui/clipboardstack.h \
     gui/entities/arc.h \
-    gui/entities/image.h
+    gui/entities/image.h \
+    gui/entities/arrow.h \
+    gui/entities/dimhorizontal.h
 
 FORMS += \
     resources/ui/mainwindow.ui \

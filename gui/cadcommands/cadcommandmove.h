@@ -12,6 +12,7 @@
 #include "text.h"
 #include "arc.h"
 #include "image.h"
+#include "dimhorizontal.h"
 
 class CadCommandMove : public QUndoCommand
 {
@@ -80,6 +81,17 @@ public:
             setText(QString("Image moved to (%1,%2)")
                     .arg(nPos.x() + imageItem->startP.x())
                     .arg(nPos.y() + imageItem->startP.y()));
+        }
+
+        if (cadItem->type() == DimHorizontal::Type)
+        {
+            DimHorizontal *dimHorizontalItem =
+                    dynamic_cast<DimHorizontal *>(cadItem);
+            setText(QString("DimHorizontal moved to p1(%1,%2), p2(%3,%4)")
+                    .arg(dimHorizontalItem->startP.x() + nPos.x())
+                    .arg(dimHorizontalItem->endP.y() + nPos.y())
+                    .arg(dimHorizontalItem->midP.x() + nPos.x())
+                    .arg(dimHorizontalItem->endP.y() + nPos.y()));
         }
     }
 

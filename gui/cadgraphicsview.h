@@ -44,6 +44,7 @@ public slots:
     void drawText();
     void drawArc();
     void drawImage();
+    void drawDimHorizontal();
     void setNoMode();
     void selectWindow();
     void deleteSingleItem();

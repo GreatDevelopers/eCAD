@@ -138,6 +138,7 @@ void MainWindow::toggleActions(bool b)
     actionGridSnap->setEnabled(b);
     actionEndPoints->setEnabled(b);
     actionCenter->setEnabled(b);
+    actionHorizontal->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -290,6 +291,8 @@ void MainWindow::newFile()
             this, SLOT(setSnapping()));
     connect(actionCenter, SIGNAL(triggered()),
             this, SLOT(setSnapping()));
+    connect(actionHorizontal, SIGNAL(triggered()),
+            view, SLOT(drawDimHorizontal()));
 
     // toggle actions to true
     toggleActions(1);

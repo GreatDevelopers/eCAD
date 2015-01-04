@@ -190,6 +190,23 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                 addItem(arcItem);
             }
         }
+
+        else if (entityMode == DimHorizontalMode)
+        {
+            if (mSecondClick)
+            {
+                lineItem = new Line(startP, tempPoint);
+                previewList.append(lineItem);
+                addItem(lineItem);
+            }
+
+            if (mThirdClick)
+            {
+                dimHorizontalItem = new DimHorizontal(startP, midP, tempPoint);
+                previewList.append(dimHorizontalItem);
+                addItem(dimHorizontalItem);
+            }
+        }
     }
 }
 
@@ -306,6 +323,13 @@ void CadGraphicsScene::selectItems()
             else if (item->type() == Image::Type)
             {
                 Image *itemPtr = dynamic_cast<Image *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
+            }
+
+            else if (item->type() == DimHorizontal::Type)
+            {
+                DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item);
                 selectedEntities.append(qMakePair(itemPtr,
                                                   itemPtr->scenePos()));
             }
@@ -469,6 +493,13 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
+    else if (item->type() == DimHorizontal::Type)
+    {
+        DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
     setFlags();
 }
 
@@ -615,6 +646,35 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             break;
 
+        case DimHorizontalMode:
+            if (mFirstClick)
+            {
+                startP = tempPoint;
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                midP = tempPoint;
+                mSecondClick = false;
+                mThirdClick = true;
+            }
+
+            else if (!mSecondClick && mThirdClick)
+            {
+                endP = tempPoint;
+                mPaintFlag = true;
+                mThirdClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                dimHorizontalItem = new DimHorizontal(++id, startP, midP, endP);
+                drawEntity(dimHorizontalItem);
+            }
+            break;
+
         default:
             ;
         }
@@ -694,6 +754,13 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                     Image *itemPtr = dynamic_cast<Image *>(contextItem);
                     contextItemId = itemPtr->id;
                 }
+
+                else if (contextItem->type() == DimHorizontal::Type)
+                {
+                    DimHorizontal *itemPtr =
+                            dynamic_cast<DimHorizontal *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
             }
         }
     }
@@ -762,6 +829,13 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (item.first->type() == Image::Type)
             {
                 Image *itemPtr = dynamic_cast<Image *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
+
+            else if (item.first->type() == DimHorizontal::Type)
+            {
+                DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item.first);
                 mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                     itemPtr->scenePos()));
             }
@@ -911,6 +985,32 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                 stream->writeAttribute("path", itemPtr->path);
                 stream->writeEndElement();  //end of Image Item
             }
+
+            else if (item->type() == DimHorizontal::Type)
+            {
+                DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item);
+                stream->writeStartElement("DimHorizontal");
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x1", QString::number(itemPtr->startP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y1", QString::number(itemPtr->startP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x2", QString::number(itemPtr->midP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y2", QString::number(itemPtr->midP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x3", QString::number(itemPtr->endP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y3", QString::number(itemPtr->endP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeEndElement();  //end of Horizontal Dimension Item
+            }
         }
     }
 }
@@ -1056,6 +1156,30 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             imageItem = new Image(id, startP, imagePath);
             drawEntity(imageItem);
         }
+
+        if (stream->isStartElement() && stream->name() == "DimHorizontal")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x1")
+                    startP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y1")
+                    startP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "x2")
+                    midP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y2")
+                    midP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "x3")
+                    endP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y3")
+                    endP.setY(attribute.value().toString().toDouble());
+            }
+
+            dimHorizontalItem = new DimHorizontal(id, startP, midP, endP);
+            drawEntity(dimHorizontalItem);
+        }
     }
 }
 
@@ -1198,6 +1322,15 @@ QString CadGraphicsScene::setStatusBarMessage()
 
     case ImageMode:
         message = "IMAGE: Specify position";
+        break;
+
+    case DimHorizontalMode:
+        if (mFirstClick)
+            message = "Horizontal Dim: Specify first point";
+        else if (!mFirstClick && mSecondClick)
+            message = "Horizontal Dim: Specify next point";
+        else if (!mSecondClick && mThirdClick)
+            message = "Horizontal Dim: Specify last point";
         break;
 
     default:
