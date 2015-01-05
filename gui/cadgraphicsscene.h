@@ -20,7 +20,8 @@ class CadGraphicsScene : public QGraphicsScene
 public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode,
-                ArcMode, ImageMode, DeleteMode, DimHorizontalMode };
+                ArcMode, ImageMode, DeleteMode, DimHorizontalMode,
+                DimVerticalMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -97,6 +98,7 @@ private:
     Arc *arcItem;
     Image *imageItem;
     DimHorizontal *dimHorizontalItem;
+    DimVertical *dimVerticalItem;
     QUndoStack *mUndoStack;
     QMenu *contextMenu;
     QAction *cutAction;

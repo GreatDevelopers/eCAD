@@ -1,11 +1,28 @@
 #include "arrow.h"
 
-Arrow::Arrow(QPointF p1, QPointF p2, QPointF p3)
+Arrow::Arrow(int i, QPointF p1, QPointF p2, QPointF p3)
 {
     // Set values of startPoint, midPoint and endPoint
     startP = p1;
     midP = p2;
     endP = p3;
+
+    horizontal = false;
+    vertical = false;
+
+    switch (i)
+    {
+    case 1:
+        horizontal = true;
+        break;
+
+    case 2:
+        vertical = true;
+        break;
+
+    default:
+        break;
+    }
 
     calculate();
 }
@@ -24,8 +41,13 @@ void Arrow::calculate()
     QFontMetrics fm(font);
     textHeight = fm.height();
 
-    line.setLine(startP.x(), endP.y(), midP.x(), endP.y());
+    if (horizontal)
+        line.setLine(startP.x(), endP.y(), midP.x(), endP.y());
+    else if (vertical)
+        line.setLine(endP.x(), startP.y(), endP.x(), midP.y());
+
     value = QString::number(line.length());
+    textWidth = fm.width(value);
     middle = line.pointAt(0.45);
     lineAngle = getAngle(line.dx(), line.dy());
 
@@ -69,17 +91,33 @@ QPainterPath Arrow::getArrowPath()
     else
     {
         padding = 25;
-        QTransform t, t2;
-        t.translate(-line.dx(), 0);
-        p.addPolygon(t.map(headPolygon));
-        t2.translate(line.dx(), 0);
-        p.addPolygon(t2.map(tailPolygon));
-        p.moveTo(QPointF(line.p1().x() - 30, line.p1().y()));
-        p.lineTo(QPointF(line.p1()));
-        p.moveTo(QPointF(line.p2().x() + 30, line.p2().y()));
-        p.lineTo(QPointF(line.p2()));
+
+        if (horizontal)
+        {
+            QTransform t1, t2;
+            t1.translate(-line.dx(), 0);
+            p.addPolygon(t1.map(headPolygon));
+            t2.translate(line.dx(), 0);
+            p.addPolygon(t2.map(tailPolygon));
+            p.moveTo(QPointF(line.p1().x() - 30, line.p1().y()));
+            p.lineTo(QPointF(line.p1()));
+            p.moveTo(QPointF(line.p2().x() + 30, line.p2().y()));
+            p.lineTo(QPointF(line.p2()));
+        }
+
+        else if (vertical)
+        {
+            QTransform t1, t2;
+            t1.translate(0, -line.dy());
+            p.addPolygon(t1.map(headPolygon));
+            t2.translate(0, line.dy());
+            p.addPolygon(t2.map(tailPolygon));
+            p.moveTo(QPointF(line.p1().x(), line.p1().y() - 30));
+            p.lineTo(QPointF(line.p1()));
+            p.moveTo(QPointF(line.p2().x(), line.p2().y() + 30));
+            p.lineTo(QPointF(line.p2()));
+        }
     }
 
-    p.addText(middle * 0.995, font, value);
     return p;
 }

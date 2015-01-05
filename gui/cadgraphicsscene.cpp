@@ -207,6 +207,23 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                 addItem(dimHorizontalItem);
             }
         }
+
+        else if (entityMode == DimVerticalMode)
+        {
+            if (mSecondClick)
+            {
+                lineItem = new Line(startP, tempPoint);
+                previewList.append(lineItem);
+                addItem(lineItem);
+            }
+
+            if (mThirdClick)
+            {
+                dimVerticalItem = new DimVertical(startP, midP, tempPoint);
+                previewList.append(dimVerticalItem);
+                addItem(dimVerticalItem);
+            }
+        }
     }
 }
 
@@ -330,6 +347,13 @@ void CadGraphicsScene::selectItems()
             else if (item->type() == DimHorizontal::Type)
             {
                 DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item);
+                selectedEntities.append(qMakePair(itemPtr,
+                                                  itemPtr->scenePos()));
+            }
+
+            else if (item->type() == DimVertical::Type)
+            {
+                DimVertical *itemPtr = dynamic_cast<DimVertical *>(item);
                 selectedEntities.append(qMakePair(itemPtr,
                                                   itemPtr->scenePos()));
             }
@@ -496,6 +520,13 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     else if (item->type() == DimHorizontal::Type)
     {
         DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
+    else if (item->type() == DimVertical::Type)
+    {
+        DimVertical *itemPtr = dynamic_cast<DimVertical *>(item);
         itemList.append(itemPtr);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
@@ -675,6 +706,35 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             break;
 
+        case DimVerticalMode:
+            if (mFirstClick)
+            {
+                startP = tempPoint;
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                midP = tempPoint;
+                mSecondClick = false;
+                mThirdClick = true;
+            }
+
+            else if (!mSecondClick && mThirdClick)
+            {
+                endP = tempPoint;
+                mPaintFlag = true;
+                mThirdClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                dimVerticalItem = new DimVertical(++id, startP, midP, endP);
+                drawEntity(dimVerticalItem);
+            }
+            break;
+
         default:
             ;
         }
@@ -761,6 +821,13 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                             dynamic_cast<DimHorizontal *>(contextItem);
                     contextItemId = itemPtr->id;
                 }
+
+                else if (contextItem->type() == DimVertical::Type)
+                {
+                    DimVertical *itemPtr =
+                            dynamic_cast<DimVertical *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
             }
         }
     }
@@ -836,6 +903,13 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (item.first->type() == DimHorizontal::Type)
             {
                 DimHorizontal *itemPtr = dynamic_cast<DimHorizontal *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
+
+            else if (item.first->type() == DimVertical::Type)
+            {
+                DimVertical *itemPtr = dynamic_cast<DimVertical *>(item.first);
                 mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                     itemPtr->scenePos()));
             }
@@ -1011,6 +1085,32 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                                                              .y()));
                 stream->writeEndElement();  //end of Horizontal Dimension Item
             }
+
+            else if (item->type() == DimVertical::Type)
+            {
+                DimVertical *itemPtr = dynamic_cast<DimVertical *>(item);
+                stream->writeStartElement("DimVertical");
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x1", QString::number(itemPtr->startP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y1", QString::number(itemPtr->startP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x2", QString::number(itemPtr->midP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y2", QString::number(itemPtr->midP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x3", QString::number(itemPtr->endP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y3", QString::number(itemPtr->endP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeEndElement();  //end of Vertical Dimension Item
+            }
         }
     }
 }
@@ -1180,6 +1280,30 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
             dimHorizontalItem = new DimHorizontal(id, startP, midP, endP);
             drawEntity(dimHorizontalItem);
         }
+
+        if (stream->isStartElement() && stream->name() == "DimVertical")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x1")
+                    startP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y1")
+                    startP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "x2")
+                    midP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y2")
+                    midP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "x3")
+                    endP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y3")
+                    endP.setY(attribute.value().toString().toDouble());
+            }
+
+            dimVerticalItem = new DimVertical(id, startP, midP, endP);
+            drawEntity(dimVerticalItem);
+        }
     }
 }
 
@@ -1331,6 +1455,15 @@ QString CadGraphicsScene::setStatusBarMessage()
             message = "Horizontal Dim: Specify next point";
         else if (!mSecondClick && mThirdClick)
             message = "Horizontal Dim: Specify last point";
+        break;
+
+    case DimVerticalMode:
+        if (mFirstClick)
+            message = "Vertical Dim: Specify first point";
+        else if (!mFirstClick && mSecondClick)
+            message = "Vertical Dim: Specify next point";
+        else if (!mSecondClick && mThirdClick)
+            message = "Vertical Dim: Specify last point";
         break;
 
     default:

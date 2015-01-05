@@ -13,6 +13,7 @@
 #include "arc.h"
 #include "image.h"
 #include "dimhorizontal.h"
+#include "dimvertical.h"
 
 class CadCommandMove : public QUndoCommand
 {
@@ -92,6 +93,16 @@ public:
                     .arg(dimHorizontalItem->endP.y() + nPos.y())
                     .arg(dimHorizontalItem->midP.x() + nPos.x())
                     .arg(dimHorizontalItem->endP.y() + nPos.y()));
+        }
+
+        if (cadItem->type() == DimVertical::Type)
+        {
+            DimVertical *dimVerticalItem = dynamic_cast<DimVertical *>(cadItem);
+            setText(QString("DimVertical moved to p1(%1,%2), p2(%3,%4)")
+                    .arg(dimVerticalItem->endP.x() + nPos.x())
+                    .arg(dimVerticalItem->startP.y() + nPos.y())
+                    .arg(dimVerticalItem->endP.x() + nPos.x())
+                    .arg(dimVerticalItem->midP.y() + nPos.y()));
         }
     }
 

@@ -13,6 +13,7 @@
 #include "arc.h"
 #include "image.h"
 #include "dimhorizontal.h"
+#include "dimvertical.h"
 
 class CadCommandDelete : public QUndoCommand
 {
@@ -89,6 +90,16 @@ public:
                     .arg(dimHorizontalItem->endP.y())
                     .arg(dimHorizontalItem->midP.x())
                     .arg(dimHorizontalItem->endP.y()));
+        }
+
+        if (cadItem->type() == DimVertical::Type)
+        {
+            DimVertical *dimVerticalItem = dynamic_cast<DimVertical *>(cadItem);
+            setText(QString("DimVertical delete p1(%1,%2), p2(%3,%4)")
+                    .arg(dimVerticalItem->endP.x())
+                    .arg(dimVerticalItem->startP.y())
+                    .arg(dimVerticalItem->endP.x())
+                    .arg(dimVerticalItem->midP.y()));
         }
     }
 

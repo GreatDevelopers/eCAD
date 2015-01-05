@@ -8,16 +8,17 @@
 class Arrow
 {
 public:
-    Arrow(QPointF, QPointF, QPointF);
+    Arrow(int, QPointF, QPointF, QPointF);
     qreal getAngle(const qreal, const qreal);
     QPainterPath getArrowPath();
     void calculate();
 
+    bool horizontal, vertical;
     QPointF startP, midP, endP;
     QPointF middle;
     QLineF line;
     QPolygonF headPolygon, tailPolygon;
-    qreal lineAngle, textHeight, padding;
+    qreal lineAngle, textHeight, textWidth, padding;
     QString value;
     QFont font;
 };
