@@ -17,6 +17,7 @@ public:
     enum { Type = UserType + 1 };
     int type() const;
     getEntity *clone(int);
+    QPointF getPoint();
 
     int id;
     QPointF position;

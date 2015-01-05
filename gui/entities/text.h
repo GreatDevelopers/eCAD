@@ -12,6 +12,7 @@ public:
     Text(int, QPointF, QString);
     enum { Type = UserType + 5 };
     int type() const;
+    QPointF getEndPoint();
 
     int id;
     QPointF position;

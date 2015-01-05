@@ -73,6 +73,11 @@ void Arc::init()
 
     int w = 10;
     boundingRectTemp = circle.adjusted(-w, -w, w, w);
+
+    // sets the path of arc and middle point of its path
+    path.arcMoveTo(circle, startAngle);
+    path.arcTo(circle, startAngle, spanAngle);
+    middlePoint = path.pointAtPercent(0.5);
 }
 
 QRectF Arc::boundingRect() const
@@ -116,9 +121,6 @@ void Arc::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawEllipse(p3, 2, 2);
     }
 
-    QPainterPath path;
-    path.arcMoveTo(circle, startAngle);
-    path.arcTo(circle, startAngle, spanAngle);
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path);
 }
@@ -143,4 +145,24 @@ getEntity *Arc::clone(int i)
     a->startAngle = startAngle;
     a->spanAngle = spanAngle;
     return a;
+}
+
+QVector<QPointF> Arc::getEndPoints()
+{
+    // returns vector containing end points of arc
+    endPoints.append(p1);
+    endPoints.append(p3);
+    return endPoints;
+}
+
+QPointF Arc::getCenter()
+{
+    // returns center of arc
+    return center;
+}
+
+QPointF Arc::getMiddlePoint()
+{
+    // returns middle point of arc
+    return middlePoint;
 }

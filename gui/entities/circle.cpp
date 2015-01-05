@@ -108,3 +108,9 @@ getEntity *Circle::clone(int i)
     c->radius = radius;
     return c;
 }
+
+QPointF Circle::getCenter()
+{
+    // returns center of circle
+    return centerP;
+}

@@ -43,8 +43,11 @@ public:
     qreal snapTo;
     QPointF endPoint;
     QPointF centerPoint;
+    QPointF middlePoint;
+
     bool endPointSnap;
     bool centerSnap;
+    bool middleSnap;
 
 public slots:
     void setMode(Mode mode);
@@ -86,6 +89,7 @@ private:
     float differenceY;
     QList<QPointF> endPointsList;
     QList<QPointF> centerPointsList;
+    QList<QPointF> midPointsList;
 
     QList<QGraphicsItem *> itemList;
     QList<QGraphicsItem *> previewList;

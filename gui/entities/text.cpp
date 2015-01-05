@@ -38,3 +38,9 @@ void Text::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
     QGraphicsTextItem::mouseDoubleClickEvent(event);
 }
+
+QPointF Text::getEndPoint()
+{
+    // returns end point of text
+    return position;
+}

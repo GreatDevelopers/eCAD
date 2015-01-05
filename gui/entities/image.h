@@ -20,12 +20,18 @@ public:
     enum { Type = UserType + 7 };
     int type() const;
     getEntity *clone(int);
+    QVector<QPointF> getEndPoints();
+    QPointF getCenter();
+    QVector<QPointF> getMiddlePoints();
 
     int id;
     QPointF startP;
     QString path;
     QImage img;
     QPixmap imagePixmap;
+    QVector<QPointF> endPoints;
+    QVector<QPointF> middlePoints;
+    QPointF center;
 };
 
 #endif // IMAGE_H
