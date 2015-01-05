@@ -1,12 +1,12 @@
-#include "dimhorizontal.h"
+#include "dimvertical.h"
 
-DimHorizontal::DimHorizontal(int i, QPointF p1, QPointF p2, QPointF p3)
+DimVertical::DimVertical(int i, QPointF p1, QPointF p2, QPointF p3)
 {
     // Assigns id
     id = i;
 
     // Set values of startPoint, midPoint and endPoint
-    if (p2.x() > p1.x())
+    if (p2.y() > p1.y())
     {
         startP = p1;
         midP = p2;
@@ -23,10 +23,10 @@ DimHorizontal::DimHorizontal(int i, QPointF p1, QPointF p2, QPointF p3)
     eval();
 }
 
-DimHorizontal::DimHorizontal(QPointF p1, QPointF p2, QPointF p3)
+DimVertical::DimVertical(QPointF p1, QPointF p2, QPointF p3)
 {
     // Set values of startPoint, midPoint and endPoint
-    if (p2.x() > p1.x())
+    if (p2.y() > p1.y())
     {
         startP = p1;
         midP = p2;
@@ -43,22 +43,22 @@ DimHorizontal::DimHorizontal(QPointF p1, QPointF p2, QPointF p3)
     eval();
 }
 
-void DimHorizontal::eval()
+void DimVertical::eval()
 {
     // Creates arrow and extension lines
-    arrow = new Arrow(1, startP, midP, endP);
+    arrow = new Arrow(2, startP, midP, endP);
 
-    extLine1.setLine(startP.x(), startP.y(), startP.x(), endP.y());
-    extLine2.setLine(midP.x(), midP.y(), midP.x(), endP.y());
+    extLine1.setLine(startP.x(), startP.y(), endP.x(), startP.y());
+    extLine2.setLine(midP.x(), midP.y(), endP.x(), midP.y());
 }
 
-int DimHorizontal::type() const
+int DimVertical::type() const
 {
-    // Enable the use of qgraphicsitem_cast with horizontal dimension item.
+    // Enable the use of qgraphicsitem_cast with vertical dimension item.
     return Type;
 }
 
-QPainterPath DimHorizontal::shape() const
+QPainterPath DimVertical::shape() const
 {
     QPainterPath s;
     QPainterPathStroker stroker;
@@ -72,21 +72,21 @@ QPainterPath DimHorizontal::shape() const
     return stroker.createStroke(s);
 }
 
-QRectF DimHorizontal::boundingRect() const
+QRectF DimVertical::boundingRect() const
 {
-    // Bounding rectangle of the horizontal dimension
-    qreal extra = 10.0 + arrow->textHeight;
+    // Bounding rectangle of the vertical dimension
+    qreal extra = 10.0 + arrow->textWidth;
 
-    if (startP.y() > midP.y())
+    if (startP.x() > midP.x())
     {
-        if (endP.y() > midP.y() && endP.y() > startP.y())
+        if (endP.x() >= startP.x() && endP.x() > midP.x())
         {
-            return QRectF(QPointF(startP.x(), endP.y()),
-                          QSizeF(midP.x() - startP.x(), midP.y() - endP.y()))
+            return QRectF(QPointF(midP.x(), startP.y()),
+                          QSizeF(endP.x() - midP.x(), midP.y() - startP.y()))
                     .normalized().adjusted(-extra, -extra, extra, extra);
         }
 
-        else if (endP.y() > midP.y() && endP.y() < startP.y())
+        else if (endP.x() > midP.x() && endP.x() < startP.x())
         {
             return QRectF(QPointF(startP.x(), startP.y()),
                           QSizeF(midP.x() - startP.x(), midP.y() - startP.y()))
@@ -95,41 +95,41 @@ QRectF DimHorizontal::boundingRect() const
 
         else
         {
-            return QRectF(QPointF(startP.x(), startP.y()),
-                          QSizeF(midP.x() - startP.x(), endP.y() - startP.y()))
+            return QRectF(QPointF(endP.x(), startP.y()),
+                          QSizeF(startP.x() - endP.x(), midP.y() - startP.y()))
                     .normalized().adjusted(-extra, -extra, extra, extra);
         }
     }
 
-    else if (startP.y() < midP.y())
+    else if (startP.x() < midP.x())
     {
-        if (endP.y() > midP.y() && endP.y() > startP.y())
-        {
-            return QRectF(QPointF(startP.x(), endP.y()),
-                          QSizeF(midP.x() - startP.x(), startP.y() - endP.y()))
-                    .normalized().adjusted(-extra, -extra, extra, extra);
-        }
-
-        else if (endP.y() < midP.y() && endP.y() < startP.y())
+        if (endP.x() >= midP.x() && endP.x() > startP.x())
         {
             return QRectF(QPointF(startP.x(), midP.y()),
-                          QSizeF(midP.x() - startP.x(), endP.y() - midP.y()))
+                          QSizeF(endP.x() - startP.x(), startP.y() - midP.y()))
                     .normalized().adjusted(-extra, -extra, extra, extra);
         }
 
-        else
+        else if (endP.x() < midP.x() && endP.x() > startP.x())
         {
             return QRectF(QPointF(startP.x(), midP.y()),
                           QSizeF(midP.x() - startP.x(), startP.y() - midP.y()))
                     .normalized().adjusted(-extra, -extra, extra, extra);
         }
+
+        else
+        {
+            return QRectF(QPointF(endP.x(), midP.y()),
+                          QSizeF(midP.x() - endP.x(), startP.y() - midP.y()))
+                    .normalized().adjusted(-extra, -extra, extra, extra);
+        }
     }
 }
 
-void DimHorizontal::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+void DimVertical::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
-    // Draws/paints the horizontal dimension
+    // Draws/paints the vertical dimension
     QPen paintpen;
     paintpen.setCosmetic(true);
     paintpen.setWidth(1);
@@ -139,11 +139,12 @@ void DimHorizontal::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
     paintpen.setColor(Qt::black);
     painter->setPen(paintpen);
-    painter->drawLine(startP.x(), startP.y(), startP.x(), endP.y());
-    painter->drawLine(midP.x(), midP.y(), midP.x(), endP.y());
+    painter->drawLine(startP.x(), startP.y(), endP.x(), startP.y());
+    painter->drawLine(midP.x(), midP.y(), endP.x(), midP.y());
     painter->setBrush(Qt::SolidPattern);
     painter->drawPath(arrow->getArrowPath());
-    painter->scale(1, -1);
+    painter->scale(-1, 1);
+    painter->rotate(180);
     painter->translate(0, -2 * arrow->middle.y());
     painter->drawText(arrow->middle, arrow->value);
 }

@@ -31,7 +31,8 @@ SOURCES += \
     gui/entities/arc.cpp \
     gui/entities/image.cpp \
     gui/entities/arrow.cpp \
-    gui/entities/dimhorizontal.cpp
+    gui/entities/dimhorizontal.cpp \
+    gui/entities/dimvertical.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -52,7 +53,8 @@ HEADERS += \
     gui/entities/arc.h \
     gui/entities/image.h \
     gui/entities/arrow.h \
-    gui/entities/dimhorizontal.h
+    gui/entities/dimhorizontal.h \
+    gui/entities/dimvertical.h
 
 FORMS += \
     resources/ui/mainwindow.ui \
