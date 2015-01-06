@@ -96,3 +96,19 @@ getEntity *Line::clone(int i)
     l->endP;
     return l;
 }
+
+QVector<QPointF> Line::getEndPoints()
+{
+    // returns vector containing end points of line
+    endPoints.append(startP);
+    endPoints.append(endP);
+    return endPoints;
+}
+
+QPointF Line::getMiddlePoint()
+{
+    // returns middle point of line
+    midP.setX((startP.x() + endP.x()) / 2);
+    midP.setY((startP.y() + endP.y()) / 2);
+    return midP;
+}

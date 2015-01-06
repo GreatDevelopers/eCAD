@@ -55,3 +55,9 @@ getEntity *Point::clone(int i)
     p->scenePos();
     return p;
 }
+
+QPointF Point::getPoint()
+{
+    // returns point's position
+    return position;
+}

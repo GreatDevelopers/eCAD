@@ -20,6 +20,7 @@ CadGraphicsScene::CadGraphicsScene(QObject *parent, QUndoStack *undoStack)
     snapTo = 1;
     endPointSnap = false;
     centerSnap = false;
+    middleSnap = false;
     installEventFilter(this);
 
     dx = 30;
@@ -103,6 +104,23 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                             && (centerPoint.y() - dy <= mouseEvent->scenePos().y())
                             && (mouseEvent->scenePos().y() <= centerPoint.y() + dy))
                         tempPoint = centerPoint;
+                }
+            }
+
+            /**
+             * snaps the mouse to the middle points of entities if the distance
+             * between any of the end points of any entity and mouse's position
+             * is less than 30 units along both axes
+             */
+            else if (middleSnap)
+            {
+                foreach (middlePoint, midPointsList)
+                {
+                    if ((middlePoint.x() - dx <= mouseEvent->scenePos().x())
+                            && (mouseEvent->scenePos().x() <= middlePoint.x() + dx)
+                            && (middlePoint.y() - dy <= mouseEvent->scenePos().y())
+                            && (mouseEvent->scenePos().y() <= middlePoint.y() + dy))
+                        tempPoint = middlePoint;
                 }
             }
 
@@ -426,8 +444,9 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         Point *itemPtr = dynamic_cast<Point *>(item);
         itemPtr->setPos(itemPtr->position.x(), itemPtr->position.y());
         itemList.append(itemPtr);
-        endPointsList.append(itemPtr->position);
-        centerPointsList.append(itemPtr->position);
+        endPointsList.append(itemPtr->getPoint());
+        centerPointsList.append(itemPtr->getPoint());
+        midPointsList.append(itemPtr->getPoint());
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -435,8 +454,11 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Line *itemPtr = dynamic_cast<Line *>(item);
         itemList.append(itemPtr);
-        endPointsList.append(itemPtr->startP);
-        endPointsList.append(itemPtr->endP);
+
+        foreach (QPointF i, itemPtr->getEndPoints())
+            endPointsList.append(i);
+
+        midPointsList.append(itemPtr->getMiddlePoint());
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -444,7 +466,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Circle *itemPtr = dynamic_cast<Circle *>(item);
         itemList.append(itemPtr);
-        centerPointsList.append(itemPtr->centerP);
+        centerPointsList.append(itemPtr->getCenter());
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -452,8 +474,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Ellipse *itemPtr = dynamic_cast<Ellipse *>(item);
         itemList.append(itemPtr);
-        endPointsList.append(itemPtr->p2);
-        centerPointsList.append(itemPtr->p1);
+        centerPointsList.append(itemPtr->getCenter());
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -464,7 +485,7 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setPlainText(itemPtr->str);
         itemPtr->setTransform(QTransform::fromScale(1, -1));
         itemList.append(itemPtr);
-        endPointsList.append(itemPtr->position);
+        endPointsList.append(itemPtr->getEndPoint());
         itemPtr->setTextInteractionFlags(Qt::TextEditorInteraction);
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
         connect(itemPtr, SIGNAL(lostFocus(Text *)),
@@ -477,9 +498,12 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     {
         Arc *itemPtr = dynamic_cast<Arc *>(item);
         itemList.append(itemPtr);
-        endPointsList.append(itemPtr->p1);
-        endPointsList.append(itemPtr->p3);
-        centerPointsList.append(itemPtr->center);
+
+        foreach (QPointF i, itemPtr->getEndPoints())
+            endPointsList.append(i);
+
+        centerPointsList.append(itemPtr->getCenter());
+        midPointsList.append(itemPtr->getMiddlePoint());
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
@@ -489,31 +513,15 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         itemPtr->setTransform(QTransform::fromScale(1, -1).
                               translate(0, -2 * startP.y()));
         itemList.append(itemPtr);
-        endPointsList.append(itemPtr->startP);
-        endPointsList.append(QPointF(itemPtr->startP.x() +
-                                     itemPtr->img.width(),
-                                     itemPtr->startP.y()));
-        endPointsList.append(QPointF(itemPtr->startP.x(),
-                                     itemPtr->startP.y() -
-                                     itemPtr->img.height()));
-        endPointsList.append(QPointF(itemPtr->startP.x() +
-                                     itemPtr->img.width(),
-                                     itemPtr->startP.y() -
-                                     itemPtr->img.height()));
-        centerPointsList.append(QPointF(itemPtr->startP.x() +
-                                        (itemPtr->img.width() / 2),
-                                        itemPtr->startP.y()));
-        centerPointsList.append(QPointF(itemPtr->startP.x(),
-                                        itemPtr->startP.y() -
-                                        (itemPtr->img.height() / 2)));
-        centerPointsList.append(QPointF(itemPtr->startP.x() +
-                                        (itemPtr->img.width() / 2),
-                                        itemPtr->startP.y() -
-                                        itemPtr->img.height()));
-        centerPointsList.append(QPointF(itemPtr->startP.x() +
-                                        itemPtr->img.width(),
-                                        itemPtr->startP.y() -
-                                        (itemPtr->img.height() / 2)));
+
+        foreach (QPointF i, itemPtr->getEndPoints())
+            endPointsList.append(i);
+
+        centerPointsList.append(itemPtr->getCenter());
+
+        foreach (QPointF i, itemPtr->getMiddlePoints())
+            midPointsList.append(i);
+
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 

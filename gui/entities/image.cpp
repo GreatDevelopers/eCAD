@@ -56,3 +56,31 @@ getEntity *Image::clone(int i)
     image->imagePixmap = imagePixmap;
     return image;
 }
+
+QVector<QPointF> Image::getEndPoints()
+{
+    // returns vector containing end points of image
+    endPoints.append(startP);
+    endPoints.append(QPointF(startP.x() + img.width(), startP.y()));
+    endPoints.append(QPointF(startP.x(), startP.y() - img.height()));
+    endPoints.append(QPointF(startP.x() + img.width(), startP.y() - img.height()));
+    return endPoints;
+}
+
+QPointF Image::getCenter()
+{
+    center = QPointF(startP.x() + img.width() / 2, startP.y() - img.height() / 2);
+    return center;
+}
+
+QVector<QPointF> Image::getMiddlePoints()
+{
+    // returns vector containing center points of image
+    middlePoints.append(QPointF(startP.x() + (img.width() / 2), startP.y()));
+    middlePoints.append(QPointF(startP.x(), startP.y() - img.height() / 2));
+    middlePoints.append(QPointF(startP.x() + (img.width() / 2),
+                                startP.y() - img.height()));
+    middlePoints.append(QPointF(startP.x() + img.width(),
+                                startP.y() - (img.height() / 2)));
+    return middlePoints;
+}

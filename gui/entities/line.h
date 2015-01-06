@@ -23,9 +23,12 @@ public:
     enum { Type = UserType + 2 };
     int type() const;
     getEntity *clone(int);
+    QVector<QPointF> getEndPoints();
+    QPointF getMiddlePoint();
 
     int id;
-    QPointF startP, endP;
+    QPointF startP, endP, midP;
+    QVector<QPointF> endPoints;
 };
 
 #endif // LINE_H

@@ -138,6 +138,7 @@ void MainWindow::toggleActions(bool b)
     actionGridSnap->setEnabled(b);
     actionEndPoints->setEnabled(b);
     actionCenter->setEnabled(b);
+    actionMiddlePoints->setEnabled(b);
     actionHorizontal->setEnabled(b);
     actionVertical->setEnabled(b);
 }
@@ -291,6 +292,8 @@ void MainWindow::newFile()
     connect(actionEndPoints, SIGNAL(triggered()),
             this, SLOT(setSnapping()));
     connect(actionCenter, SIGNAL(triggered()),
+            this, SLOT(setSnapping()));
+    connect(actionMiddlePoints, SIGNAL(triggered()),
             this, SLOT(setSnapping()));
     connect(actionHorizontal, SIGNAL(triggered()),
             view, SLOT(drawDimHorizontal()));
@@ -634,6 +637,7 @@ void MainWindow::setSnapping()
         view->scene->snapTo = 1;
         view->scene->endPointSnap = false;
         view->scene->centerSnap = false;
+        view->scene->middleSnap = false;
     }
 
     // sets snapping value for Snap-to-Grid
@@ -642,6 +646,7 @@ void MainWindow::setSnapping()
         view->scene->snapTo = 50;
         view->scene->endPointSnap = false;
         view->scene->centerSnap = false;
+        view->scene->middleSnap = false;
     }
 
     // sets snapping to end points
@@ -650,6 +655,7 @@ void MainWindow::setSnapping()
         view->scene->snapTo = 1;
         view->scene->endPointSnap = true;
         view->scene->centerSnap = false;
+        view->scene->middleSnap = false;
     }
 
     // sets snapping to center points of entities
@@ -658,6 +664,16 @@ void MainWindow::setSnapping()
         view->scene->snapTo = 1;
         view->scene->endPointSnap = false;
         view->scene->centerSnap = true;
+        view->scene->middleSnap = false;
+    }
+
+    // sets snapping to middle points of entities
+    else if (actionMiddlePoints->isChecked())
+    {
+        view->scene->snapTo = 1;
+        view->scene->endPointSnap = false;
+        view->scene->centerSnap = false;
+        view->scene->middleSnap = true;
     }
 }
 

@@ -19,6 +19,9 @@ public:
     enum { Type = UserType + 6 };
     int type() const;
     getEntity *clone(int);
+    QVector<QPointF> getEndPoints();
+    QPointF getCenter();
+    QPointF getMiddlePoint();
 
     int id;
     QPointF p1, p2, p3, center;
@@ -26,6 +29,9 @@ public:
     QLineF bisectorBC, bisectorBA;
     qreal startAngle, spanAngle, rad;
     QRectF circle, boundingRectTemp;
+    QVector<QPointF> endPoints;
+    QPointF middlePoint;
+    QPainterPath path;
 
 private:
     void init();

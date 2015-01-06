@@ -165,6 +165,7 @@
     <addaction name="actionGridSnap"/>
     <addaction name="actionEndPoints"/>
     <addaction name="actionCenter"/>
+    <addaction name="actionMiddlePoints"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -995,6 +996,17 @@
    </property>
    <property name="text">
     <string>Center</string>
+   </property>
+  </action>
+  <action name="actionMiddlePoints">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Middle Points</string>
    </property>
   </action>
  </widget>

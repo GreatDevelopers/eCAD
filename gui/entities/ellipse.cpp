@@ -143,3 +143,9 @@ getEntity *Ellipse::clone(int i)
     e->majRadius = majRadius;
     return e;
 }
+
+QPointF Ellipse::getCenter()
+{
+    // returns center of ellipse
+    return p1;
+}
