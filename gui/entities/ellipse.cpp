@@ -64,6 +64,9 @@ void Ellipse::calculate()
     topLeft.setY(p1.y() - minRadius);
     bottomRight.setX(p1.x() + majRadius);
     bottomRight.setY(p1.y() + minRadius);
+
+    setTransformOriginPoint(p1);
+    setRotation(theta);
 }
 
 int Ellipse::type() const
@@ -123,9 +126,6 @@ void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setPen(paintpen);
         painter->drawEllipse(p1, majRadius, minRadius);
     }
-
-    setTransformOriginPoint(p1);
-    setRotation(theta);
 }
 
 getEntity *Ellipse::clone(int i)
