@@ -25,10 +25,12 @@ public:
     getEntity *clone(int);
     QVector<QPointF> getEndPoints();
     QPointF getMiddlePoint();
+    void linePath();
 
     int id;
     QPointF startP, endP, midP;
     QVector<QPointF> endPoints;
+    QPainterPath path;
 };
 
 #endif // LINE_H

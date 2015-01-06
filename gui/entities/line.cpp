@@ -5,6 +5,8 @@ Line::Line(QPointF p1, QPointF p2)
     // set values of start point and end point of line
     startP = p1;
     endP = p2;
+
+    linePath();
 }
 
 Line::Line(int i, QPointF p1, QPointF p2)
@@ -15,6 +17,14 @@ Line::Line(int i, QPointF p1, QPointF p2)
     // set values of start point and end point of line
     startP = p1;
     endP = p2;
+
+    linePath();
+}
+
+void Line::linePath()
+{
+    path.moveTo(startP);
+    path.lineTo(endP);
 }
 
 int Line::type() const
@@ -26,26 +36,14 @@ int Line::type() const
 QPainterPath Line::shape() const
 {
     // sets the shape of the line for selection
-    QPainterPath path;
-    qreal adjust = 10;
-    QLineF line(startP, endP);
-    QPolygonF nPolygon;
-    qreal radAngle = line.angle() * M_PI / 180;
-    qreal dx = adjust * sin(radAngle);
-    qreal dy = adjust * cos(radAngle);
-    QPointF offset1 = QPointF(dx, dy);
-    QPointF offset2 = QPointF(-dx, -dy);
-    nPolygon << startP + offset1
-             << startP + offset2
-             << endP + offset2
-             << endP + offset1;
-    path.addPolygon(nPolygon);
-    return path;
+    QPainterPathStroker stroker;
+    stroker.setWidth(10);
+    return stroker.createStroke(path);
 }
 
 QRectF Line::boundingRect() const
 {
-    qreal extra = 1.0;
+    qreal extra = 10.0;
 
     // bounding rectangle for line
     return QRectF(startP, QSizeF(endP.x() - startP.x(), endP.y() - startP.y()))
@@ -74,7 +72,7 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         paintpen.setStyle(Qt::DashLine);
         paintpen.setColor(Qt::black);
         painter->setPen(paintpen);
-        painter->drawLine(startP, endP);
+        painter->drawPath(path);
     }
 
     else
@@ -84,7 +82,7 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setPen(paintpen);
         painter->drawEllipse(startP, 2, 2);
         painter->drawEllipse(endP, 2, 2);
-        painter->drawLine(startP, endP);
+        painter->drawPath(path);
     }
 }
 
