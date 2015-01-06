@@ -13,6 +13,7 @@ public:
     Arc(QObject *parent = 0) : getEntity(parent) {}
     Arc(int i, QPointF point1, QPointF point2, QPointF point3);
     Arc(QPointF point1, QPointF point2, QPointF point3);
+    QPainterPath shape() const;
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
