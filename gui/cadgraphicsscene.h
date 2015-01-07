@@ -85,6 +85,7 @@ private:
     QPointF contextPosition;
     QPointF lineEndPoint;
     QPointF lineStartPoint;
+    QPointF arcStartPoint, arcMidPoint, arcEndPoint;
     float differenceX;
     float differenceY;
     QList<QPointF> endPointsList;

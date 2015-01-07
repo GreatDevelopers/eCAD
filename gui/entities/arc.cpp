@@ -137,21 +137,6 @@ getEntity *Arc::clone(int i)
 {
     Arc *a = new Arc;
     a->id = i;
-    a->p1 = p1;
-    a->p2 = p2;
-    a->p3 = p3;
-    a->lineAC = lineAC;
-    a->lineBA = lineBA;
-    a->lineBC = lineBC;
-    a->lineOA = lineOA;
-    a->lineOB = lineOB;
-    a->lineOC = lineOC;
-    a->bisectorBA = bisectorBA;
-    a->bisectorBC = bisectorBC;
-    a->center = center;
-    a->circle = circle;
-    a->startAngle = startAngle;
-    a->spanAngle = spanAngle;
     return a;
 }
 

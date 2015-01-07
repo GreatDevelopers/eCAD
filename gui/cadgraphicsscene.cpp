@@ -815,6 +815,9 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 {
                     Arc *itemPtr = dynamic_cast<Arc *>(contextItem);
                     contextItemId = itemPtr->id;
+                    arcStartPoint = itemPtr->p1;
+                    arcMidPoint = itemPtr->p2;
+                    arcEndPoint = itemPtr->p3;
                 }
 
                 else if (contextItem->type() == Image::Type)
@@ -1335,51 +1338,85 @@ void CadGraphicsScene::paste(const QPointF &pos)
 
     if (pasteEntity->type() == Point::Type)
     {
-        Point *itemPtr = dynamic_cast<Point *>(pasteEntity);
-        itemPtr->position = pos;
+        Point *tempItem = dynamic_cast<Point *>(pasteEntity);
+        tempItem->position = pos;
+
+        Point *itemPtr = new Point(tempItem->id, tempItem->position);
         drawEntity(itemPtr);
     }
 
     if (pasteEntity->type() == Line::Type)
     {
-        Line *itemPtr = dynamic_cast<Line *>(pasteEntity);
-        itemPtr->startP = pos;
+        Line *tempItem = dynamic_cast<Line *>(pasteEntity);
+        tempItem->startP = pos;
 
         /* calculates difference between startP of line being cut/copy and line
          * being pasted for proper pasting of line
          */
-        differenceX = itemPtr->startP.x() - lineStartPoint.x();
-        differenceY = itemPtr->startP.y() - lineStartPoint.y();
-        itemPtr->endP = QPointF(lineEndPoint.x() + differenceX,
+        differenceX = tempItem->startP.x() - lineStartPoint.x();
+        differenceY = tempItem->startP.y() - lineStartPoint.y();
+        tempItem->endP = QPointF(lineEndPoint.x() + differenceX,
                                 lineEndPoint.y() + differenceY);
+
+        Line *itemPtr = new Line(tempItem->startP, tempItem->endP);
         drawEntity(itemPtr);
     }
 
     if (pasteEntity->type() == Circle::Type)
     {
-        Circle *itemPtr = dynamic_cast<Circle *>(pasteEntity);
-        itemPtr->centerP = pos;
+        Circle *tempItem = dynamic_cast<Circle *>(pasteEntity);
+        tempItem->centerP = pos;
+
+        Circle *itemPtr = new Circle(tempItem->id, tempItem->centerP,
+                                     tempItem->radius);
         drawEntity(itemPtr);
     }
 
     if (pasteEntity->type() == Ellipse::Type)
     {
-        Ellipse *itemPtr = dynamic_cast<Ellipse *>(pasteEntity);
-        itemPtr->p1 = pos;
+        Ellipse *tempItem = dynamic_cast<Ellipse *>(pasteEntity);
+        tempItem->p1 = pos;
+
+        Ellipse *itemPtr = new Ellipse(tempItem->id, tempItem->p1,
+                                       tempItem->majRadius, tempItem->minRadius,
+                                       tempItem->theta);
         drawEntity(itemPtr);
     }
 
     if (pasteEntity->type() == Text::Type)
     {
-        Text *itemPtr = dynamic_cast<Text *>(pasteEntity);
-        itemPtr->position = pos;
+        Text *tempItem = dynamic_cast<Text *>(pasteEntity);
+        tempItem->position = pos;
+
+        Text *itemPtr = new Text(tempItem->id, tempItem->position, tempItem->str);
         drawEntity(itemPtr);
     }
 
     if (pasteEntity->type() == Image::Type)
     {
-        Image *itemPtr = dynamic_cast<Image *>(pasteEntity);
-        itemPtr->startP = pos;
+        Image *tempItem = dynamic_cast<Image *>(pasteEntity);
+        tempItem->startP = pos;
+
+        Image *itemPtr = new Image(tempItem->id, tempItem->startP, tempItem->path);
+        drawEntity(itemPtr);
+    }
+
+    if (pasteEntity->type() == Arc::Type)
+    {
+        Arc *tempItem = dynamic_cast<Arc *>(pasteEntity);
+        tempItem->p1 = pos;
+
+        /* calculates difference between p1 of arc being cut/copy and arc
+         * being pasted for proper pasting of arc
+         */
+        differenceX = tempItem->p1.x() - arcStartPoint.x();
+        differenceY = tempItem->p1.y() -arcStartPoint.y();
+        tempItem->p2 = QPointF(arcMidPoint.x() + differenceX,
+                              arcMidPoint.y() + differenceY);
+        tempItem->p3 = QPointF(arcEndPoint.x() + differenceX,
+                              arcEndPoint.y() + differenceY);
+        Arc *itemPtr = new Arc(tempItem->id, tempItem->p1, tempItem->p2,
+                                tempItem->p3);
         drawEntity(itemPtr);
     }
 
