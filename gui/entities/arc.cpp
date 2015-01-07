@@ -80,6 +80,14 @@ void Arc::init()
     middlePoint = path.pointAtPercent(0.5);
 }
 
+QPainterPath Arc::shape() const
+{
+    // sets the shape of the arc for selection
+    QPainterPathStroker stroker;
+    stroker.setWidth(10);
+    return stroker.createStroke(path);
+}
+
 QRectF Arc::boundingRect() const
 {
     // bounding rectangle for arc
