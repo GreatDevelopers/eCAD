@@ -90,8 +90,6 @@ getEntity *Line::clone(int i)
 {
     Line *l = new Line;
     l->id = i;
-    l->startP;
-    l->endP;
     return l;
 }
 
