@@ -5,7 +5,7 @@ Circle::Circle(QPointF p1, QPointF p2)
     /**
      * set values of center point, end point
      * and calculate radius of circle
-    */
+     */
     centerP = p1;
     endP = p2;
     radius = qSqrt(qPow((endP.x()-centerP.x()), 2)
@@ -20,7 +20,7 @@ Circle::Circle(int i, QPointF p1, QPointF p2)
     /**
      * set values of center point, end point
      * and calculate radius of circle
-    */
+     */
     centerP = p1;
     endP = p2;
     radius = qSqrt(qPow((endP.x()-centerP.x()), 2)
@@ -35,7 +35,7 @@ Circle::Circle(int i, QPointF p1, qreal rad)
     /**
      * set values of center point
      * and radius of circle
-    */
+     */
     centerP = p1;
     radius = rad;
 }
@@ -103,8 +103,6 @@ getEntity *Circle::clone(int i)
 {
     Circle *c = new Circle;
     c->id = i;
-    c->centerP.x();
-    c->centerP.y();
     c->radius = radius;
     return c;
 }

@@ -2,9 +2,10 @@
 
 Ellipse::Ellipse(QPointF point1, QPointF point2, QPointF point3)
 {
-    /** set values of three points
+    /**
+     * set values of three points
      * and calculate radii of ellipse
-    */
+     */
     p1 = point1;
     p2 = point2;
     p3 = point3;
@@ -17,9 +18,10 @@ Ellipse::Ellipse(int i, QPointF point1, QPointF point2, QPointF point3)
     // assigns id
     id = i;
 
-    /** set values of three points
+    /**
+     * set values of three points
      * and calculate radii of ellipse
-    */
+     */
     p1 = point1;
     p2 = point2;
     p3 = point3;
@@ -35,11 +37,17 @@ Ellipse::Ellipse(int i, QPointF point1, qreal rad, qreal radM, qreal angle)
     /**
      * set values of center point
      * and radii of ellipse
-    */
+     */
     p1 = point1;
     minRadius = rad;
     majRadius = radM;
     theta = angle;
+
+    /**
+     * This is set to false to overcome the problem of rotation after pasting
+     * or if the ellipse is drawn from script widget.
+     */
+    setOrientation(false);
 }
 
 void Ellipse::calculate()
@@ -60,13 +68,23 @@ void Ellipse::calculate()
         theta = atan2((p3.y() - p1.y()), (p3.x() - p1.x())) * (180 / M_PI);
     }
 
+    // This is set to true to rotate the ellipse
+    setOrientation(true);
+}
+
+void Ellipse::setOrientation(bool b)
+{
     topLeft.setX(p1.x() - majRadius);
     topLeft.setY(p1.y() - minRadius);
     bottomRight.setX(p1.x() + majRadius);
     bottomRight.setY(p1.y() + minRadius);
 
     setTransformOriginPoint(p1);
-    setRotation(theta);
+
+    if (b)
+        setRotation(theta);
+    else
+        setRotation(-theta);
 }
 
 int Ellipse::type() const
@@ -88,8 +106,16 @@ QPainterPath Ellipse::shape() const
 QRectF Ellipse::boundingRect() const
 {
     // bounding rectangle for ellipse
-    return QRectF(p1.x() - majRadius, p1.y() - majRadius,
-                  majRadius * 2, majRadius * 2);
+    qreal rad;
+    qreal extra = 1.0;
+
+    if (majRadius >= minRadius)
+        rad = majRadius;
+    else
+        rad = minRadius;
+
+    return QRectF(p1.x() - rad, p1.y() - rad, rad * 2, rad * 2)
+            .adjusted(-extra, -extra, extra, extra);
 }
 
 void Ellipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -132,12 +158,6 @@ getEntity *Ellipse::clone(int i)
 {
     Ellipse *e = new Ellipse;
     e->id = i;
-    e->p1.x();
-    e->p1.y();
-    e->p2.x();
-    e->p2.y();
-    e->p3.x();
-    e->p3.y();
     e->theta = theta;
     e->minRadius = minRadius;
     e->majRadius = majRadius;
