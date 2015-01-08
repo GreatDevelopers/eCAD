@@ -26,6 +26,7 @@ public:
     int type() const;
     getEntity *clone(int);
     QPointF getCenter();
+    void setOrientation(bool);
 
     int id;
     QPointF p1, p2, p3, topLeft, bottomRight;
