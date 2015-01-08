@@ -16,8 +16,12 @@ Image::Image(int i, QPointF p, QString s)
 
 QRectF Image::boundingRect() const
 {
+    qreal extra = 1.0;
+
     // bounding rectangle for image
-    return QRectF(startP, QSizeF(imagePixmap.size()));
+    return QRectF(QPointF(startP.x(), startP.y() - img.height()),
+                  QSizeF(imagePixmap.size())).
+            adjusted(-extra, -extra, extra, extra);
 }
 
 int Image::type() const
@@ -34,9 +38,6 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     paintpen.setWidth(1);
     paintpen.setStyle(Qt::DashLine);
     paintpen.setColor(Qt::black);
-    painter->setRenderHint(QPainter::Antialiasing);
-
-    painter->drawPixmap(startP, imagePixmap);
 
     if (option->state & QStyle::State_Selected)
     {
@@ -44,6 +45,10 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->setPen(paintpen);
         painter->drawRect(boundingRect());
     }
+
+    painter->scale(1, -1);
+    painter->translate(0, -2 * startP.y());
+    painter->drawPixmap(startP, imagePixmap);
 }
 
 getEntity *Image::clone(int i)
