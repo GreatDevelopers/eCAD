@@ -510,8 +510,6 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
     else if (item->type() == Image::Type)
     {
         Image *itemPtr = dynamic_cast<Image *>(item);
-        itemPtr->setTransform(QTransform::fromScale(1, -1).
-                              translate(0, -2 * startP.y()));
         itemList.append(itemPtr);
 
         foreach (QPointF i, itemPtr->getEndPoints())
