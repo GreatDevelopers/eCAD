@@ -175,6 +175,15 @@ void CadGraphicsView::drawDimRadial()
     cursorMode();
 }
 
+void CadGraphicsView::drawDimDiametric()
+{
+    // sets the mode to DimDiametricMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::DimDiametricMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
 void CadGraphicsView::deleteSingleItem()
 {
     // sets delete mode to delete single item in the scene

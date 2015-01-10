@@ -15,6 +15,7 @@
 #include "dimhorizontal.h"
 #include "dimvertical.h"
 #include "dimradial.h"
+#include "dimdiametric.h"
 
 class CadCommandMove : public QUndoCommand
 {
@@ -114,6 +115,17 @@ public:
                     .arg(dimRadialItem->startP.y() + nPos.y())
                     .arg(dimRadialItem->endP.x() + nPos.x())
                     .arg(dimRadialItem->endP.y() + nPos.y()));
+        }
+
+        if (cadItem->type() == DimDiametric::Type)
+        {
+            DimDiametric *dimDiametricItem =
+                    dynamic_cast<DimDiametric *>(cadItem);
+            setText(QString("DimDiametric moved to p1(%1,%2), p2(%3,%4)")
+                    .arg(dimDiametricItem->startP.x() + nPos.x())
+                    .arg(dimDiametricItem->startP.y() + nPos.y())
+                    .arg(dimDiametricItem->endP.x() + nPos.x())
+                    .arg(dimDiametricItem->endP.y() + nPos.y()));
         }
     }
 

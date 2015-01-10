@@ -1,5 +1,5 @@
-#ifndef DIMRADIAL_H
-#define DIMRADIAL_H
+#ifndef DIMDIAMETRIC_H
+#define DIMDIAMETRIC_H
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -9,26 +9,26 @@
 #include "qmath.h"
 #include "arrow.h"
 
-class DimRadial: public getEntity
+class DimDiametric: public getEntity
 {
     Q_OBJECT
 
 public:
-    DimRadial(QObject *parent = 0) : getEntity(parent) {}
-    DimRadial(int i, qreal, QPointF, QPointF);
-    DimRadial(qreal, QPointF, QPointF);
+    DimDiametric(QObject *parent = 0) : getEntity(parent) {}
+    DimDiametric(int i, qreal, QPointF, QPointF);
+    DimDiametric(qreal, QPointF, QPointF);
     QPainterPath shape() const;
     QRectF boundingRect() const;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,
                        QWidget *widget);
-    enum { Type = UserType + 10 };
+    enum { Type = UserType + 11 };
     int type() const;
     void eval(qreal);
 
     int id;
-    QString radValue;
-    qreal rad, textPadding, textHeight, textWidth;
+    QString diaValue;
+    qreal dia, textPadding, textHeight, textWidth;
     Arrow *arrow;
     QLineF extLine;
     QPointF startP, endP, textPoint;
@@ -36,4 +36,4 @@ public:
     QPainterPath text;
 };
 
-#endif // DIMRADIAL_H
+#endif // DIMDIAMETRIC_H

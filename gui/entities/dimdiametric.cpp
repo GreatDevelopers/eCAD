@@ -1,6 +1,6 @@
-#include "dimradial.h"
+#include "dimdiametric.h"
 
-DimRadial::DimRadial(int i, qreal v, QPointF p1, QPointF p2)
+DimDiametric::DimDiametric(int i, qreal v, QPointF p1, QPointF p2)
 {
     // Assigns id
     id = i;
@@ -12,7 +12,7 @@ DimRadial::DimRadial(int i, qreal v, QPointF p1, QPointF p2)
     eval(v);
 }
 
-DimRadial::DimRadial(qreal v, QPointF p1, QPointF p2)
+DimDiametric::DimDiametric(qreal v, QPointF p1, QPointF p2)
 {
     // Set values of startPoint and endPoint
     startP = p1;
@@ -21,19 +21,19 @@ DimRadial::DimRadial(qreal v, QPointF p1, QPointF p2)
     eval(v);
 }
 
-void DimRadial::eval(qreal v)
+void DimDiametric::eval(qreal v)
 {
-    // Creates arrow and set value of radius
+    // Creates arrow and set value of diameter
     arrow = new Arrow(3, startP, endP);
-    rad = v;
-    radValue = "R " + QString::number(v);
+    dia = v;
+    diaValue = "D " + QString::number(v);
 
     // Set the font and font metrics for the text
     font.setPointSize(10);
     font.setWeight(25);
     QFontMetrics fm(font);
     textHeight = fm.height();
-    textWidth = fm.width(radValue);
+    textWidth = fm.width(diaValue);
 
     if (arrow->line.p1().x() > arrow->line.p2().x())
     {
@@ -51,18 +51,18 @@ void DimRadial::eval(qreal v)
 
     textPoint.setX(arrow->line.p2().x() + textPadding);
     textPoint.setY(arrow->line.p2().y() + textHeight / 4);
-    text.addText(textPoint, font, radValue);
+    text.addText(textPoint, font, diaValue);
 }
 
-int DimRadial::type() const
+int DimDiametric::type() const
 {
-    // Enable the use of qgraphicsitem_cast with radial dimension item.
+    // Enable the use of qgraphicsitem_cast with diametric dimension item.
     return Type;
 }
 
-QPainterPath DimRadial::shape() const
+QPainterPath DimDiametric::shape() const
 {
-    // Returns the shape of the radial dimension
+    // Returns the shape of the diametric dimension
     QPainterPath s;
     QPainterPathStroker stroker;
     QTransform t;
@@ -76,19 +76,19 @@ QPainterPath DimRadial::shape() const
     return stroker.createStroke(s);
 }
 
-QRectF DimRadial::boundingRect() const
+QRectF DimDiametric::boundingRect() const
 {
-    // Bounding rectangle of the radial dimension
+    // Bounding rectangle of the diametric dimension
     qreal extra = 10.0 + textWidth;
 
     return QRectF(startP, QSizeF(endP.x() - startP.x(), endP.y() - startP.y()))
             .normalized().adjusted(-extra, -extra, extra, extra);
 }
 
-void DimRadial::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+void DimDiametric::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                   QWidget *widget)
 {
-    // Draws/paints the radial dimension
+    // Draws/paints the diametric dimension
     QPen paintpen;
     paintpen.setCosmetic(true);
     paintpen.setWidth(1);
