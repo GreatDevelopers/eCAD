@@ -1,5 +1,18 @@
 #include "arrow.h"
 
+Arrow::Arrow(int i, QPointF p1, QPointF p2)
+{
+    // Set values of startPoint and endPoint
+    startP = p1;
+    endP = p2;
+
+    horizontal = false;
+    vertical = false;
+    radial = false;
+
+    calculate(i);
+}
+
 Arrow::Arrow(int i, QPointF p1, QPointF p2, QPointF p3)
 {
     // Set values of startPoint, midPoint and endPoint
@@ -9,7 +22,19 @@ Arrow::Arrow(int i, QPointF p1, QPointF p2, QPointF p3)
 
     horizontal = false;
     vertical = false;
+    radial = false;
 
+    calculate(i);
+}
+
+qreal Arrow::getAngle(const qreal dx, const qreal dy)
+{
+    // Returns the angle of the line
+    return M_PI - atan(dx / dy);
+}
+
+void Arrow::calculate(int i)
+{
     switch (i)
     {
     case 1:
@@ -20,21 +45,14 @@ Arrow::Arrow(int i, QPointF p1, QPointF p2, QPointF p3)
         vertical = true;
         break;
 
+    case 3:
+        radial = true;
+        break;
+
     default:
         break;
     }
 
-    calculate();
-}
-
-qreal Arrow::getAngle(const qreal dx, const qreal dy)
-{
-    // Returns the angle of the line
-    return M_PI - atan(dx/dy);
-}
-
-void Arrow::calculate()
-{
     // Sets font of text
     font.setPointSize(10);
     font.setWeight(25);
@@ -45,6 +63,8 @@ void Arrow::calculate()
         line.setLine(startP.x(), endP.y(), midP.x(), endP.y());
     else if (vertical)
         line.setLine(endP.x(), startP.y(), endP.x(), midP.y());
+    else if (radial)
+        line.setLine(startP.x(), startP.y(), endP.x(), endP.y());
 
     value = QString::number(line.length());
     textWidth = fm.width(value);
@@ -82,7 +102,10 @@ QPainterPath Arrow::getArrowPath()
     if (line.length() >= 30)
     {
         padding = 0;
-        p.addPolygon(headPolygon);
+
+        if (!radial)
+            p.addPolygon(headPolygon);
+
         p.moveTo(line.p1());
         p.lineTo(line.p2());
         p.addPolygon(tailPolygon);
@@ -116,6 +139,13 @@ QPainterPath Arrow::getArrowPath()
             p.lineTo(QPointF(line.p1()));
             p.moveTo(QPointF(line.p2().x(), line.p2().y() + 30));
             p.lineTo(QPointF(line.p2()));
+        }
+
+        else if (radial)
+        {
+            p.moveTo(line.p1());
+            p.lineTo(line.p2());
+            p.addPolygon(tailPolygon);
         }
     }
 

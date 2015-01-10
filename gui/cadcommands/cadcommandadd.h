@@ -14,6 +14,8 @@
 #include "image.h"
 #include "dimhorizontal.h"
 #include "dimvertical.h"
+#include "dimradial.h"
+#include "dimdiametric.h"
 
 class CadCommandAdd : public QUndoCommand
 {
@@ -104,6 +106,27 @@ public:
                     .arg(dimVerticalItem->startP.y())
                     .arg(dimVerticalItem->endP.x())
                     .arg(dimVerticalItem->midP.y()));
+        }
+
+        if (cadItem->type() == DimRadial::Type)
+        {
+            DimRadial *dimRadialItem = dynamic_cast<DimRadial *>(cadItem);
+            setText(QString("DimRadial add p1(%1,%2), p2(%3,%4)")
+                    .arg(dimRadialItem->startP.x())
+                    .arg(dimRadialItem->startP.y())
+                    .arg(dimRadialItem->endP.x())
+                    .arg(dimRadialItem->endP.y()));
+        }
+
+        if (cadItem->type() == DimDiametric::Type)
+        {
+            DimDiametric *dimDiametricItem =
+                    dynamic_cast<DimDiametric *>(cadItem);
+            setText(QString("DimDiametric add p1(%1,%2), p2(%3,%4)")
+                    .arg(dimDiametricItem->startP.x())
+                    .arg(dimDiametricItem->startP.y())
+                    .arg(dimDiametricItem->endP.x())
+                    .arg(dimDiametricItem->endP.y()));
         }
     }
 

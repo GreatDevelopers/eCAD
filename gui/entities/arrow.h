@@ -8,12 +8,13 @@
 class Arrow
 {
 public:
+    Arrow(int, QPointF, QPointF);
     Arrow(int, QPointF, QPointF, QPointF);
     qreal getAngle(const qreal, const qreal);
     QPainterPath getArrowPath();
-    void calculate();
+    void calculate(int);
 
-    bool horizontal, vertical;
+    bool horizontal, vertical, radial;
     QPointF startP, midP, endP;
     QPointF middle;
     QLineF line;

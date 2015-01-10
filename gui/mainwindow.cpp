@@ -141,6 +141,8 @@ void MainWindow::toggleActions(bool b)
     actionMiddlePoints->setEnabled(b);
     actionHorizontal->setEnabled(b);
     actionVertical->setEnabled(b);
+    actionRadial->setEnabled(b);
+    actionDiametric->setEnabled(b);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -299,6 +301,10 @@ void MainWindow::newFile()
             view, SLOT(drawDimHorizontal()));
     connect(actionVertical, SIGNAL(triggered()),
             view, SLOT(drawDimVertical()));
+    connect(actionRadial, SIGNAL(triggered()),
+            view, SLOT(drawDimRadial()));
+    connect(actionDiametric, SIGNAL(triggered()),
+            view, SLOT(drawDimDiametric()));
 
     // toggle actions to true
     toggleActions(1);

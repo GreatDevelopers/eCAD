@@ -32,7 +32,9 @@ SOURCES += \
     gui/entities/image.cpp \
     gui/entities/arrow.cpp \
     gui/entities/dimhorizontal.cpp \
-    gui/entities/dimvertical.cpp
+    gui/entities/dimvertical.cpp \
+    gui/entities/dimradial.cpp \
+    gui/entities/dimdiametric.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -54,7 +56,9 @@ HEADERS += \
     gui/entities/image.h \
     gui/entities/arrow.h \
     gui/entities/dimhorizontal.h \
-    gui/entities/dimvertical.h
+    gui/entities/dimvertical.h \
+    gui/entities/dimradial.h \
+    gui/entities/dimdiametric.h
 
 FORMS += \
     resources/ui/mainwindow.ui \
