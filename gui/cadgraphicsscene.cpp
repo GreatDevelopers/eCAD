@@ -139,10 +139,14 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                                     QPointF(tempPoint.x(),
                                             sceneRect().bottomLeft().y()));
 
-            addItem(horizontalAxis);
-            addItem(verticalAxis);
-            previewList.append(horizontalAxis);
-            previewList.append(verticalAxis);
+            if (entityMode != DeleteMode && entityMode != DimHorizontalMode &&
+                    entityMode != DimVerticalMode && entityMode != DimRadialMode)
+            {
+                addItem(horizontalAxis);
+                addItem(verticalAxis);
+                previewList.append(horizontalAxis);
+                previewList.append(verticalAxis);
+            }
         }
 
         emit setMessage();
@@ -240,6 +244,16 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                 dimVerticalItem = new DimVertical(startP, midP, tempPoint);
                 previewList.append(dimVerticalItem);
                 addItem(dimVerticalItem);
+            }
+        }
+
+        else if (entityMode == DimRadialMode)
+        {
+            if (mSecondClick)
+            {
+                dimRadialItem = new DimRadial(radValue, startP, tempPoint);
+                previewList.append(dimRadialItem);
+                addItem(dimRadialItem);
             }
         }
     }
@@ -537,6 +551,13 @@ void CadGraphicsScene::drawEntity(QGraphicsItem *item)
         mUndoStack->push(new CadCommandAdd(this, itemPtr));
     }
 
+    else if (item->type() == DimRadial::Type)
+    {
+        DimRadial *itemPtr = dynamic_cast<DimRadial *>(item);
+        itemList.append(itemPtr);
+        mUndoStack->push(new CadCommandAdd(this, itemPtr));
+    }
+
     setFlags();
 }
 
@@ -741,6 +762,48 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             break;
 
+        case DimRadialMode:
+            if (mFirstClick)
+            {
+                clickedItem = itemAt(mouseEvent->scenePos().toPoint(), QTransform());
+
+                if (clickedItem)
+                {
+                    if (clickedItem->type() == Circle::Type)
+                    {
+                        Circle *itemPtr = dynamic_cast<Circle *>(clickedItem);
+                        radValue = itemPtr->radius;
+                    }
+
+                    else if (clickedItem->type() == Arc::Type)
+                    {
+                        Arc *itemPtr = dynamic_cast<Arc *>(clickedItem);
+                        radValue = itemPtr->rad;
+                    }
+
+                    startP = tempPoint;
+                    mFirstClick = false;
+                    mSecondClick = true;
+                }
+
+                else
+                    mFirstClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                endP = tempPoint;
+                mPaintFlag = true;
+                mSecondClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                dimRadialItem = new DimRadial(++id, radValue, startP, endP);
+                drawEntity(dimRadialItem);
+            }
+            break;
+
         default:
             ;
         }
@@ -837,6 +900,12 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                             dynamic_cast<DimVertical *>(contextItem);
                     contextItemId = itemPtr->id;
                 }
+
+                else if (contextItem->type() == DimRadial::Type)
+                {
+                    DimRadial *itemPtr = dynamic_cast<DimRadial *>(contextItem);
+                    contextItemId = itemPtr->id;
+                }
             }
         }
     }
@@ -919,6 +988,13 @@ void CadGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (item.first->type() == DimVertical::Type)
             {
                 DimVertical *itemPtr = dynamic_cast<DimVertical *>(item.first);
+                mUndoStack->push(new CadCommandMove(itemPtr, item.second,
+                                                    itemPtr->scenePos()));
+            }
+
+            else if (item.first->type() == DimRadial::Type)
+            {
+                DimRadial *itemPtr = dynamic_cast<DimRadial *>(item.first);
                 mUndoStack->push(new CadCommandMove(itemPtr, item.second,
                                                     itemPtr->scenePos()));
             }
@@ -1120,6 +1196,27 @@ void CadGraphicsScene::writeStream(QXmlStreamWriter *stream)
                                                              .y()));
                 stream->writeEndElement();  //end of Vertical Dimension Item
             }
+
+            else if (item->type() == DimRadial::Type)
+            {
+                DimRadial *itemPtr = dynamic_cast<DimRadial *>(item);
+                stream->writeStartElement("DimRadial");
+                stream->writeAttribute("id", QString::number(itemPtr->id));
+                stream->writeAttribute("x1", QString::number(itemPtr->startP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y1", QString::number(itemPtr->startP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("x2", QString::number(itemPtr->endP.x()
+                                                             + itemPtr->scenePos()
+                                                             .x()));
+                stream->writeAttribute("y2", QString::number(itemPtr->endP.y()
+                                                             + itemPtr->scenePos()
+                                                             .y()));
+                stream->writeAttribute("rad", QString::number(itemPtr->radValue);
+                stream->writeEndElement();  //end of Radial Dimension Item
+            }
         }
     }
 }
@@ -1312,6 +1409,28 @@ void CadGraphicsScene::readStream(QXmlStreamReader *stream)
 
             dimVerticalItem = new DimVertical(id, startP, midP, endP);
             drawEntity(dimVerticalItem);
+        }
+
+        if (stream->isStartElement() && stream->name() == "DimRadial")
+        {
+            foreach (QXmlStreamAttribute attribute, stream->attributes())
+            {
+                if (attribute.name() == "id")
+                    id = attribute.value().toString().toDouble();
+                if (attribute.name() == "x1")
+                    startP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y1")
+                    startP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "x2")
+                    endP.setX(attribute.value().toString().toDouble());
+                if (attribute.name() == "y2")
+                    endP.setY(attribute.value().toString().toDouble());
+                if (attribute.name() == "rad")
+                    radValue = attribute.value().toString().toDouble();
+            }
+
+            dimRadialItem = new DimRadial(id, radValue, startP, endP);
+            drawEntity(DimRadialItem);
         }
     }
 }
@@ -1507,6 +1626,13 @@ QString CadGraphicsScene::setStatusBarMessage()
             message = "Vertical Dim: Specify next point";
         else if (!mSecondClick && mThirdClick)
             message = "Vertical Dim: Specify last point";
+        break;
+
+    case DimRadialMode:
+        if (mFirstClick)
+            message = "Radial Dim: Select arc or circle entity";
+        else if (!mFirstClick && mSecondClick)
+            message = "Radial Dim: Specify final point to draw";
         break;
 
     default:

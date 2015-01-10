@@ -166,6 +166,15 @@ void CadGraphicsView::drawDimVertical()
     cursorMode();
 }
 
+void CadGraphicsView::drawDimRadial()
+{
+    // sets the mode to DimRadialMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::DimRadialMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
 void CadGraphicsView::deleteSingleItem()
 {
     // sets delete mode to delete single item in the scene

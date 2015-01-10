@@ -14,6 +14,7 @@
 #include "image.h"
 #include "dimhorizontal.h"
 #include "dimvertical.h"
+#include "dimradial.h"
 
 class CadCommandDelete : public QUndoCommand
 {
@@ -100,6 +101,16 @@ public:
                     .arg(dimVerticalItem->startP.y())
                     .arg(dimVerticalItem->endP.x())
                     .arg(dimVerticalItem->midP.y()));
+        }
+
+        if (cadItem->type() == DimRadial::Type)
+        {
+            DimRadial *dimRadialItem = dynamic_cast<DimRadial *>(cadItem);
+            setText(QString("DimRadial delete p1(%1,%2), p2(%3,%4)")
+                    .arg(dimRadialItem->startP.x())
+                    .arg(dimRadialItem->startP.y())
+                    .arg(dimRadialItem->endP.x())
+                    .arg(dimRadialItem->endP.y()));
         }
     }
 

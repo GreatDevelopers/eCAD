@@ -21,7 +21,7 @@ public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode,
                 ArcMode, ImageMode, DeleteMode, DimHorizontalMode,
-                DimVerticalMode };
+                DimVerticalMode, DimRadialMode };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -79,7 +79,7 @@ private:
     bool mSecondClick;
     bool mThirdClick;
     bool mPaintFlag;
-    qreal x, y, rad, radM, angle, dx, dy;
+    qreal x, y, rad, radM, angle, dx, dy, radValue;
     QString str;
     QPen paintpen, linePen;
     QPointF contextPosition;
@@ -104,6 +104,7 @@ private:
     Image *imageItem;
     DimHorizontal *dimHorizontalItem;
     DimVertical *dimVerticalItem;
+    DimRadial *dimRadialItem;
     QUndoStack *mUndoStack;
     QMenu *contextMenu;
     QAction *cutAction;
