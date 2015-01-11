@@ -71,7 +71,7 @@
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Licensed under GNU LGPL Version 3</string>
+       <string>Licensed under GNU GPL Version 3+</string>
       </property>
      </widget>
     </item>
