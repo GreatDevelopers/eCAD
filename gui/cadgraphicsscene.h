@@ -54,6 +54,7 @@ public slots:
     void selectItems();
     void selectDeselectAllItems(bool b);
     void invertSelection();
+    void selectDeselectIntersectedEntities(bool);
     void deleteItems();
     void editorLostFocus(Text *item);
     void cut(getEntity *);

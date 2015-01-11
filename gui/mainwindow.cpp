@@ -77,6 +77,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
             this, SLOT(deselectAll()));
     connect(actionSelectWindow, SIGNAL(triggered()),
             this, SLOT(selectWindow()));
+    connect(actionSelectIntersectedEntities, SIGNAL(triggered()),
+            this, SLOT(selectIntersectedEntities()));
+    connect(actionDeselectIntersectedEntities, SIGNAL(triggered()),
+            this, SLOT(deselectIntersectedEntities()));
     connect(actionGrid, SIGNAL(toggled(bool)),
             this, SLOT(showGrid(bool)));
     connect(actionToolbar, SIGNAL(toggled(bool)),
@@ -415,7 +419,9 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(false);
         actionDeleteEntity->setEnabled(false);
         actionDeleteSelected->setEnabled(false);
+        actionInvertSelection->setEnabled(false);
         actionSelectWindow->setEnabled(false);
+        actionSelectIntersectedEntities->setEnabled(false);
         actionCut->setEnabled(false);
         actionCopy->setEnabled(false);
 
@@ -436,6 +442,7 @@ void MainWindow::toggleMenuActions()
         actionSelectEntity->setEnabled(true);
         actionInvertSelection->setEnabled(true);
         actionSelectWindow->setEnabled(true);
+        actionSelectIntersectedEntities->setEnabled(true);
         actionDeleteEntity->setEnabled(true);
         actionCut->setEnabled(true);
         actionCopy->setEnabled(true);
@@ -456,6 +463,7 @@ void MainWindow::toggleMenuActions()
                 actionCut->setEnabled(true);
                 actionCopy->setEnabled(true);
                 actionPaste->setEnabled(false);
+                actionDeselectIntersectedEntities->setEnabled(true);
             }
 
             else
@@ -465,6 +473,7 @@ void MainWindow::toggleMenuActions()
                 actionDeleteSelected->setEnabled(false);
                 actionCut->setEnabled(false);
                 actionCopy->setEnabled(false);
+                actionDeselectIntersectedEntities->setEnabled(false);
 
                 if (clipboardStack::instance()->isEmpty())
                 {
@@ -891,6 +900,18 @@ void MainWindow::deselectAll()
 {
     // deselects all items in the scene
     view->scene->selectDeselectAllItems(0);
+}
+
+void MainWindow::selectIntersectedEntities()
+{
+    // selects intersected entities in the scene
+    view->scene->selectDeselectIntersectedEntities(1);
+}
+
+void MainWindow::deselectIntersectedEntities()
+{
+    // deselects intersected entities in the scene
+    view->scene->selectDeselectIntersectedEntities(0);
 }
 
 void MainWindow::selectWindow()

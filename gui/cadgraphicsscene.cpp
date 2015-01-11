@@ -441,6 +441,18 @@ void CadGraphicsScene::invertSelection()
     }
 }
 
+void CadGraphicsScene::selectDeselectIntersectedEntities(bool b)
+{
+    setMode(NoMode);
+
+    // checks if any items existing in the scene intersects with another
+    foreach (QGraphicsItem *item, items())
+    {
+        foreach (QGraphicsItem *i, collidingItems(item))
+            item->setSelected(b);
+    }
+}
+
 void CadGraphicsScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
     if (isGridVisible)
