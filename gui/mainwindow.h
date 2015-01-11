@@ -71,6 +71,8 @@ private slots:
     void pasteOperation();
     void toggleMenuActions();
     void selectWindow();
+    void selectIntersectedEntities();
+    void deselectIntersectedEntities();
     void deleteItems();
     void toggleActions(bool b);
     void filePrintPreview();
