@@ -158,8 +158,7 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                                     QPointF(tempPoint.x(),
                                             sceneRect().bottomLeft().y()));
 
-            if (entityMode != DeleteMode && entityMode != DimHorizontalMode &&
-                    entityMode != DimVerticalMode && entityMode != DimRadialMode
+            if (entityMode != DeleteMode && entityMode != DimRadialMode
                     && entityMode != DimDiametricMode)
             {
                 addItem(horizontalAxis);
