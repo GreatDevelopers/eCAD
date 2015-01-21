@@ -188,6 +188,37 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
+        else if (entityMode == oSLine)
+        {
+                lineItem = new Line(tempPoint,tempPoint +
+                          QPointF(lineLength*qCos(qDegreesToRadians(lineAngle)),
+                          lineLength*qSin(qDegreesToRadians(lineAngle))));
+                previewList.append(lineItem);
+                addItem(lineItem);
+        }
+
+        else if (entityMode == oMLine)
+        {
+                lineItem = new Line(tempPoint -
+                      QPointF((lineLength/2)*qCos(qDegreesToRadians(lineAngle)),
+                             (lineLength/2)*qSin(qDegreesToRadians(lineAngle))),
+                                    tempPoint +
+                      QPointF((lineLength/2)*qCos(qDegreesToRadians(lineAngle)),
+                            (lineLength/2)*qSin(qDegreesToRadians(lineAngle))));
+                previewList.append(lineItem);
+                addItem(lineItem);
+        }
+
+        else if (entityMode == oELine)
+        {
+                lineItem = new Line(tempPoint -
+                          QPointF(lineLength*qCos(qDegreesToRadians(lineAngle)),
+                                lineLength*qSin(qDegreesToRadians(lineAngle))),
+                                    tempPoint);
+                previewList.append(lineItem);
+                addItem(lineItem);
+        }
+
         else if (entityMode == CircleMode)
         {
             if (mSecondClick)
@@ -197,6 +228,14 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
                 addItem(circleItem);
             }
         }
+
+        else if (entityMode == oCCircle)
+        {
+                circleItem = new Circle(tempPoint,tempPoint + QPointF(circleRadius,0));
+                previewList.append(circleItem);
+                addItem(circleItem);
+        }
+
 
         else if (entityMode == EllipseMode)
         {
@@ -651,6 +690,57 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             break;
 
+        case oSLine:
+            if (mFirstClick)
+            {
+                startP = tempPoint;
+                endP = tempPoint +
+                       QPointF(lineLength*qCos(qDegreesToRadians(lineAngle)),
+                               lineLength*qSin(qDegreesToRadians(lineAngle)));
+                mPaintFlag = true;
+            }
+            if (mPaintFlag)
+            {
+                lineItem = new Line(startP,endP);
+                drawEntity(lineItem);
+            }
+            break;
+
+
+        case oMLine:
+            if (mFirstClick)
+            {
+                startP = tempPoint -
+                      QPointF((lineLength/2)*qCos(qDegreesToRadians(lineAngle)),
+                             (lineLength/2)*qSin(qDegreesToRadians(lineAngle)));
+                endP = tempPoint +
+                      QPointF((lineLength/2)*qCos(qDegreesToRadians(lineAngle)),
+                             (lineLength/2)*qSin(qDegreesToRadians(lineAngle)));
+                mPaintFlag = true;
+            }
+            if (mPaintFlag)
+            {
+                lineItem = new Line(startP,endP);
+                drawEntity(lineItem);
+            }
+            break;
+
+        case oELine:
+            if (mFirstClick)
+            {
+                startP = tempPoint -
+                        QPointF(lineLength*qCos(qDegreesToRadians(lineAngle)),
+                                lineLength*qSin(qDegreesToRadians(lineAngle)));
+                endP = tempPoint;
+                mPaintFlag = true;
+            }
+            if (mPaintFlag)
+            {
+                lineItem = new Line(startP,endP);
+                drawEntity(lineItem);
+            }
+            break;
+
         case CircleMode:
             if (mFirstClick)
             {
@@ -668,6 +758,15 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
             if (mPaintFlag)
             {
+                circleItem = new Circle(++id, startP, endP);
+                drawEntity(circleItem);
+            }
+            break;
+
+        case oCCircle:
+            {
+                startP = tempPoint;
+                endP = tempPoint + QPointF(circleRadius,0);
                 circleItem = new Circle(++id, startP, endP);
                 drawEntity(circleItem);
             }
