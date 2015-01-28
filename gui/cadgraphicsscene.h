@@ -40,7 +40,8 @@ public:
     explicit CadGraphicsScene(QObject *parent, QUndoStack *);
     enum Mode { NoMode, PointMode, LineMode, CircleMode, EllipseMode, TextMode,
                 ArcMode, ImageMode, DeleteMode, DimHorizontalMode,
-                DimVerticalMode, DimRadialMode, DimDiametricMode };
+                DimVerticalMode, DimRadialMode, DimDiametricMode,
+                oSLine, oMLine, oELine , oCCircle };
 
     void writeStream(QXmlStreamWriter *stream);
     void readStream(QXmlStreamReader *stream);
@@ -63,6 +64,10 @@ public:
     QPointF endPoint;
     QPointF centerPoint;
     QPointF middlePoint;
+
+    double lineLength;
+    double lineAngle;
+    double circleRadius;
 
     bool endPointSnap;
     bool centerSnap;

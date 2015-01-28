@@ -42,6 +42,33 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mainStatusBar->addPermanentWidget(messageMiddle, 4);
     messageLeft->setText("Welcome to eCAD");
 
+    // SpinBoxes to get runtime inputs for Line Parameters
+
+    //SpinBox for getting Angle Input
+    lineLength = new QDoubleSpinBox;
+    actionLineLength = propertiesToolBar->addWidget(lineLength);
+    lineLength->setPrefix("Length: ");
+    lineLength->setSuffix(" units");
+    lineLength->setValue(60);
+    lineLength->setRange(0,INFINITY);
+
+    //SpinBox for getting Angle Input
+    lineAngle = new QDoubleSpinBox;
+    actionLineAngle = propertiesToolBar->addWidget(lineAngle);
+    lineAngle->setPrefix("Angle: ");
+    lineAngle->setSuffix(" degrees");
+    lineAngle->setValue(0);
+    lineAngle->setRange(0,360);
+
+    //SpinBox for getting Circle Radius
+    circleRadius = new QDoubleSpinBox;
+    actionCircleRadius = propertiesToolBar->addWidget(circleRadius);
+    circleRadius->setPrefix("Radius: ");
+    circleRadius->setSuffix(" units");
+    circleRadius->setValue(0);
+    circleRadius->setRange(0,INFINITY);
+
+
     // shortcut keys
     new QShortcut(QKeySequence(Qt::Key_Escape),
                   this, SLOT(setNoMode()));
@@ -132,20 +159,47 @@ void MainWindow::toggleActions(bool b)
     actionGrid->setEnabled(b);
     actionZoomIn->setEnabled(b);
     actionZoomOut->setEnabled(b);
-    actionPoints->setEnabled(b);
-    actionLine->setEnabled(b);
-    actionCircle->setEnabled(b);
-    actionEllipse->setEnabled(b);
-    actionText->setEnabled(b);
-    actionInsertImage->setEnabled(b);
+
+    actionBack->setVisible(isLineIconClicked + isCircleIconClicked);
+
+    //Icons Visible until Line Icon Click
+    actionPoints->setVisible(!isLineIconClicked * !isCircleIconClicked);
+    actionLineIcon->setVisible(!isLineIconClicked * !isCircleIconClicked);
+    actionCircleIcon->setVisible(!isLineIconClicked * !isCircleIconClicked);
+    actionEllipse->setVisible(!isLineIconClicked * !isCircleIconClicked);
+    actionText->setVisible(!isLineIconClicked * !isCircleIconClicked);
+    actionInsertImage->setVisible(!isLineIconClicked * !isCircleIconClicked);
+    actionArc->setVisible(!isLineIconClicked * !isCircleIconClicked);
+
+    //Icons Disbaled before any file Opened
+    actionPoints->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+    actionLineIcon->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+    actionCircleIcon->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+    actionEllipse->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+    actionText->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+    actionInsertImage->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+    actionArc->setEnabled(b * !isLineIconClicked * !isCircleIconClicked);
+
+    //Toggle Icon Visibility on Line Click
+    actionLine->setVisible(b * isLineIconClicked);
+    actionOSLine->setVisible(b * isLineIconClicked);
+    actionOMLine->setVisible(b * isLineIconClicked);
+    actionOELine->setVisible(b * isLineIconClicked);
+    actionLineLength->setVisible(b * isLineIconClicked);
+    actionLineAngle->setVisible(b * isLineIconClicked);
+
+    //Toggle Icon Visibility on Circle Click
+    actionCircle->setVisible(b * isCircleIconClicked);
+    actionOCCircle->setVisible(b * isCircleIconClicked);
+    actionCircleRadius->setVisible(b * isCircleIconClicked);
+
     menuToolbars->setEnabled(b);
     actionCommandConsole->setEnabled(b);
     actionScripting->setEnabled(b);
-    actionArc->setEnabled(b);
     actionPanning->setEnabled(b);
-    actionCut->setEnabled(b);
-    actionCopy->setEnabled(b);
-    actionPaste->setEnabled(b);
+    actionCut->setEnabled(false);
+    actionCopy->setEnabled(false);
+    actionPaste->setEnabled(false);
     actionToolbar->setEnabled(b);
     actionClose->setEnabled(b);
     actionImportImage->setEnabled(b);
@@ -284,10 +338,34 @@ void MainWindow::newFile()
             this, SLOT(setStatusBarMessage()));
     connect(actionPoints, SIGNAL(triggered()),
             view, SLOT(drawPoint()));
+
+    connect(actionLineIcon, SIGNAL(triggered()),
+            this, SLOT (lineIconClicked()));
+    connect(actionBack, SIGNAL(triggered()),
+            this, SLOT (backIconClicked()));
+    connect(lineLength, SIGNAL(valueChanged(double)),
+            this, SLOT (lineParams()));
+    connect(lineAngle, SIGNAL(valueChanged(double)),
+            this, SLOT (lineParams()));
+
     connect(actionLine, SIGNAL(triggered()),
             view, SLOT(drawLine()));
+    connect(actionOSLine, SIGNAL(triggered()),
+            view, SLOT(drawOSLine()));
+    connect(actionOMLine, SIGNAL(triggered()),
+            view, SLOT(drawOMLine()));
+    connect(actionOELine, SIGNAL(triggered()),
+            view, SLOT(drawOELine()));
+
+    connect(actionCircleIcon, SIGNAL(triggered()),
+            this, SLOT(circleIconClicked()));
+    connect(circleRadius, SIGNAL(valueChanged(double)),
+            this, SLOT(circleParams()));
     connect(actionCircle, SIGNAL(triggered()),
             view, SLOT(drawCircle()));
+    connect(actionOCCircle, SIGNAL(triggered()),
+            view, SLOT(drawOCCircle()));
+
     connect(actionEllipse, SIGNAL(triggered()),
             view, SLOT(drawEllipse()));
     connect(actionText, SIGNAL(triggered()),
@@ -403,6 +481,43 @@ void MainWindow::updateView()
                 actionGrid->setChecked(false);
         }
     }
+}
+
+void MainWindow::lineIconClicked()
+{
+    isLineIconClicked = true;
+    toggleActions(true);
+    double length = lineLength->value();
+    double angle = lineAngle->value();
+    view->getLineParams(length,angle);
+}
+
+void MainWindow::backIconClicked()
+{
+    isLineIconClicked = false;
+    isCircleIconClicked = false;
+    toggleActions(true);
+    view->setNoMode();
+}
+
+void MainWindow::lineParams()
+{
+    double length = lineLength->value();
+    double angle = lineAngle->value();
+    view->getLineParams(length,angle);
+}
+
+void MainWindow::circleParams()
+{
+    double radius= circleRadius->value();
+    view->getCircleParams(radius);
+}
+
+
+void MainWindow::circleIconClicked()
+{
+    isCircleIconClicked = true;
+    toggleActions(true);
 }
 
 void MainWindow::toggleWidgets()

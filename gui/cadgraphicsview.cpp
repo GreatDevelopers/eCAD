@@ -115,10 +115,57 @@ void CadGraphicsView::drawLine()
     cursorMode();
 }
 
+void CadGraphicsView::getLineParams(double length, double angle)
+{
+    scene->lineLength = length;
+    scene->lineAngle = angle;
+}
+
+void CadGraphicsView::getCircleParams(double radius)
+{
+    scene->circleRadius = radius;
+}
+
+void CadGraphicsView::drawOSLine()
+{
+    // sets the mode to LineMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::oSLine);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawOMLine()
+{
+    // sets the mode to LineMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::oMLine);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawOELine()
+{
+    // sets the mode to LineMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::oELine);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
 void CadGraphicsView::drawCircle()
 {
     // sets the mode to CircleMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::CircleMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawOCCircle()
+{
+    // sets the mode to CircleMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::oCCircle);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
     cursorMode();
