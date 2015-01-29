@@ -188,11 +188,60 @@ bool CadGraphicsScene::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
+        else if (entityMode == StartPointLineMode)
+        {
+                lineItem = new Line(tempPoint, tempPoint +
+                        QPointF(lineLength * qCos(qDegreesToRadians(lineAngle)),
+                        lineLength * qSin(qDegreesToRadians(lineAngle))));
+                previewList.append(lineItem);
+                addItem(lineItem);
+        }
+
+        else if (entityMode == MiddlePointLineMode)
+        {
+                lineItem = new Line(tempPoint -
+                  QPointF((lineLength / 2) * qCos(qDegreesToRadians(lineAngle)),
+                         (lineLength / 2) * qSin(qDegreesToRadians(lineAngle))),
+                                    tempPoint +
+                  QPointF((lineLength / 2) * qCos(qDegreesToRadians(lineAngle)),
+                        (lineLength / 2) * qSin(qDegreesToRadians(lineAngle))));
+                previewList.append(lineItem);
+                addItem(lineItem);
+        }
+
+        else if (entityMode == EndPointLineMode)
+        {
+                lineItem = new Line(tempPoint -
+                        QPointF(lineLength * qCos(qDegreesToRadians(lineAngle)),
+                              lineLength * qSin(qDegreesToRadians(lineAngle))),
+                                    tempPoint);
+                previewList.append(lineItem);
+                addItem(lineItem);
+        }
+
         else if (entityMode == CircleMode)
         {
             if (mSecondClick)
             {
                 circleItem = new Circle(startP, tempPoint);
+                previewList.append(circleItem);
+                addItem(circleItem);
+            }
+        }
+
+        else if (entityMode == CenterPointCircleMode)
+        {
+                circleItem = new Circle(tempPoint,
+                                        tempPoint + QPointF(circleRadius, 0));
+                previewList.append(circleItem);
+                addItem(circleItem);
+        }
+
+        else if (entityMode == TwoPointCircleMode)
+        {
+            if (mSecondClick)
+            {
+                circleItem = new Circle((startP + tempPoint) / 2, tempPoint);
                 previewList.append(circleItem);
                 addItem(circleItem);
             }
@@ -651,6 +700,56 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             }
             break;
 
+        case StartPointLineMode:
+            if (mFirstClick)
+            {
+                startP = tempPoint;
+                endP = tempPoint +
+                       QPointF(lineLength * qCos(qDegreesToRadians(lineAngle)),
+                               lineLength * qSin(qDegreesToRadians(lineAngle)));
+                mPaintFlag = true;
+            }
+            if (mPaintFlag)
+            {
+                lineItem = new Line(++id, startP, endP);
+                drawEntity(lineItem);
+            }
+            break;
+
+        case MiddlePointLineMode:
+            if (mFirstClick)
+            {
+                startP = tempPoint -
+                  QPointF((lineLength / 2) * qCos(qDegreesToRadians(lineAngle)),
+                         (lineLength / 2) * qSin(qDegreesToRadians(lineAngle)));
+                endP = tempPoint +
+                  QPointF((lineLength / 2) * qCos(qDegreesToRadians(lineAngle)),
+                         (lineLength / 2) * qSin(qDegreesToRadians(lineAngle)));
+                mPaintFlag = true;
+            }
+            if (mPaintFlag)
+            {
+                lineItem = new Line(++id, startP, endP);
+                drawEntity(lineItem);
+            }
+            break;
+
+        case EndPointLineMode:
+            if (mFirstClick)
+            {
+                startP = tempPoint -
+                       QPointF(lineLength * qCos(qDegreesToRadians(lineAngle)),
+                               lineLength * qSin(qDegreesToRadians(lineAngle)));
+                endP = tempPoint;
+                mPaintFlag = true;
+            }
+            if (mPaintFlag)
+            {
+                lineItem = new Line(++id, startP, endP);
+                drawEntity(lineItem);
+            }
+            break;
+
         case CircleMode:
             if (mFirstClick)
             {
@@ -662,6 +761,38 @@ void CadGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             else if (!mFirstClick && mSecondClick)
             {
                 endP = tempPoint;
+                mPaintFlag = true;
+                mSecondClick = false;
+            }
+
+            if (mPaintFlag)
+            {
+                circleItem = new Circle(++id, startP, endP);
+                drawEntity(circleItem);
+            }
+            break;
+
+        case CenterPointCircleMode:
+            {
+                startP = tempPoint;
+                endP = tempPoint + QPointF(circleRadius, 0);
+                circleItem = new Circle(++id, startP, endP);
+                drawEntity(circleItem);
+            }
+            break;
+
+        case TwoPointCircleMode:
+            if (mFirstClick)
+            {
+                startP = tempPoint;
+                mFirstClick = false;
+                mSecondClick = true;
+            }
+
+            else if (!mFirstClick && mSecondClick)
+            {
+                endP = tempPoint;
+                startP = (startP + tempPoint) / 2;
                 mPaintFlag = true;
                 mSecondClick = false;
             }
