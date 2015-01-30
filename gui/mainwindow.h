@@ -28,6 +28,7 @@
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
+#include <QSpinBox>
 
 #include "ui_mainwindow.h"
 #include "ui_aboutdialog.h"
@@ -61,9 +62,17 @@ private:
     bool eventFilter(QObject *obj, QEvent *event);
     bool isEntitySelected;
     bool autoSaveCount;
+    bool isLineIconClicked = false;
+    bool isCircleIconClicked = false;
     QString curFileName, fileName;
     int fileNumber;
     QLabel *messageLeft, *messageMiddle;
+    QAction *actionLineLength;
+    QAction *actionLineAngle;
+    QAction *actionCircleRadius;
+    QDoubleSpinBox *lineLength;
+    QDoubleSpinBox *lineAngle;
+    QDoubleSpinBox *circleRadius;
 
 private slots:
     void newFile();
@@ -99,6 +108,11 @@ private slots:
     void showAboutDialog();
     void updateView();
     void setSnapping();
+    void lineIconClicked();
+    void lineParams();
+    void backIconClicked();
+    void circleIconClicked();
+    void circleParams();
     void setStatusBarMessage();
     CadGraphicsView *createMdiView();
 };

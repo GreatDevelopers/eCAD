@@ -40,6 +40,8 @@ public:
     void cursorMode();
     void showUndoStack();
     void modifySceneRect();
+    void getLineParams(double, double);
+    void getCircleParams(double);
     void setCurrentFile(const QString &fileName);
 
     CadGraphicsScene *scene;
@@ -70,6 +72,11 @@ public slots:
     void setNoMode();
     void selectWindow();
     void deleteSingleItem();
+    void drawStartPointLine();
+    void drawMiddlePointLine();
+    void drawEndPointLine();
+    void drawCenterPointCircle();
+    void drawTwoPointCircle();
 
 protected:
     void wheelEvent(QWheelEvent *event);

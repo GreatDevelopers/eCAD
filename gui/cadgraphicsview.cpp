@@ -115,10 +115,68 @@ void CadGraphicsView::drawLine()
     cursorMode();
 }
 
+void CadGraphicsView::getLineParams(double length, double angle)
+{
+    // Gets the changed parameteres of Line for current Scene
+    scene->lineLength = length;
+    scene->lineAngle = angle;
+}
+
+void CadGraphicsView::getCircleParams(double radius)
+{
+    // Gets the changed parameteres of Circle for current Scene
+    scene->circleRadius = radius;
+}
+
+void CadGraphicsView::drawStartPointLine()
+{
+    // sets the mode to StartPointLineMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::StartPointLineMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawMiddlePointLine()
+{
+    // sets the mode to MiddlePointLineMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::MiddlePointLineMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawEndPointLine()
+{
+    // sets the mode to EndPointLineMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::EndPointLineMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
 void CadGraphicsView::drawCircle()
 {
     // sets the mode to CircleMode for scene and sets/resets the flags
     scene->setMode(CadGraphicsScene::CircleMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawCenterPointCircle()
+{
+    //sets the mode to CenterPointCircleMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::CenterPointCircleMode);
+    scene->setFlags();
+    viewport()->setCursor(Qt::CrossCursor);
+    cursorMode();
+}
+
+void CadGraphicsView::drawTwoPointCircle()
+{
+    // sets the mode to TwoPointCircleMode for scene and sets/resets the flags
+    scene->setMode(CadGraphicsScene::TwoPointCircleMode);
     scene->setFlags();
     viewport()->setCursor(Qt::CrossCursor);
     cursorMode();
